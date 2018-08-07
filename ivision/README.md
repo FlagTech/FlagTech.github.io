@@ -128,7 +128,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![WiFi設定](https://flagtech.github.io/ivision/images/WiFi設定.png)
 
-> 請注意！除非您對於網路架構很熟悉，否則建議不要修改『本機 AP IP』與『本機 AP 網段』這兩個設定。
+> 請注意！除非您對於網路架構很熟悉，否則建議不要修改『本機 AP IP』與『本機 AP 子網路遮罩』這兩個設定。
 
 ## 用按鈕切換 Wi-Fi 模式/歸零重設
 
