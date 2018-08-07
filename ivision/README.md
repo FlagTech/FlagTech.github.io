@@ -35,7 +35,8 @@ iVision 主機的主要元件如下：
 
     ![電壓顯示計顯示目前電池的電壓](https://flagtech.github.io/ivision/images/電壓顯示計顯示目前電池的電壓.jpg)
  
- 2. 如下將 iTank 的 UART 開關撥到最上方的 A 位置，並且將 DIP_SW 的 1-4 開關全部撥到下方 OFF  位置：
+ 2. 如下將 iTank 的 UART 開關撥到最上方的 A 位置，並且將 DIP_SW 的 1-4 開關全部撥到下方 OFF 位置：
+
     ![設定UART與DIP開關](https://flagtech.github.io/ivision/images/設定UART與DIP開關.jpg)
 
  3. 在 iTank 的 LCD 中選擇 **I2C Control** 並按二下 **K3** 鈕，若有安裝 iArm 手臂的話，此時手臂會轉成 Z 字型，表示 iTank 已由 Arduino 預錄程式掌控。
@@ -48,7 +49,7 @@ iVision 主機的主要元件如下：
     
     2. 在以下畫面再按 K3 鈕確認
 
-         ![I2CControl-2](https://flagtech.github.io/ivision/images/I2CControl-2.jpg)
+       ![I2CControl-2](https://flagtech.github.io/ivision/images/I2CControl-2.jpg)
     
     3. 出現初始化訊息，稍待幾秒後，畫面會閃爍並消失
 
@@ -220,6 +221,8 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上圖為例若設定為 62，之後若物體半徑變小低於 62，表示物體遠離，所以 iTank 會往前移動以追隨物體；反之若物體接近，iTank 便會往後拉開距離；一旦物體半徑剛好等於 62 時，iTank 就會停止。
 
+> 當電力變弱或地面阻力大時，您可以將 iTank 上 DIP_SW 的 4 號開關撥到上方 ON 位置，可以增加馬力輸出。
+
 #### 更改追蹤的顏色 
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
@@ -336,9 +339,165 @@ void loop() {
 }
 ```
  
-## iVision 函式說明
+## iVision for Arduino 函式說明
 
-待補
+#### iVision.initSerial()
+
+##### 說明
+
+初始化 Serial 通道，以便與 iVision 溝通。
+
+##### 語法
+
+iVision.initSerial(long baud)
+
+##### 參數
+
+- baud：非必須參數，指定 Serial Baudrate，若未指定的預設值為 19200。
+
+##### 傳回值
+
+無
+
+#### iVision.getVersion()
+
+##### 說明
+
+查詢 iVision 版本。
+
+##### 語法
+
+iVision.getVersion()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+無
+
+#### iVision.findColor()
+
+##### 說明
+
+設定 iVision 以顏色來辨識物體。
+
+##### 語法
+
+iVision.findColor(byte rgb_hsv[], byte len=3)
+
+##### 參數
+
+- rgb_hsv：內含至少 3 bytes，指定 R (紅)、G (綠)、B(藍) 的顏色值，也可以有 4~6 個 bytes，指定 H (色彩或稱色相)、S (飽和度%)、V (明亮度%) 的範圍。
+
+    - RGB範圍:0~255, H範圍:0~359度, SV範圍:0~100%。
+    - RGB是指定顏色的值, HSV是指定顏色的範圍, 例如H設為2, 則指定顏色的色彩值『由減2到加2』之間的顏色都符合
+    - HSV若未指定, 則均會自動設定為其預設值: 4、40、100。
+    - 在計算S或V的誤差容許範圍時, 上限值若大於100會改為100, 下限值若小於20會改為20。設為100時, 會自動變成 20%~100% 範圍
+
+- len：非必須參數，為 rgb_hsv 陣列長度 (3~6)，若省略此參數則預設為 3
+
+##### 傳回值
+
+無
+
+#### iVision.findCircle()
+
+##### 說明
+
+設定 iVision 辨識圓形物體。
+
+##### 語法
+
+iVision.findCircle()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+無
+
+#### iVision.findSquare()
+
+##### 說明
+
+設定 iVision 辨識方形物體。
+
+##### 語法
+
+iVision.findSquare()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+無
+
+#### iVision.findStop()
+
+##### 說明
+
+設定 iVision 停止辨識。
+
+##### 語法
+
+iVision.findStop()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+無
+
+#### iVision.checkRead()
+
+##### 說明
+
+檢查是否有資料可讀取 
+
+##### 語法
+
+iVision.checkRead()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+布林值 (boolean)
+
+#### iVision.read()
+
+##### 說明
+
+讀取 iVision 傳來的訊息
+
+##### 語法
+
+iVision.read()
+
+##### 參數
+
+無
+
+##### 傳回值
+
+char 字元，代表讀到訊息的種類，訊息的種類如下：
+
+-0x00：沒讀到資料
+-r：圓形或顏色辨識物體的資訊
+-s：多邊形物體的資訊
+-t：要傳給 iTank 的指令
+-v：版本資訊
+-e：錯誤訊息
 
 ## 還原 Arduino 預錄程式
 
