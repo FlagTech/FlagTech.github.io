@@ -343,21 +343,21 @@ void loop() {
 
 #### iVision.initSerial()
 
-##### 說明
+- 說明
 
-初始化 Serial 通道，以便與 iVision 溝通。
+    初始化 Serial 通道，以便與 iVision 溝通。
 
-##### 語法
+- 語法
 
-iVision.initSerial(long baud)
+    iVision.initSerial(long baud)
 
-##### 參數
+- 參數
 
-- baud：非必須參數，指定 Serial Baudrate，若未指定的預設值為 19200。
+    - baud：非必須參數，指定 Serial Baudrate，若未指定的預設值為 19200。
 
-##### 傳回值
+- 傳回值
 
-無
+    無
 
 #### iVision.getVersion()
 
@@ -492,12 +492,12 @@ iVision.read()
 
 char 字元，代表讀到訊息的種類，訊息的種類如下：
 
--0x00：沒讀到資料
--r：圓形或顏色辨識物體的資訊
--s：多邊形物體的資訊
--t：要傳給 iTank 的指令
--v：版本資訊
--e：錯誤訊息
+- 0x00：沒讀到資料
+- r：圓形或顏色辨識物體的資訊
+- s：多邊形物體的資訊
+- t：要傳給 iTank 的指令
+- v：版本資訊
+- e：錯誤訊息
 
 ## 還原 Arduino 預錄程式
 
