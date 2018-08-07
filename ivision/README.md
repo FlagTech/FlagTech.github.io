@@ -131,13 +131,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 > 請注意！除非您對於網路架構很熟悉，否則建議不要修改『本機 AP IP』與『本機 AP 子網路遮罩』這兩個設定。
 
-## 用按鈕切換 Wi-Fi 模式/歸零重設
-
-模式切換按鈕的動作與燈號如下：
-
-![按鈕動作與燈號](https://flagtech.github.io/ivision/images/按鈕動作與燈號.png)
-
-> 以按鈕切換為 STA 模式之前，請參見本手冊的『[用瀏覽器設定 Wi-Fi 模式](#用瀏覽器設定-wi-fi-模式)』段落，先設定好 STA 模式下 iVision 要連線哪一個 AP。
+修改完畢後，請按套用鈕，即可讓設定馬上生效。
 
 ## 透過 iVision 遠端視訊遙控 iTank
 
@@ -246,6 +240,16 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 ![更改OpenCV追蹤的顏色-3](https://flagtech.github.io/ivision/images/更改OpenCV追蹤的顏色-3.jpg)
 
 > 影像辨識的結果會依照現場的光線或背景而有差異，您可以調整誤差容許值來改善辨識結果
+
+## 用按鈕切換 Wi-Fi 模式/歸零重設
+
+除了使用瀏覽器更改 Wi-Fi 模式以外，您也可以使用模式切換按鈕來快速切換 Wi-Fi 模式，或者將 iVision 所有設定歸零。
+
+模式切換按鈕的動作與燈號如下：
+
+![按鈕動作與燈號](https://flagtech.github.io/ivision/images/按鈕動作與燈號.png)
+
+> 以按鈕切換為 STA 模式之前，請參見本手冊的『[用瀏覽器設定 Wi-Fi 模式](#用瀏覽器設定-wi-fi-模式)』段落，先設定好 STA 模式下 iVision 要連線哪一個 AP。
 
 ## 撰寫 Arduino 程式控制 iVision
 
