@@ -205,7 +205,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![自動追物Find-2](https://flagtech.github.io/ivision/images/自動追物Find-2.jpg)
 
- - x, y 表示物體的 x, y 位置，原點在鏡頭右上方
+ - x, y 表示物體的 x, y 位置，原點在鏡頭左上方
  - area 是物體的面積
  - r|s 是物體的半徑
 
