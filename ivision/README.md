@@ -156,7 +156,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
-然後請透過 Android 手機的 Play 商店安裝『**旗標視訊Wifi視訊機器手臂車** App』，或者請點此[連接](http://ivision.iurl.org/Android/iVision.apk)下載 APK 檔直接安裝。
+然後請透過 Android 手機的 Play 商店安裝『**旗標視訊Wifi視訊機器手臂車**』 App，或者請點此[連結](http://ivision.iurl.org/Android/FlagTankVision.apk)下載 APK 檔直接安裝。
 
 安裝完畢後，請開啟『旗標視訊Wifi視訊機器手臂車』App，在 IP 欄位輸入剛剛找到的 iVision IP，然後按『確定』鈕，連線後會出現連線成功的訊息：
 
@@ -182,7 +182,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 本 App 程式是使用 App Invertor 2 所製作的，若想要自行修改或撰寫新程式，請先下載以下專案檔：
 
- - [FlagTankArm.aia](http://ivision.iurl.org/Android/FlagTankArm.aia)
+ - [FlagTankVision.aia](http://ivision.iurl.org/Android/FlagTankVision.aia)
 
 然後登入 [http://ai2.appinventor.mit.edu](http://ai2.appinventor.mit.edu) 網站 (若無帳號可免費申請)，匯入剛剛下載的 FlagTankArm.aia 專案檔，即可進行更改 (請先將 App Invertor 2 介面切換到繁體中文，才能正確編譯)。
 
