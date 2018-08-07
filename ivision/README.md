@@ -316,7 +316,7 @@ void loop() {
   while(iVision.checkRead()) {   // 不斷讀取資料並處理, 直到沒有資料為止
     iVision.read();         // 讀取資料
 
-    if(iVision.type=='r')
+    if(iVision.type=='r') {
       char blank[] = "    ";
       
       // 在 LCD 顯示物體座標
