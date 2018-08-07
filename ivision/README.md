@@ -339,7 +339,7 @@ void loop() {
 }
 ```
  
-## iVision for Arduino 函式說明
+## iVision for Arduino 函式與屬性說明
 
 #### iVision.initSerial()
 
@@ -498,6 +498,22 @@ void loop() {
     - t：要傳給 iTank 的指令
     - v：版本資訊
     - e：錯誤訊息
+
+#### iVision.x
+
+- 辨識到的物體的中心點 x 座標，原點在鏡頭左上角
+
+#### iVision.y
+
+- 辨識到的物體的中心點 y 座標，原點在鏡頭左上角
+
+#### iVision.r
+
+- 辨識到的物體的半徑 (圓形) 或端點數 (方形)
+
+#### iVision.area
+
+- 辨識到的物體的面積
 
 ## 還原 Arduino 預錄程式
 
