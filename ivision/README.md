@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：0.9
+ - 目前版本：0.9A
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：https://flagtech.github.io/ivision/ivision.pdf
 
@@ -11,6 +11,8 @@
 - iTank 電池充電從 0% 到 100% 的時間大約是 4 小時，請勿過長時間充電以免造成電池損害。
 
 ## iVision 硬體介紹
+
+iVision 為 iTank 專用的無線影像辨識套件，須固定在 iTank 上使用。若您想要自行組裝 iVision，請參見本手冊的『[將 iVision 組裝在 iTank](#將-ivision-組裝在-itank)』段落。
 
 iVision 套件由以下兩個硬體組成：
 
@@ -246,6 +248,8 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 **旗標**科技提供了 iVision 專用的函式庫，Arduino 程式內直接呼叫函式庫提供的函式，即可傳送或接收 iVision 的資料。
 
+> 只要使用 iVision 函式庫撰寫或修改 Arduino 程式，即使覆蓋了 Arduino 上的出廠預錄程式，也不會影響 iVision 網頁或 App 的操控。
+
 #### 安裝 iVision 函式庫
 
 請先使用瀏覽器下載以下函式庫檔案：
@@ -332,6 +336,10 @@ void loop() {
 }
 ```
  
+## iVision 函式說明
+
+待補
+
 ## 還原 Arduino 預錄程式
 
 請參見本手冊的『[安裝 iVision 函式庫](#安裝-ivision-函式庫)』段落，安裝好所有相關的函式庫檔案。
@@ -345,6 +353,10 @@ void loop() {
 開機後若一切正常，紅燈會熄滅。當 iVision 處於 AP 模式，綠燈會每秒快閃兩下；如果處於 STA 模式，綠燈會每秒閃一下。
 
 若您以按鈕切換模式時，也會有相對應的燈號，請參見本手冊的『[用按鈕切換 Wi-Fi 模式/歸零重設](#用按鈕切換-wi-fi-模式歸零重設)』段落。
+
+## 將 iVision 組裝在 iTank
+
+待補
 
 ## iVision 硬體規格
 
