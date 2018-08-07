@@ -313,15 +313,21 @@ void setup() {
 void loop() {
   char blank[] = "    ";
 
-  if(iVision.type=='r')
-    // 在 LCD 顯示物體座標
-    iTank.writeLCD(3, String("x,y = ")+iVision.x+","+iVision.y+blank);
-    
-    // 在 LCD 顯示物體面積
-    iTank.writeLCD(4, String("area= ")+iVision.area+blank);
+  delay(1); // 避免跑太快(造成iTank或其他硬體反應不及), 若不Delay每秒可跑4萬多圈 
+  
+  while(iVision.checkRead()) {   // 不斷讀取資料並處理, 直到沒有資料為止
+    iVision.read();         // 讀取資料
 
-    // 在 LCD 顯示物體半徑
-    iTank.writeLCD(5, String("r|s = ")+iVision.r+blank);
+    if(iVision.type=='r')
+      // 在 LCD 顯示物體座標
+      iTank.writeLCD(3, String("x,y = ")+iVision.x+","+iVision.y+blank);
+
+      // 在 LCD 顯示物體面積
+      iTank.writeLCD(4, String("area= ")+iVision.area+blank);
+
+      // 在 LCD 顯示物體半徑
+      iTank.writeLCD(5, String("r|s = ")+iVision.r+blank);
+    }
   }
 }
 ```
