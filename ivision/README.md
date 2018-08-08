@@ -559,11 +559,13 @@ iVision 提供 HTTP 視訊串流以及 HTTP API，所以只要您使用的程式
 
 #### HTTP API
 
+HTTP API 會以 json 的格式回傳結果。
+
 ##### 控制 iTank 行進方向
 
 http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
 
-- 方向：F (前進)、B (後退)、R (右轉)、L (左轉)，方向字元可混和使用如下：
+- 方向：F (前進)、B (後退)、R (右轉)、L (左轉)、S (停止)，方向字元可混和使用如下：
 
     |    |   |    |
     |----|---|----|
