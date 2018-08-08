@@ -179,7 +179,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 本 App 程式是使用 App Invertor 2 所製作的，若想要自行修改或撰寫新程式，請先下載以下專案檔：
 
- - [FlagTankVision.aia](http://ivision.iurl.org/Android/FlagTankVision.aia)
+ - [FlagTankVision.aia](https://flagtech.github.io/ivision/Android/FlagTankVision.aia)
 
 然後登入 [http://ai2.appinventor.mit.edu](http://ai2.appinventor.mit.edu) 網站 (若無帳號可免費申請)，匯入剛剛下載的 FlagTankArm.aia 專案檔，即可進行更改 (請先將 App Invertor 2 介面切換到繁體中文，才能正確編譯)。
 
@@ -261,10 +261,10 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 請先使用瀏覽器下載以下函式庫檔案：
 
- - [FlagTank.zip](http://ivision.iurl.org/Arduino/FlagTank.zip)
- - [FlagTankVision.zip](http://ivision.iurl.org/Arduino/FlagTankVision.zip)
- - [FlagTankArm.zip](http://ivision.iurl.org/Arduino/FlagTankArm.zip)
- - [PS2X_lib.zip](http://ivision.iurl.org/Arduino/PS2X_lib.zip)
+ - [FlagTank.zip](https://flagtech.github.io/ivision/Arduino/FlagTank.zip)
+ - [FlagTankVision.zip](https://flagtech.github.io/ivision/Arduino/FlagTankVision.zip)
+ - [FlagTankArm.zip](https://flagtech.github.io/ivision/Arduino/FlagTankArm.zip)
+ - [PS2X_lib.zip](https://flagtech.github.io/ivision/Arduino/PS2X_lib.zip)
 
 然後請開啟 Arduino IDE，參考下圖加入 **FlagTank.zip**、**FlagTankVision.zip**、**FlagTankArm.zip**、**PS2X_lib.zip** 等函式庫檔案，以便後續撰寫 Arduino 程式。
 
