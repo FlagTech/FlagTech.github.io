@@ -57,8 +57,8 @@ iVision 主機的主要元件如下：
 
  4. 等待 iVision 開機，iVision 通電後到開機完畢需要大約 40 秒，開機過程中會依序顯示以下燈號：
 
-    1. **綠燈長亮、紅燈熄滅**：代表已經通電，準備載入系統核心
-    2. **綠燈長亮、紅燈長亮**：已經載入系統核心，系統正在開機中
+    1. **綠燈長亮、紅燈熄滅**：代表已經通電，準備載入系統核心。
+    2. **綠燈長亮、紅燈長亮**：已經載入系統核心，系統正在開機啟動相關服務中。
     3. **綠燈每秒快閃兩下、紅燈熄滅**：已經開機完畢，Wi-Fi 進入 AP 模式 (關於 Wi-Fi 模式請參見本手冊的『[iVision Wi-Fi 模式](#ivision-wi-fi-模式)』段落)。
     
  5. iVision 開機完畢後，iTank 的 LCD 會顯示目前 iVision 的 Wi-Fi SSID 基地台名稱：
@@ -115,7 +115,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 #### 用瀏覽器設定 Wi-Fi 模式
 
-請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
+請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
 然後請開啟 Chrome 瀏覽器，連線 http://iVision的IP ，然後按選單上的『Wi-Fi』：
 
@@ -137,7 +137,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 #### 以 Android/iPhone 手機或電腦瀏覽器進行遠端視訊遙控
 
-請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
+請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
 然後請開啟 Chrome 瀏覽器，連線 http://iVision的IP ，然後按選單上的『搖桿控制』，即可一邊觀看遠端的影像，一邊遠端操控 iTank：
 
@@ -151,7 +151,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 #### 以 Android 手機 App 進行遙控
 
-請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
+請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
 然後請透過 Android 手機的 Play 商店安裝『**旗標 iVision 視訊 Wifi 機器手臂車**』 App，或者請點[此連結下載 APK 檔](http://ivision.iurl.org/Android/FlagTankVision.apk)直接安裝。
 
@@ -187,7 +187,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 本套件內附的 Arduino 上已經預錄了一個自動追物的程式，可以自動追蹤跟隨 RGB 值為 240, 93, 23 的橘色物體。
 
-> 本程式是以『SUPER-K 兒童5寸PU發泡籃球』這個產品的顏色為基準進行開發。若要更改追蹤的顏色，請參見本手冊的『[更改追蹤的顏色](#更改追蹤的顏色)』段落)，
+> 本程式是以『SUPER-K 兒童5寸PU發泡籃球』這個產品的顏色為基準進行開發。若要更改追蹤的顏色，請參見本手冊的『[更改追蹤的顏色](#更改追蹤的顏色)』段落。
 
 #### 尋找物體 
 
@@ -219,7 +219,7 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 #### 更改追蹤的顏色 
 
-請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
+請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
 然後請開啟 Chrome 瀏覽器，連線 http://iVision的IP ，然後按選單上的『影像辨識/OpenCV 啟動與設定』：
 
