@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：0.9A
+ - 目前版本：0.9B
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：https://flagtech.github.io/ivision/ivision.pdf
 
@@ -153,7 +153,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落)，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
-然後請透過 Android 手機的 Play 商店安裝『**旗標視訊Wifi視訊機器手臂車**』 App，或者請點此[連結](http://ivision.iurl.org/Android/FlagTankVision.apk)下載 APK 檔直接安裝。
+然後請透過 Android 手機的 Play 商店安裝『**旗標 iVision 視訊 Wifi 機器手臂車**』 App，或者請點[此連結下載 APK 檔](http://ivision.iurl.org/Android/FlagTankVision.apk)直接安裝。
 
 安裝完畢後，請開啟『旗標視訊Wifi視訊機器手臂車』App，在 IP 欄位輸入剛剛找到的 iVision IP，然後按『確定』鈕，連線後會出現連線成功的訊息：
 
