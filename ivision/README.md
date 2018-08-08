@@ -2,7 +2,7 @@
 
  - 目前版本：0.9B
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
- - PDF 版本下載網址：https://flagtech.github.io/ivision/ivision.pdf
+ - PDF 版本下載網址：(即將提供)
 
 ## 安全性與操作須知
 
@@ -363,6 +363,8 @@ void loop() {
 
     無
 
+----------
+
 #### iVision.getVersion()
 
 - 說明
@@ -380,6 +382,8 @@ void loop() {
 - 傳回值
 
     無
+
+----------
 
 #### iVision.findColor()
 
