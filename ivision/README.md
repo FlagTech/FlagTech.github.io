@@ -563,7 +563,7 @@ iVision 提供 HTTP 視訊串流以及 HTTP API，所以只要您使用的程式
 
 http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
 
-- 方向：F (前進)、B (後退)、R (右轉)、L (左轉)，方向的字元可混和使用如下：
+- 方向：F (前進)、B (後退)、R (右轉)、L (左轉)，方向字元可混和使用如下：
 
     |    |   |    |
     |----|---|----|
@@ -572,11 +572,13 @@ http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
     | BL | B | BR |
 
 
-- 速度：非必須參數，可使用的值為 1-7，數字越大速度越快
+- 速度：非必須參數，可使用的值為 1-7，數字越大速度越快。若未指定則預設值是 2。
 
 ##### 傳送 UART 指令給 iTank
 
 http://iVision的IP/api?setserial=[UART指令]
+
+- UART指令：請使用 %FF 來表示 16 進位 0xFF，例如 %FF%FF%07%5A%FF%FF%00 指令會設定 Servo1 的角度為 90 度。
 
 ## 燈號狀態說明
 
