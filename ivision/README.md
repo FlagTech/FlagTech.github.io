@@ -547,6 +547,37 @@ void loop() {
 
 然後請開啟 Arduino IDE，執行『檔案/範例/FlagTankVision/iVision_Preload』命令開啟 iVision 預錄程式，將此程式上傳 Arduino 即可還原預錄程式。 
 
+## 撰寫 Python/C#/VB/Java 程式遠端視訊遙控 iVision
+
+iVision 提供 HTTP 視訊串流以及 HTTP API，所以只要您使用的程式語言有 HTTP 相關函式庫或物件，即可用來取得遠端視訊，以及進行遠端遙控。
+
+#### 視訊串流
+
+- 視訊網址：http://iVision的IP/stream 串流格式為 MJPEG
+
+- 圖片網址：http://iVision的IP/image.jpg 圖片格式為 JPEG
+
+#### HTTP API
+
+##### 控制 iTank 行進方向
+
+http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
+
+- 方向：F (前進)、B (後退)、R (右轉)、L (左轉)，方向的字元可混和使用如下：
+
+    |    |   |    |
+    |----|---|----|
+    | FL | F | FR |
+    | L  | S | R  |
+    | BL | B | BR |
+
+
+- 速度：非必須參數，可使用的值為 1-7，數字越大速度越快
+
+##### 傳送 UART 指令給 iTank
+
+http://iVision的IP/api?setserial=[UART指令]
+
 ## 燈號狀態說明
 
 **開機過程綠燈會保持長亮**，關於開機過程的燈號狀態，請參見本手冊的『[第一次啟動 iVision](#第一次啟動-ivision)』段落。
