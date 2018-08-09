@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：0.9C
+ - 目前版本：0.9D
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：(即將提供)
 
@@ -573,7 +573,7 @@ http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
 
 http://iVision的IP/api?setserial=[UART指令]
 
-- UART指令：請使用 %FF 來表示 16 進位 0xFF，例如 %FF%FF%07%5A%FF%FF%00 指令會設定 Servo1 的角度為 90 度。
+- UART指令：請使用 %FF 來表示 16 進位 0xFF，例如 %FF%FF%07%21%FF%FF%00 指令會設定 Servo1 的角度為 33 度。
 
 ## 燈號狀態說明
 
