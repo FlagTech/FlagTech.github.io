@@ -10,7 +10,7 @@ function doGet(e){
 //   scriptProperties.setProperty('temperature', temperature);
   
   var datetime = new Date().toLocaleString();
-  userProperties.setProperty('temperature', datetime + temperature);
+  userProperties.setProperty('temperature', datetime  + " 的溫度是 " + temperature + "°C");
   
   var returnText = temperature + " OK";
   var textOutput = ContentService.createTextOutput(returnText)
@@ -18,7 +18,6 @@ function doGet(e){
 }
 
 function doPost(e) {
-  var CHANNEL_ACCESS_TOKEN = '++U0ei/MDvdoHKFTCuPF8eedFJqQdvz5EYx4DPsLu6wCtoerxL0IHnoPg43QKkv92a1wQC+y0nDvD5Fbg5EUHEhCfa2wJ30TgM3t5OjP+ug60EHckIrNKwCOA09YyMkQCHXUS4hn37W9Nlc/Qlw+ZQdB04t89/1O/w1cDnyilFU=';
   var msg = JSON.parse(e.postData.contents);
   console.log(msg);
   
@@ -40,7 +39,7 @@ function doPost(e) {
 //     var temperature = scriptProperties.getProperty('temperature');
     var temperature = userProperties.getProperty('temperature');
     if (temperature) {
-      returnText = "目前溫度是 " + temperature + " 度";
+      returnText =  temperature;
     }
     else {
       returnText = "抱歉我無法取得目前溫度";
