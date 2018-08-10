@@ -1,11 +1,16 @@
+var userProperties = PropertiesService.getUserProperties();
+
 function doGet(e){
   var temperature = e.parameter.t;
   if (!temperature) {
     return;
   }
   
-  var scriptProperties = PropertiesService.getScriptProperties();
-  scriptProperties.setProperty('temperature', temperature);
+//   var scriptProperties = PropertiesService.getScriptProperties();
+//   scriptProperties.setProperty('temperature', temperature);
+  
+  var datetime = new Date().toLocaleString();
+  userProperties.setProperty('temperature', datetime + temperature);
   
   var returnText = temperature + " OK";
   var textOutput = ContentService.createTextOutput(returnText)
@@ -31,8 +36,9 @@ function doPost(e) {
     returnText = getMisunderstandWords();
   }
   else {
-    var scriptProperties = PropertiesService.getScriptProperties();
-    var temperature = scriptProperties.getProperty('temperature');
+//     var scriptProperties = PropertiesService.getScriptProperties();
+//     var temperature = scriptProperties.getProperty('temperature');
+    var temperature = userProperties.getProperty('temperature');
     if (temperature) {
       returnText = "目前溫度是 " + temperature + " 度";
     }
