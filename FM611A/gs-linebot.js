@@ -5,12 +5,9 @@ function doGet(e){
   if (!temperature) {
     return;
   }
-  
-//   var scriptProperties = PropertiesService.getScriptProperties();
-//   scriptProperties.setProperty('temperature', temperature);
-  
-  var datetime = new Date().toLocaleString();
-  userProperties.setProperty('temperature', datetime  + " 的溫度是 " + temperature + "°C");
+
+  var nowDatetime = new Date().toLocaleString();
+  userProperties.setProperty('temperatureText', nowDatetime  + " 的溫度是 " + temperature + " 度");
   
   var returnText = temperature + " OK";
   var textOutput = ContentService.createTextOutput(returnText)
@@ -19,8 +16,6 @@ function doGet(e){
 
 function doPost(e) {
   var msg = JSON.parse(e.postData.contents);
-  console.log(msg);
-  
 
   // 取出 replayToken 和發送的訊息文字
   var replyToken = msg.events[0].replyToken;
@@ -35,11 +30,9 @@ function doPost(e) {
     returnText = getMisunderstandWords();
   }
   else {
-//     var scriptProperties = PropertiesService.getScriptProperties();
-//     var temperature = scriptProperties.getProperty('temperature');
-    var temperature = userProperties.getProperty('temperature');
-    if (temperature) {
-      returnText =  temperature;
+    var temperatureText = userProperties.getProperty('temperatureText');
+    if (temperatureText) {
+      returnText =  temperatureText;
     }
     else {
       returnText = "抱歉我無法取得目前溫度";
