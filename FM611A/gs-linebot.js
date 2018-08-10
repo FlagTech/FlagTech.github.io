@@ -24,6 +24,10 @@ function doPost(e) {
   if (typeof replyToken === 'undefined') {
     return;
   }
+
+  if (typeof keyWords === 'undefined') {
+    var keyWords = ["溫度", "幾度", "熱不熱"];
+  }
   
   var returnText;
   var hasKeyword = false;
@@ -69,11 +73,12 @@ function doPost(e) {
 
 
 function getMisunderstandWords() {
-  var misunderstandWords = [
-    "不好意思，我無法理解您的需求",
-    "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
-    "我不懂您的意思，抱歉我會加強訓練的"
-  ];
-  
+  if (typeof misunderstandWords === 'undefined') {
+    var misunderstandWords = [
+      "不好意思，我無法理解您的需求",
+      "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
+      "我不懂您的意思，抱歉我會加強訓練的"
+    ];
+  }
   return misunderstandWords[Math.floor(Math.random()*misunderstandWords.length)];
 }
