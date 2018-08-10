@@ -17,7 +17,7 @@ function doGet(e){
 function doPost(e) {
   var msg = JSON.parse(e.postData.contents);
 
-  // 取出 replayToken 和發送的訊息文字
+  // 取出 replayToken 和使用者送出的訊息文字
   var replyToken = msg.events[0].replyToken;
   var userMessage = msg.events[0].message.text;
 
