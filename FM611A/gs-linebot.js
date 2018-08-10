@@ -30,8 +30,9 @@ function doPost(e) {
   
   if (userMessage) {
     for (var i = 0; i < keyWords.length; i++) {
-      if (userMessage.indexOf(keyWords[i]) === -1) {
+      if (userMessage.indexOf(keyWords[i]) !== -1) {
         hasKeyword = true;
+        break;
       }
     }
   }
