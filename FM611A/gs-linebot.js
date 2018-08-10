@@ -26,17 +26,27 @@ function doPost(e) {
   }
   
   var returnText;
-  if (!userMessage || userMessage.indexOf("溫度") === -1) {
-    returnText = getMisunderstandWords();
+  var hasKeyword = false;
+  
+  if (userMessage) {
+    for (var i = 0; i < keyWords.length; i++) {
+      if (userMessage.indexOf(keyWords[i]) === -1) {
+        hasKeyword = true;
+      }
+    }
   }
-  else {
+  
+  if (hasKeyword) {
     var temperatureText = userProperties.getProperty('temperatureText');
     if (temperatureText) {
       returnText =  temperatureText;
     }
     else {
-      returnText = "抱歉我無法取得目前溫度";
-    } 
+      returnText = "抱歉我無法取得溫度";
+    }
+  }
+  else {
+    returnText = getMisunderstandWords();
   }
   
   var url = 'https://api.line.me/v2/bot/message/reply';
