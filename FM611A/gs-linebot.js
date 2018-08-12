@@ -28,6 +28,9 @@ function doPost(e) {
   if (typeof keyWords === 'undefined') {
     var keyWords = ["溫度", "幾度", "熱不熱"];
   }
+  else {
+    keyWords = keyWords.concat(["溫度", "幾度", "熱不熱"]);
+  }
   
   var returnText;
   var hasKeyword = false;
@@ -80,5 +83,13 @@ function getMisunderstandWords() {
       "我不懂您的意思，抱歉我會加強訓練的"
     ];
   }
+  else {
+    misunderstandWords = misunderstandWords.concat([
+      "不好意思，我無法理解您的需求",
+      "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
+      "我不懂您的意思，抱歉我會加強訓練的"
+    ]);
+  }
+  
   return misunderstandWords[Math.floor(Math.random()*misunderstandWords.length)];
 }
