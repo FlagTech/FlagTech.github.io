@@ -76,19 +76,17 @@ function doPost(e) {
 
 
 function getMisunderstandWords() {
+  var _misunderstandWords = [
+    "不好意思，我無法理解您的需求",
+    "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
+    "我不懂您的意思，抱歉我會加強訓練的"
+  ];
+  
   if (typeof misunderstandWords === 'undefined') {
-    var misunderstandWords = [
-      "不好意思，我無法理解您的需求",
-      "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
-      "我不懂您的意思，抱歉我會加強訓練的"
-    ];
+    var misunderstandWords = _misunderstandWords;
   }
   else {
-    misunderstandWords = misunderstandWords.concat([
-      "不好意思，我無法理解您的需求",
-      "再說明白一點好嗎？我只是一個不太懂事的 baby 機器人",
-      "我不懂您的意思，抱歉我會加強訓練的"
-    ]);
+    misunderstandWords = misunderstandWords.concat(_misunderstandWords);
   }
   
   return misunderstandWords[Math.floor(Math.random()*misunderstandWords.length)];
