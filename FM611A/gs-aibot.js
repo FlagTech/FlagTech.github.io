@@ -17,7 +17,7 @@ function doPost(e) {
 
   var returnText = "";
   
-  if (userMessage.startsWith("學 ")) {
+  if (userMessage.indexOf("學 ") === 0) {
     var userMessageArray = userMessage.split(" ");
     if (userMessageArray.length >= 3) {
       userProperties.setProperty(userMessageArray[1], userMessageArray[2]);
