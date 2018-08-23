@@ -15,14 +15,17 @@ function doPost(e) {
     return;
   }
 
-  if (typeof keyWords === 'undefined') {
-    var keyWords = ["溫度", "幾度", "熱不熱"];
-  }
-  else {
-    keyWords = keyWords.concat(["溫度", "幾度", "熱不熱"]);
+  var returnText = "";
+  
+  if (userMessage.startsWith("學 ")) {
+    var userMessageArray = userMessage.split(" ");
+    if (userMessageArray.length >= 3) {
+      userProperties.setProperty(userMessageArray[1], userMessageArray[2]);
+      returnText = '好的好的, 學會了 :)';
+    }
   }
   
-  var returnText = getAnswer(userMessage);
+  if (!returnText) returnText = getAnswer(userMessage);
 
   var url = 'https://api.line.me/v2/bot/message/reply';
   UrlFetchApp.fetch(url, {
@@ -79,16 +82,16 @@ function getMisunderstandWords() {
 }
 
 /* 
-以下為本程式回答問題時使用的 Q&A 規則，例如對於以下 Q&A 規則物件
- { Q:"想 | 希望", A:"為何想*呢?|真的想*?|那就去做阿?為何不呢?"},
-代表的是，當您輸入的字串中有「想」或「希望」這樣的詞彙時，
-程式就會從 A: 欄位中的回答裏隨機選出一個來回答。
-回答語句中的 * 代表比對詞彙之後的字串，舉例而言、假如您說：
-    我想去巴黎
-那麼我們的程式從這四個可能的規則中隨機挑出一個來產生答案，產生的答案可能是：
-為何想去巴黎呢?
-真的想去巴黎?
-那就去做阿?為何不呢?
+  以下為本程式回答問題時使用的 Q&A 規則，例如對於以下 Q&A 規則物件
+   { Q:"想 | 希望", A:"為何想*呢?|真的想*?|那就去做阿?為何不呢?"},
+  代表的是，當您輸入的字串中有「想」或「希望」這樣的詞彙時，
+  程式就會從 A: 欄位中的回答裏隨機選出一個來回答。
+  回答語句中的 * 代表比對詞彙之後的字串，舉例而言、假如您說：
+      我想去巴黎
+  那麼我們的程式從這四個可能的規則中隨機挑出一個來產生答案，產生的答案可能是：
+  為何想去巴黎呢?
+  真的想去巴黎?
+  那就去做阿?為何不呢?
 */
 // Q&A 陣列宣告
 var qaList = [
