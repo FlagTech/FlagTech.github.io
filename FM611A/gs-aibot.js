@@ -25,7 +25,7 @@ function doPost(e) {
     }
   }
 
-  returnText = userProperties.getProperty(userMessage);
+  if (!returnText) returnText = userProperties.getProperty(userMessage);
 
   if (!returnText) returnText = getAnswer(userMessage);
 
