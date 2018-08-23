@@ -21,7 +21,7 @@ function doPost(e) {
     var userMessageArray = userMessage.split(" ");
     if (userMessageArray.length >= 3) {
       userProperties.setProperty(userMessageArray[1], userMessageArray[2]);
-      returnText = '好的好的, 學會了 :)';
+      returnText = '好的好的, 學會了!';
     }
   }
 
