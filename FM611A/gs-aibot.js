@@ -44,6 +44,19 @@ function doPost(e) {
 
 function getMisunderstandWords() {
   var _misunderstandWords = [
+    '我了解',
+    '我能理解',
+    '還有問題嗎?',
+    '請繼續說下去',
+    '可以說的更詳細一點嗎?',
+    '這樣喔! 我知道!',
+    '然後呢? 發生甚麼事?',
+    '再來呢? 可以多說一些嗎',
+    '接下來呢? ',
+    '可以多告訴我一些嗎?',
+    '多談談有關你的事，好嗎?',
+    '想多聊一聊嗎',
+    '可否多告訴我一些呢?',
     '梅林的鬍子阿, 你用對命令沒? 用個 / 捲軸試試?',
     '我就當真你在跟我聊天了(灑花)',
     '你收到幾個錯誤訊息了？再試一個',
@@ -126,7 +139,8 @@ function getAnswer(say) {
     for (var qi in qList) { // 對於每個問題字串 q
       var q = qList[qi];
       if (q=="") // 如果是最後一個「空字串」的話，那就不用比對，直接任選一個回答。
-        return aList[random(aList.length)]; // 那就從答案中任選一個回答
+        //return aList[random(aList.length)]; // 那就從答案中任選一個回答
+        return getMisunderstandWords();
       var r = new RegExp("(.*)"+q+"([^?.;]*)", "gi"); // 建立正規表達式 (.*) q ([^?.;]*)
       if (say.match(r)) { // 比對成功的話
         tail = RegExp.$2; // 就取出句尾
