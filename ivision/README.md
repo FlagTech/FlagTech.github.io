@@ -2,7 +2,7 @@
 
  - 目前版本：0.9D
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
- - PDF 版本下載網址：(即將提供)
+ - PDF 版本下載網址：http://flagtech.github.io/ivision/iVision.pdf
 
 ## 安全性與操作須知
 
