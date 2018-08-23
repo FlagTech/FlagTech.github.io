@@ -24,7 +24,9 @@ function doPost(e) {
       returnText = '好的好的, 學會了 :)';
     }
   }
-  
+
+  returnText = userProperties.getProperty(userMessage);
+
   if (!returnText) returnText = getAnswer(userMessage);
 
   var url = 'https://api.line.me/v2/bot/message/reply';
