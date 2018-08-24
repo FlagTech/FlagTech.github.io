@@ -20,7 +20,7 @@ function doPost(e) {
   if (userMessage.indexOf("學 ") === 0) {
     var userMessageArray = userMessage.split(" ");
     if (userMessageArray.length >= 3) {
-      userProperties.setProperty(userMessageArray[1], userMessageArray[2]);
+      userProperties.setProperty(userMessageArray[1], userMessageArray.slice(2).join(' '));
       returnText = '好的好的, 學會了!';
     }
   }
