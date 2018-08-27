@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：0.9D
+ - 目前版本：0.9E
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：http://flagtech.github.io/ivision/iVision.pdf
 
@@ -516,6 +516,28 @@ void loop() {
     - t：要傳給 iTank 的指令
     - v：版本資訊
     - e：錯誤訊息
+
+-----------------------------------------------------------------------
+
+#### iVision.showMsg()
+
+- 說明
+
+    將訊息顯示在 iVision OpenCV 影像辨識畫面網頁的錯誤訊息窗格。
+
+- 語法
+
+    iVision.showMsg(char *msg)
+
+    iVision.showMsg(String msg)
+
+- 參數
+
+    - msg：char 陣列或 String 物件
+
+- 傳回值
+
+    無
 
 -----------------------------------------------------------------------
 
