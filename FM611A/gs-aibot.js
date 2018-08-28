@@ -18,10 +18,8 @@ function doPost(e) {
   var returnText = "";
   
   var talk_mode = userProperties.getProperty('talk_mode');
-  if (talk_mode == "mood" || talk_mode == "ptt") {
-    returnText = talk_mode;
-  }
-  else if (userMessage.match(/[開|啟].*心情.*模式/)) {
+
+  if (userMessage.match(/[開|啟].*心情.*模式/)) {
     userProperties.setProperty('talk_mode', 'mood');
     returnText = '開啟心情陪伴模式了';
   }
@@ -36,6 +34,9 @@ function doPost(e) {
   else if (userMessage.toLowerCase().match(/關.*ptt.*模式/)) {
     userProperties.setProperty('talk_mode', 'normal');
     returnText = '關閉PTT鄉民模式了';
+  }
+  else if (talk_mode == "mood" || talk_mode == "ptt") {
+    returnText = talk_mode;
   }
   else if (userMessage.indexOf("學 ") === 0) {
     var userMessageArray = userMessage.split(" ");
