@@ -17,11 +17,11 @@ function doPost(e) {
 
   var returnText = "";
 
-  if (userMessage.match(/[開|啟].*心情模式/)) {
+  if (userMessage.match(/[開|啟].*心情.*模式/)) {
     userProperties.setProperty('talk_mode', 'mood');
     returnText = '開啟心情陪伴模式了';
   }
-  else if (userMessage.match(/關.*心情模式/)) {
+  else if (userMessage.match(/關.*心情.*模式/)) {
     userProperties.setProperty('talk_mode', 'normal');
     returnText = '關閉心情陪伴模式了';
   }
