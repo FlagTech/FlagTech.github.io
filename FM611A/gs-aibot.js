@@ -36,7 +36,7 @@ function doPost(e) {
     returnText = '關閉PTT鄉民模式了';
   }
   else if (talk_mode == "mood" || talk_mode == "ptt") {
-    returnText = talk_mode;
+    returnText = getReplyFromAI(userMessage, talk_mode);
   }
   else if (userMessage.indexOf("學 ") === 0) {
     var userMessageArray = userMessage.split(" ");
@@ -67,6 +67,24 @@ function doPost(e) {
   });
 }
 
+function getReplyFromAI(msg, mode){
+  var act = "talk";
+  if (mode == 'mood') act == 'mood';
+  
+  var url = ngrokUrl + "/" + act + "/" + msg;
+  var returnText = "";
+
+  try{
+    returnText = UrlFetchApp.fetch(url).getContentText();
+  }
+  catch(e){
+    returnText = "無法連線AI大腦程式, 關閉"
+    if (mode == 'mood') returnText += '心情陪伴模式';
+    else if (mode == 'ptt') returnText += 'PTT鄉民模式';
+  }
+  
+  return returnText;
+}
 
 function getMisunderstandWords() {
   var _misunderstandWords = [
