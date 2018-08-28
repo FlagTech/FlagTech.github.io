@@ -76,8 +76,26 @@ function getReplyFromAI(msg, mode){
 
   try{
     returnText = UrlFetchApp.fetch(url).getContentText();
+    if (mode == 'mood') {
+      var moodReply = [];
+      returnText = parseInt(returnText);
+      if (returnText > 0) {
+        if (Array.isArray(happyReply)) moodReply = happyReply;
+        else moodReply = ["開心"];
+      }
+      else if (returnText < 0) {
+        if (Array.isArray(sadReply)) moodReply = sadReply;
+        else moodReply = ["哭哭"];
+      }
+      else {
+        if (Array.isArray(normalReply)) moodReply = normalReply;
+        else moodReply = ["嗯嗯"];
+      }
+      returnText = "[心情陪伴模式] " + moodReply[Math.floor(Math.random()*moodReply.length)];
+    }
   }
   catch(e){
+    userProperties.setProperty('talk_mode', 'normal');
     returnText = "無法連線AI大腦程式, 關閉"
     if (mode == 'mood') returnText += '心情陪伴模式';
     else if (mode == 'ptt') returnText += 'PTT鄉民模式';
