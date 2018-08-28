@@ -69,10 +69,10 @@ function doPost(e) {
 
 function getReplyFromAI(msg, mode){
   var act = "talk";
-  if (mode == 'mood') act == 'mood';
+  if (mode == 'mood') act = 'mood';
   
   //var url = ngrokUrl + "/" + act + "/" + msg;
-  var url = "http://45.35.38.229" + "/" + mode + "/11" + msg;
+  var url = "http://45.35.38.229" + "/" + mode + "/" + msg;
   var returnText = "";
 
   try{
