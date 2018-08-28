@@ -16,8 +16,24 @@ function doPost(e) {
   }
 
   var returnText = "";
-  
-  if (userMessage.indexOf("學 ") === 0) {
+
+  if (userMessage.match(/[開|啟].*心情模式/)) {
+    userProperties.setProperty('talk_mode', 'mood');
+    returnText = '開啟心情陪伴模式了';
+  }
+  else if (userMessage.match(/關.*心情模式/)) {
+    userProperties.setProperty('talk_mode', 'normal');
+    returnText = '關閉心情陪伴模式了';
+  }
+  else if (userMessage.toLowerCase().match(/[開|啟].*ptt.*模式/)) {
+    userProperties.setProperty('talk_mode', 'ptt');
+    returnText = '開啟PTT鄉民模式了';
+  }
+  else if (userMessage.toLowerCase().match(/關.*ptt.*模式/)) {
+    userProperties.setProperty('talk_mode', 'normal');
+    returnText = '關閉PTT鄉民模式了';
+  }
+  else if (userMessage.indexOf("學 ") === 0) {
     var userMessageArray = userMessage.split(" ");
     if (userMessageArray.length >= 3) {
       userProperties.setProperty(userMessageArray[1], userMessageArray.slice(2).join(' '));
