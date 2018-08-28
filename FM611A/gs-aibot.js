@@ -72,7 +72,7 @@ function getReplyFromAI(msg, mode){
   if (mode == 'mood') act == 'mood';
   
   //var url = ngrokUrl + "/" + act + "/" + msg;
-  var url = "http://45.35.38.229" + "/" + act + "/" + msg;
+  var url = "http://45.35.38.229" + "/" + mode + "/11" + msg;
   var returnText = "";
 
   try{
