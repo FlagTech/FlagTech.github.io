@@ -72,7 +72,7 @@ function getReplyFromAI(msg, mode){
   if (mode == 'mood') act = 'mood';
   
   var url = ngrokUrl + "/" + act + "/" + msg;
-  url.replace(/([^:]\/)\/+/g, "$1");
+  url = url.replace(/([^:]\/)\/+/g, "$1");
 
   var returnText = "";
 
