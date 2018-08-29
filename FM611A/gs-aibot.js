@@ -76,6 +76,7 @@ function getReplyFromAI(msg, mode){
 
   try{
     returnText = UrlFetchApp.fetch(url).getContentText();
+    
     if (mode == 'mood') {
       var moodReply = [];
       returnText = parseInt(returnText);
@@ -92,6 +93,9 @@ function getReplyFromAI(msg, mode){
         else moodReply = ["嗯嗯"];
       }
       returnText = "[心情陪伴模式] " + moodReply[Math.floor(Math.random()*moodReply.length)];
+    }
+    else {
+      returnText += "\n\nPS:這是PTT鄉民模擬機器人, 若有不雅言詞還請見諒";
     }
   }
   catch(e){
