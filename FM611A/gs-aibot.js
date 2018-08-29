@@ -81,15 +81,15 @@ function getReplyFromAI(msg, mode){
       var moodReply = [];
       returnText = parseInt(returnText);
       if (returnText > 0) {
-        if (Array.isArray(happyReply)) moodReply = happyReply;
+        if (typeof happyReply !== 'undefined' && Array.isArray(happyReply)) moodReply = happyReply;
         else moodReply = ["開心"];
       }
       else if (returnText < 0) {
-        if (Array.isArray(sadReply)) moodReply = sadReply;
+        if (typeof sadReply !== 'undefined' && Array.isArray(sadReply)) moodReply = sadReply;
         else moodReply = ["哭哭"];
       }
       else {
-        if (Array.isArray(normalReply)) moodReply = normalReply;
+        if (typeof normalReply !== 'undefined' && Array.isArray(normalReply)) moodReply = normalReply;
         else moodReply = ["嗯嗯"];
       }
       returnText = "[心情陪伴模式] " + moodReply[Math.floor(Math.random()*moodReply.length)];
