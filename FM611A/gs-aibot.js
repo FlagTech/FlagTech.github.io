@@ -54,7 +54,7 @@ function doPost(e) {
   UrlFetchApp.fetch(url, {
       'headers': {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + accessToken,
+      'Authorization': 'Bearer ' + accessToken.trim(),
     },
     'method': 'post',
     'payload': JSON.stringify({
@@ -72,7 +72,7 @@ function getReplyFromAI(msg, mode){
   if (mode == 'mood') act = 'mood';
   
   var url = ngrokUrl + "/" + act + "/" + msg;
-  url = url.replace(/([^:]\/)\/+/g, "$1");
+  url = url.trim().replace(/([^:]\/)\/+/g, "$1");
 
   var returnText = "";
 
