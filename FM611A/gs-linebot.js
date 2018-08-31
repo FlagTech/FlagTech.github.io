@@ -61,7 +61,7 @@ function doPost(e) {
   UrlFetchApp.fetch(url, {
       'headers': {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + accessToken,
+      'Authorization': 'Bearer ' + accessToken.trim(),
     },
     'method': 'post',
     'payload': JSON.stringify({
