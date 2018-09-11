@@ -93,19 +93,19 @@ iVision 主機的主要元件如下：
 
 iVision 支援 AP 與 STA 兩種 Wi-Fi 模式，兩種模式下 iVision  的 IP 位址有所不同。
 
-#### AP 模式
+### AP 模式
 
 iVision 自己作為 Wi-Fi 基地台，您的電腦或手機的 Wi-Fi 連到 iVision 的 Wi-Fi 基地台之後，便可以控制 iVision。
 
 ![AP模式示意圖](https://flagtech.github.io/ivision/images/AP模式示意圖.jpg)
 
-#### STA 模式
+### STA 模式
 
 iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手機也必須連到同一個基地台，才能控制 iVision 。
 
 ![STA模式示意圖](https://flagtech.github.io/ivision/images/STA模式示意圖.jpg)
 
-#### 找出 iVision 的 Wi-Fi 模式與 IP
+### 找出 iVision 的 Wi-Fi 模式與 IP
 
 當 iTank 的 LCD 第一行顯示 AP SSID 時，表示 iVision 目前是 AP 模式，自己作為 Wi-Fi 基地台：
 
@@ -121,7 +121,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 以上圖為例，iVision 的 IP 是 192.168.100.101。
 
-#### 用瀏覽器設定 Wi-Fi 模式
+### 用瀏覽器設定 Wi-Fi 模式
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
@@ -143,7 +143,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ## 透過 iVision 遠端視訊遙控 iTank
 
-#### 以 Android/iPhone 手機或電腦瀏覽器進行遠端視訊遙控
+### 以 Android/iPhone 手機或電腦瀏覽器進行遠端視訊遙控
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
@@ -165,7 +165,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 若無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
 
-#### 以 Android 手機 App 進行遙控
+### 以 Android 手機 App 進行遙控
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
@@ -205,7 +205,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 > 本程式是以『SUPER-K 兒童5寸PU發泡籃球』這個產品的顏色為基準進行開發。若要更改追蹤的顏色，請參見本手冊的『[更改追蹤的顏色](#更改追蹤的顏色)』段落。
 
-#### 尋找物體 
+### 尋找物體 
 
 重複按 iTank LCD 下方的 K0 鈕，一直到 LCD 第 3 行顯示 『->Find』之後，按 K3 鈕確認：
 
@@ -219,7 +219,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
  - area 是物體的面積
  - r|s 是物體的半徑
 
-#### 追蹤跟隨物體
+### 追蹤跟隨物體
 
 確認 iVision 可以辨識到您提供的物體，便可以設定讓 iVision 控制 iTank 追蹤跟隨該物體。
 
@@ -233,7 +233,7 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 > 當電力變弱或地面阻力大時，您可以將 iTank 上 DIP_SW 的 4 號開關撥到上方 ON 位置，即可增加馬力輸出。
 
-#### 更改追蹤的顏色 
+### 更改追蹤的顏色 
 
 請參見本手冊的『[找出 iVision 的 Wi-Fi 模式與 IP](#找出-ivision-的-wi-fi-模式與-ip)』段落，完成 Wi-Fi 連線，並找出 iVision 的 IP。
 
@@ -273,7 +273,7 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 > 只要使用 iVision 函式庫撰寫或修改 Arduino 程式，即使覆蓋了 Arduino 上的出廠預錄程式，也不會影響 iVision 網頁或 App 的操控。
 
-#### 安裝 iVision 函式庫
+### 安裝 iVision 函式庫
 
 請先使用瀏覽器下載以下函式庫檔案：
 
@@ -288,7 +288,7 @@ iVision 會依照物體的半徑值來判斷物體與 iTank 的距離，以上�
 
 > FlagTankArm.zip、PS2X_lib.zip 是 iArm 手臂的函式庫，因為本套件預錄程式也有包含手臂相關控制，所以請一併加入手臂的函式庫，以便之後可以還原預錄程式。
 
-#### 使用 iVision 函式庫
+### 使用 iVision 函式庫
 
 若要在 Arduino 程式中使用 iVision 函式庫，請先在 Arduino 程式最前面引入以下 2 個 .h 檔案：
 
@@ -361,7 +361,7 @@ void loop() {
  
 ## iVision for Arduino 函式與屬性說明
 
-#### iVision.initSerial()
+### iVision.initSerial()
 
 - 說明
 
@@ -381,7 +381,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.getVersion()
+### iVision.getVersion()
 
 - 說明
 
@@ -401,7 +401,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.findColor()
+### iVision.findColor()
 
 - 說明
 
@@ -428,7 +428,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.findCircle()
+### iVision.findCircle()
 
 - 說明
 
@@ -448,7 +448,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.findSquare()
+### iVision.findSquare()
 
 - 說明
 
@@ -468,7 +468,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.findStop()
+### iVision.findStop()
 
 - 說明
 
@@ -488,7 +488,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.checkRead()
+### iVision.checkRead()
 
 - 說明
 
@@ -508,7 +508,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.read()
+### iVision.read()
 
 - 說明
 
@@ -535,7 +535,7 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.showMsg()
+### iVision.showMsg()
 
 - 說明
 
@@ -557,25 +557,25 @@ void loop() {
 
 -----------------------------------------------------------------------
 
-#### iVision.x
+### iVision.x
 
 - 辨識到的物體的中心點 x 座標，原點在畫面左上角
 
 -----------------------------------------------------------------------
 
-#### iVision.y
+### iVision.y
 
 - 辨識到的物體的中心點 y 座標，原點在畫面左上角
 
 -----------------------------------------------------------------------
 
-#### iVision.r
+### iVision.r
 
 - 辨識到的物體的半徑 (圓形) 或端點數 (多邊形)
 
 -----------------------------------------------------------------------
 
-#### iVision.area
+### iVision.area
 
 - 辨識到的物體的面積
 
@@ -589,17 +589,17 @@ void loop() {
 
 iVision 提供 HTTP 視訊串流以及 HTTP API，所以只要您使用的程式語言有 HTTP 相關函式庫或物件，即可用來取得遠端視訊，以及進行遠端遙控。
 
-#### 視訊串流
+### 視訊串流
 
 - 視訊網址：http://iVision的IP/stream 串流格式為 MJPEG
 
 - 圖片網址：http://iVision的IP/image.jpg 圖片格式為 JPEG
 
-#### HTTP API
+### HTTP API
 
 HTTP API 會以 json 的格式回傳結果。
 
-##### 控制 iTank 行進方向
+#### 控制 iTank 行進方向
 
 http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
 
@@ -607,7 +607,7 @@ http://iVision的IP/api?setitank&dir=[方向]&speed=[速度]
 
 - 速度：非必須參數，可使用的值為 1-7，數字越大速度越快。若未指定則預設值是 2。
 
-##### 傳送 UART 指令給 iTank
+#### 傳送 UART 指令給 iTank
 
 http://iVision的IP/api?setserial=[UART指令]
 
@@ -623,11 +623,11 @@ http://iVision的IP/api?setserial=[UART指令]
 
 ## 錯誤排除
 
-##### 無法開機
+### 無法開機
 
 通常是因為電池的電量不足，請透過電壓指示計檢查，若低於 10.0 V，請儘快充電。
 
-##### 無法透過網路連線
+### 無法透過網路連線
 
 開機後 AP 模式綠燈每秒快閃兩下，STA 模式綠燈會每秒閃一下，若亮起紅燈，表示網路發生錯誤，請如下處理：
 
