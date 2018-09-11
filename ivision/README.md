@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：0.9E
+ - 目前版本：0.9F
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：http://flagtech.github.io/ivision/iVision.pdf
 
@@ -77,9 +77,17 @@ iVision 主機的主要元件如下：
 
     ![iVision選單-搖桿控制](https://flagtech.github.io/ivision/images/iVision選單-搖桿控制.jpg)
 
-    若使用手機，請將手機橫擺，左邊的搖桿可以控制 iTank 前進後退左右轉，右邊的搖桿控制手臂上下擺動、爪子開合：
+    若使用手機，請將手機橫擺，畫面左邊是方向控制區，右邊是手臂控制區：
 
-    ![搖桿控制畫面](https://flagtech.github.io/ivision/images/搖桿控制畫面.jpg)
+    ![搖桿控制畫面1](https://flagtech.github.io/ivision/images/搖桿控制畫面1.jpg)
+    
+    在畫面左邊的方向控制區按一下，手按之處會出現藍色搖桿，拉曳搖桿可以控制 iTank 前進後退左右轉，拉曳距離越大，速度越快：
+
+    ![搖桿控制畫面2](https://flagtech.github.io/ivision/images/搖桿控制畫面2.jpg)
+    
+    在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，拉曳搖桿可以控制手臂上下擺動、爪子開合，拉曳距離越大，動作越快：
+
+    ![搖桿控制畫面3](https://flagtech.github.io/ivision/images/搖桿控制畫面3.jpg)
 
 ## iVision Wi-Fi 模式
 
@@ -143,9 +151,17 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![iVision選單-搖桿控制](https://flagtech.github.io/ivision/images/iVision選單-搖桿控制.jpg)
 
-若使用手機，請將手機橫擺，左邊的搖桿可以控制 iTank 前進後退左右轉，右邊的搖桿控制手臂上下擺動、爪子開合：
+若使用手機，請將手機橫擺，畫面左邊是方向控制區，右邊是手臂控制區：
 
-![搖桿控制畫面](https://flagtech.github.io/ivision/images/搖桿控制畫面.jpg)
+![搖桿控制畫面1](https://flagtech.github.io/ivision/images/搖桿控制畫面1.jpg)
+
+在畫面左邊的方向控制區按一下，手按之處會出現藍色搖桿，拉曳搖桿可以控制 iTank 前進後退左右轉，拉曳距離越大，速度越快：
+
+![搖桿控制畫面2](https://flagtech.github.io/ivision/images/搖桿控制畫面2.jpg)
+
+在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，拉曳搖桿可以控制手臂上下擺動、爪子開合，拉曳距離越大，動作越快：
+
+![搖桿控制畫面3](https://flagtech.github.io/ivision/images/搖桿控制畫面3.jpg)
 
 若無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
 
