@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>iVision 無線影像辨識套件手冊</title>
+  <!-- the docute client styles -->
+  <link rel="stylesheet" href="/docute/docute.css">
+  
+</head>
+<body>
+  <div id="app"></div>
+  <!-- load the docute client library -->
+  <script src="/docute/docute.js"></script>
+  
+  <!-- 
+   cpp depends on c which depends on clike. 
+   Visit https://prismjs.com/download.html to get the dependencies resolved automatically.
+  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-cpp.min.js"></script>
+  
+  <!-- bootstrap your docute app! -->
+  
+  <script>
+    docute.init()
+  </script>
+</body>
+</html>
