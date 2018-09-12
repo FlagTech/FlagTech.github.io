@@ -10,8 +10,11 @@
 
   <style type="text/css">
     .sidebar-nav>ul>ul>li>a {
-      background-image: var(--sidebar-nav-pagelink-background-image);
-      background-position: var(--sidebar-nav-pagelink-background-position);
+      background-image: var(--sidebar-nav-pagelink-background-image) !important;
+      background-position: var(--sidebar-nav-pagelink-background-position) !important;
+      padding: var(--sidebar-nav-pagelink-padding, var(--sidebar-nav-link-padding));
+    }
+    .sidebar-nav>ul>ul>ul>li>a {
       padding: var(--sidebar-nav-pagelink-padding, var(--sidebar-nav-link-padding));
     }
   </style>
