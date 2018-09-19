@@ -619,7 +619,7 @@ http://iVision的IP/api/setitank/?dir=[方向]&speed=[速度]
 
 http://iVision的IP/api/setitank/?servo=[編號,角度]
 
-- 編號：以 0~5 代表 Servo0 至 Servo5 插座上的伺服馬達，iArm 手臂的伺服馬達編號由下到上依序是 0~3。
+- 編號：以 0~5 代表 Servo0 至 Servo5 插座上的伺服馬達，iArm 手臂的伺服馬達編號由下到上依序是 0 ~ 3。
 
 - 角度：0~180 度。
 
