@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：1.0
+ - 目前版本：1.1
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：http://flagtech.github.io/ivision/iVision.pdf
 
@@ -615,6 +615,8 @@ http://iVision的IP/api/setitank/?dir=[方向]&speed=[速度]
 
 - 速度：非必須參數，可使用的值為 1-7，數字越大速度越快。若未指定則預設值是 2。
 
+此 API 必須搭配 [Arduino 預錄程式](#還原 Arduino 預錄程式)才能運作。
+
 #### 調整 iTank 伺服馬達角度
 
 http://iVision的IP/api/setitank/?servo=[編號,角度]
@@ -625,11 +627,15 @@ http://iVision的IP/api/setitank/?servo=[編號,角度]
 
 可以用 & 符號串連多個 servo 參數，同時控制多個伺服馬達，例如 http://iVision的IP/api/setitank/?servo=0,30&servo=3,90 表示調整 Servo0 角度為 30 度，Servo3 角度為 90 度。
 
+此 API 必須搭配 [Arduino 預錄程式](#還原 Arduino 預錄程式)才能運作。
+
 #### 傳送 UART 指令給 iTank
 
 http://iVision的IP/api?setserial=[UART指令]
 
 - UART指令：請使用 %FF 來表示 16 進位 0xFF，例如 %FF%FF%07%21%FF%FF%00 指令會設定 Servo1 的角度為 33 度。關於 iTank UART 指令的詳細說明，請參見 iTank 的說明手冊。
+
+此 API 必須搭配 [Arduino 預錄程式](#還原 Arduino 預錄程式)才能運作。
 
 ## 燈號狀態說明
 
