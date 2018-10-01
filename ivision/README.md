@@ -1,6 +1,6 @@
 # iVision 無線影像辨識套件手冊
 
- - 目前版本：1.1
+ - 目前版本：1.2
  - 最新線上版網址：https://flagtech.github.io/ivision/ 
  - PDF 版本下載網址：http://flagtech.github.io/ivision/iVision.pdf
 
@@ -85,9 +85,11 @@ iVision 主機的主要元件如下：
 
     ![搖桿控制畫面2](https://flagtech.github.io/ivision/images/搖桿控制畫面2.jpg)
     
-    在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，拉曳搖桿可以控制手臂上下擺動、爪子開合，拉曳距離越大，動作越快：
+    在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，上下拉曳搖桿可以控制手臂最下方的伺服馬達上下擺動，左右拉曳則可控制手臂最上方的爪子開合，拉曳距離越大，動作越快：
 
     ![搖桿控制畫面3](https://flagtech.github.io/ivision/images/搖桿控制畫面3.jpg)
+    
+    畫面最右邊的滑動桿可以控制手臂從下往上數第二個伺服馬達上下擺動，右下方的按鈕可控制爪子橫擺或直擺。
 
 ## iVision Wi-Fi 模式
 
@@ -151,6 +153,8 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![iVision選單-搖桿控制](https://flagtech.github.io/ivision/images/iVision選單-搖桿控制.jpg)
 
+> 如果無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
+
 若使用手機，請將手機橫擺，畫面左邊是方向控制區，右邊是手臂控制區：
 
 ![搖桿控制畫面1](https://flagtech.github.io/ivision/images/搖桿控制畫面1.jpg)
@@ -159,11 +163,11 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![搖桿控制畫面2](https://flagtech.github.io/ivision/images/搖桿控制畫面2.jpg)
 
-在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，拉曳搖桿可以控制手臂上下擺動、爪子開合，拉曳距離越大，動作越快：
+在畫面右邊的手臂控制區按一下，手按之處會出現綠色搖桿，上下拉曳搖桿可以控制手臂最下方的伺服馬達上下擺動，左右拉曳則可控制手臂最上方的爪子開合，拉曳距離越大，動作越快：
 
 ![搖桿控制畫面3](https://flagtech.github.io/ivision/images/搖桿控制畫面3.jpg)
-
-若無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
+    
+畫面最右邊的滑動桿可以控制手臂從下往上數第二個伺服馬達上下擺動，右下方的按鈕可控制爪子橫擺或直擺。
 
 ### 以 Android 手機 App 進行遙控
 
@@ -175,7 +179,7 @@ iVision 連到您家中或是學校的 Wi-Fi 基地台，您的電腦或是手�
 
 ![AndroidApp-01](https://flagtech.github.io/ivision/images/AndroidApp-01.jpg)
 
-若無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
+> 如果無法連線的話，請確認您的 Wi-Fi 是否連線正確的 AP 基地台，以及檢查 iVision IP 是否正確。
 
 接著請勾選『攝影機』項目，便可以看到 iVision 的視訊影像：
 
