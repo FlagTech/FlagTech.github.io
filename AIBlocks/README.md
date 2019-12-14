@@ -347,7 +347,7 @@ K+|D8
     :pencil2:範例：
     
     ```sh
-    D:\temp>curl http://192.168.100.67/train?pwd=12345678
+    D:\temp>curl http://192.168.100.67/unlock?pwd=12345678
     OK
     ```
 
