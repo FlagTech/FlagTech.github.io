@@ -1,0 +1,255 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 心情點播機</title>
+
+  <script>
+    let urlParams = new URLSearchParams(window.location.search);
+    aio_k = urlParams.get("aio_k");
+    console.log("AIO Key:" + aio_k);
+    aio_n = urlParams.get("aio_n");
+    console.log("AIO user name:" + aio_n);
+    aio_f = urlParams.get("aio_f");
+    console.log("AIO feed name:" + aio_f);
+    az_k = urlParams.get("az_k");
+    console.log("Azure Key:" + az_k);
+    az_ep = urlParams.get("az_ep");
+    console.log("Azure Endpoint:" + az_ep);
+  </script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" rel="stylesheet">
+  <style>
+    *,
+    *:before,
+    *:after {
+      box-sizing: border-box;
+      hyphens: auto;
+      overflow-wrap: break-word;
+    }
+
+    html {
+      font-size: 20px;
+      min-height: 100%;
+    }
+
+    body {
+      max-width: 700px;
+      min-height: 100%;
+      margin: 2em auto;
+      padding: 0 0.5em;
+      background: linear-gradient(45deg, #fc00ff, #00dbde);
+      background-repeat: no-repeat;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-size: inherit;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      background: transparent;
+    }
+
+    .button {
+      padding: 0.5em;
+      margin: 1em 0;
+      height: 70px;
+      width: 100%;
+      border-radius: 10px;
+      border: none;
+      background: #3b5998;
+      color: #fff;
+    }
+
+    .hidden,
+    [hidden] {
+      display: none;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.05);
+    }
+
+    #video {
+      width: 100%;
+    }
+
+    /* === Responsive === */
+    .container {
+      padding: 10px 60px 10px 60px;
+    }
+
+    .button {
+      padding: 0.5em;
+    }
+
+    #personSelectList,
+    #personName {
+      width: 50%;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px 30px 10px 30px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 5px 15px 5px 15px;
+      }
+
+      .button {
+        padding: 0.2em;
+      }
+
+      #personSelectList {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-ui">
+    <div class="container">
+      <h1>AI 心情點播機</h1>
+      <p hidden class="page-error"></p>
+      <div class="page-ok">
+        <video id="video" autoplay="true"></video>
+        <canvas id="photo" style="display: none;"></canvas>
+        <div>
+          <button type="button" id="button-play" class="button" onclick="playMusic();">AI 心情點播機 - 播放音樂</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+  <script src="https://flagtech.github.io/FM611A/textToSpeech.js"></script>
+  <script src="https://flagtech.github.io/FM611A/cameraPhoto.js"></script>
+  <script src="azureEmotion.js"></script>
+
+  <script>
+    if (!window.jQuery) {
+      pageError("請先連上網路才能使用 AI 功能");
+    };
+
+    $(document).ready(function () {
+      azureEmotion.apiKey = az_k;
+      azureEmotion.apiLocation = az_ep;
+
+      cameraPhoto.video = $("#video")[0];
+      cameraPhoto.begin(null, function () {
+        pageError("您的瀏覽器不支援影像功能");
+      });
+
+      Noty.overrideDefaults({
+        layout: 'topRight',
+        timeout: 3000,
+        progressBar: true,
+        killer: true,
+        visibilityControl: true,
+      })
+
+      $.ajaxSetup({
+        timeout: 15000,
+      });
+    });
+
+    function pageError(msg) {
+      document.querySelector('.page-error').textContent = msg;
+      document.querySelector('.page-error').removeAttribute('hidden');
+      document.querySelector('.page-ok').setAttribute('hidden', '');
+      [].forEach.call(document.querySelectorAll('form button'), function (button) {
+        button.setAttribute('disabled', '');
+      });
+    }
+
+    function speakMsg(words, type) {
+      if (typeof type === 'undefined') type = "info";
+      new Noty({
+        text: words,
+        type: type
+      }).show();
+      textToSpeech.say(words);
+    }
+
+    function logEvent(string) {
+      console.log(string);
+    }
+
+    function playMusic() {
+      speakMsg('正在使用此畫面判斷您的心情...');
+      cameraPhoto.video.pause();
+
+      azureEmotion.detect(emotionDetectDone);
+    }
+
+    function emotionDetectDone(data) {
+      var emotionIdx = 0;
+      if (data === 'normal') {
+        speakMsg("您看起來心情不好也不壞");
+        emotionIdx = 20;
+        //$.get("/playmusic?mood=normal");
+      } else if (data === 'happy') {
+        speakMsg("您看起來心情很好", 'success');
+        emotionIdx = 40;
+        //$.get("/playmusic?mood=good");
+      } else if (data === 'unhappy') {
+        speakMsg("您看起來心情不好", 'error');
+        emotionIdx = 60;
+        //$.get("/playmusic?mood=bad");
+      } else if (data === null) {
+        speakMsg('找不到臉孔', 'error');
+      } else if (data === false) {
+        new Noty({
+          text: '無法連線 AI 服務',
+          type: 'error'
+        }).show();
+      } else {
+        new Noty({
+          text: '無法確認 AI 服務回傳結果',
+          type: 'error'
+        }).show();
+      }
+
+      if (emotionIdx > 0) {
+        $.ajax({
+            url: "https://io.adafruit.com/api/v2/" + aio_n + "/feeds/" + aio_f + "/data?X-AIO-Key=" + aio_k,
+            type: "POST",
+            data: {
+              "value": emotionIdx
+            },
+          })
+          .done(function (data) {
+            new Noty({
+              text: '發出通知',
+              type: 'info'
+            }).show();
+          })
+          .fail(function () {
+            new Noty({
+              text: '無法發出通知',
+              type: 'error'
+            }).show();
+          });
+      }
+      cameraPhoto.video.play();
+    }
+  </script>
+</body>
+
+</html>
