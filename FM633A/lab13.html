@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html class="no-js consumer" lang="cmn-Hant-TW">
+
+<head>
+
+    <script>
+        (function (e, p) {
+            var m = location.href.match(/platform=(win8|win|mac|linux|cros)/);
+            e.id = (m && m[1]) ||
+                (p.indexOf('Windows NT 6.2') > -1 ? 'win8' : p.indexOf('Windows') > -1 ? 'win' : p.indexOf('Mac') >
+                    -1 ? 'mac' : p.indexOf('CrOS') > -1 ? 'cros' : 'linux');
+            e.className = e.className.replace(/\bno-js\b/, 'js');
+        })(document.documentElement, window.navigator.userAgent)
+    </script>
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+
+    <title>
+        LAB13 哼唱音樂盒
+    </title>
+
+    <style>
+
+        .sidenav {
+            height: 0;
+            width: 100%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            color: azure;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            /* padding-top: 60px; */
+            text-align: center;
+            background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(43, 43, 43) 45%, rgb(94, 94, 94) 75%, rgb(172, 172, 172) 100%);
+
+        }
+
+        .sidenav a {
+
+            padding: 8px 8px 8px 8px;
+            text-decoration: none;
+            font-size: 16px;
+            text-align: center;
+            color: rgb(147, 158, 158);
+            /* color: #bdf0ff; */
+            background-color: rgb(147, 158, 158);
+            /* background-color: rgb(75, 197, 253); */
+            display: block;
+            transition: 0.3s;
+            width: fit-content;
+            /* height: 20px; */
+            border-radius: 5px;
+            margin: auto;
+
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: relative;
+            /* top: 0; */
+            /* right: 25px; */
+            font-size: 16px;
+            margin-top: 10px;
+            
+            /* height: 20px; */
+            
+
+        }
+        .msgbox {
+        text-align: center;
+        font-size: x-large;
+        border-radius: 15px;
+        background-color: rgb(147, 158, 158);
+        opacity: 75%;
+        border: 5px solid rgb(41, 41, 41);
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+        padding-top: 0mm;
+        /* display: none; */
+        box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2),
+            1px 1px 0 0 #1c3d4b,
+            2px 2px 0 0 #1c3d4b,
+            3px 3px 0 0 #1c3d4b,
+            4px 4px 0 0 #1c3d4b,
+            5px 5px 0 0 #1c3d4b,
+            6px 6px 0 0 #1c3d4b,
+            7px 7px 0 0 #1c3d4b,
+            8px 8px 0 0 #1c3d4b,
+            9px 9px 0 0 #1c3d4b,
+            10px 10px 0 0 #1c3d4b,
+            11px 11px 0 0 #1c3d4b,
+            12px 12px 0 0 #1c3d4b;
+    }
+        @media screen and (max-width: 450px) {
+            .sidenav {
+                padding-left: 15px;
+            }
+
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+
+        #left {
+            float: left;
+            text-align: left;
+            
+            
+
+        }
+
+        #right {
+            float: right;
+            width: fit-content;
+
+        }
+
+        #menu-container {
+            margin: auto;
+            width: fit-content;
+        }
+
+        #info {
+            font-size: 20px;
+        }
+
+        #div_start {
+            float: right;
+        }
+
+        #headline {
+            text-decoration: none
+        }
+
+        #results {
+            font-size: 14px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+            min-height: 150px;
+        }
+
+        #start_button {
+            border: 0;
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .interim {
+            color: gray;
+        }
+
+        .final {
+            color: black;
+            padding-right: 3px;
+        }
+
+        .button {
+            display: none;
+        }
+
+        .marquee {
+            margin: 20px auto;
+        }
+
+        #buttons {
+            margin: 10px 0;
+            position: relative;
+            top: -50px;
+        }
+
+        #send {
+            margin-top: 20px;
+        }
+
+        #send {
+            display: none;
+            margin: 0 70px;
+        }
+        .inputtext {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: large;
+        height: fit-content;
+    }
+    </style>
+    <style>
+        a.c1 {
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body class="" id="grid">
+    <div class="browser-landing" id="main">
+        <div class="compact marquee-stacked" id="marquee">
+        
+            <div id="mySidenav" class="sidenav">
+                <h1>
+                    LAB13 哼唱音樂盒
+                </h1>
+                <div class="msgbox" id="msgbox">
+
+                    <p style="color: black;">
+                       <label class="left">Adafruit IO 金鑰:</label>
+                        <input type="text" id="activekey" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
+                        <label class="left">Adafruit IO 帳號:</label>
+                        <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value="Rainnie"><br>
+                        <label class="left">Adafruit IO Feed:</label>
+                        <input type="text" id="feed" class="inputtext" name="inputtext" autocomplete="on" value="music"><br>
+                        <a href="javascript:void(0)" class="closebtn" id="closebtn" aria-disabled="true" onclick="closeNav()">設定完成</a>
+                        </p>
+        
+                </div>
+                <!-- <p> -->
+                
+                <!-- <button id="startBtn" type="button" onclick="init()">Start</button> -->
+                <!-- </p> -->
+            </div>
+            <!-- <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span> -->
+            <div class="marquee-copy">
+                <h1>
+                    LAB13 🎵哼唱音樂盒🎵
+                </h1>
+            </div>
+        </div>
+        <div class="compact marquee">
+            <div id="info">
+                <p id="info_start">
+                    按下右方麥克風圖示然後開始說出音樂簡譜數字。
+                </p>
+                <p id="info_speak_now" style="display:none">
+                    請說。
+                </p>
+                <p id="info_no_speech" style="display:none">
+                    沒有偵測到聲音, 您可能需要調整 <a href="https://support.google.com/chrome/answer/2693767?hl=zh-Hant">麥克風設定</a>.
+                </p>
+                <p id="info_no_microphone" style="display:none">
+                    沒有找到麥克風。請確認麥克風是否正確安裝, 並且
+                    <a href="https://support.google.com/chrome/answer/2693767?hl=zh-Hant">
+                        麥克風設定</a> 都是正常的。
+                </p>
+                <p id="info_allow" style="display:none">
+                    按下上方的允許按鈕來啟用麥克風。
+                </p>
+                <p id="info_denied" style="display:none">
+                    已禁用麥克風。
+                </p>
+                <p id="info_blocked" style="display:none">
+                    Permission to use microphone is blocked. To change, go to
+                    chrome://settings/contentExceptions#media-stream
+                </p>
+                <p id="info_upgrade" style="display:none">
+                    該網頁不支援您的瀏覽器, 請升級 <a href="https://www.google.com/chrome">Chrome</a> 版本 25 以上。
+                </p>
+            </div>
+            <div id="div_start">
+                <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img"
+                        src="https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif"></button>
+            </div>
+            <div id="results">
+                <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
+            </div>
+            <div id="send">
+                <button class="button" id="send_button" onclick="sendButton()">開始唱～</button>
+                <div id="send_info">
+                    <p id="send_content">
+                        無法送出。
+                    </p>
+
+                </div><button class="button" id="clear_button" onclick="clearButton()">清除全部</button>
+            </div>
+            <div class="compact marquee" id="div_language">
+                <select id="select_language" onchange="updateCountry()">
+                </select>&nbsp;&nbsp; <select id="select_dialect">
+                </select>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.google.com/intl/en/chrome/assets/common/js/chrome.min.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.bootcss.com/noty/3.1.4/noty.min.js"></script>
+    <script>
+        var chrmMenuBar = new chrm.ui.MenuBar();
+        chrmMenuBar.decorate('nav');
+        var chrmLogo = new chrm.ui.Logo('logo');
+        var chrmscroll = new chrm.ui.SmoothScroll('scroll');
+        chrmscroll.init();
+        window.___gcfg = {
+            lang: 'en'
+        };
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#username').on('input', function () {
+                if ($(this).val() != '') {
+            
+                    $('#closebtn').css({
+                        'color': '#ffffff',
+                        'background-color': 'rgb(75, 197, 253)'
+                    })
+                } else {
+                    
+                    $('#closebtn').css({
+                        'color': 'rgb(147, 158, 158)',
+                        'background-color': 'rgb(147, 158, 158)'
+                    })
+                }
+            });
+        });
+
+        //openNav
+        document.getElementById("mySidenav").style.height = "100%";
+
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.height = "0";
+        }
+        // If you modify this array, also update default language / dialect below.
+        var langs = [
+            ['Afrikaans', ['af-ZA']],
+            ['አማርኛ', ['am-ET']],
+            ['Azərbaycanca', ['az-AZ']],
+            ['বাংলা', ['bn-BD', 'বাংলাদেশ'],
+                ['bn-IN', 'ভারত']
+            ],
+            ['Bahasa Indonesia', ['id-ID']],
+            ['Bahasa Melayu', ['ms-MY']],
+            ['Català', ['ca-ES']],
+            ['Čeština', ['cs-CZ']],
+            ['Dansk', ['da-DK']],
+            ['Deutsch', ['de-DE']],
+            ['中文', ['cmn-Hant-TW', '中文 (台灣)'],
+                ['cmn-Hans-CN', '普通话 (中国大陆)'],
+                ['cmn-Hans-HK', '普通话 (香港)'],
+                ['yue-Hant-HK', '粵語 (香港)']
+            ],
+            ['English', ['en-AU', 'Australia'],
+                ['en-CA', 'Canada'],
+                ['en-IN', 'India'],
+                ['en-KE', 'Kenya'],
+                ['en-TZ', 'Tanzania'],
+                ['en-GH', 'Ghana'],
+                ['en-NZ', 'New Zealand'],
+                ['en-NG', 'Nigeria'],
+                ['en-ZA', 'South Africa'],
+                ['en-PH', 'Philippines'],
+                ['en-GB', 'United Kingdom'],
+                ['en-US', 'United States']
+            ],
+            ['Español', ['es-AR', 'Argentina'],
+                ['es-BO', 'Bolivia'],
+                ['es-CL', 'Chile'],
+                ['es-CO', 'Colombia'],
+                ['es-CR', 'Costa Rica'],
+                ['es-EC', 'Ecuador'],
+                ['es-SV', 'El Salvador'],
+                ['es-ES', 'España'],
+                ['es-US', 'Estados Unidos'],
+                ['es-GT', 'Guatemala'],
+                ['es-HN', 'Honduras'],
+                ['es-MX', 'México'],
+                ['es-NI', 'Nicaragua'],
+                ['es-PA', 'Panamá'],
+                ['es-PY', 'Paraguay'],
+                ['es-PE', 'Perú'],
+                ['es-PR', 'Puerto Rico'],
+                ['es-DO', 'República Dominicana'],
+                ['es-UY', 'Uruguay'],
+                ['es-VE', 'Venezuela']
+            ],
+            ['Euskara', ['eu-ES']],
+            ['Filipino', ['fil-PH']],
+            ['Français', ['fr-FR']],
+            ['Basa Jawa', ['jv-ID']],
+            ['Galego', ['gl-ES']],
+            ['ગુજરાતી', ['gu-IN']],
+            ['Hrvatski', ['hr-HR']],
+            ['IsiZulu', ['zu-ZA']],
+            ['Íslenska', ['is-IS']],
+            ['Italiano', ['it-IT', 'Italia'],
+                ['it-CH', 'Svizzera']
+            ],
+            ['ಕನ್ನಡ', ['kn-IN']],
+            ['ភាសាខ្មែរ', ['km-KH']],
+            ['Latviešu', ['lv-LV']],
+            ['Lietuvių', ['lt-LT']],
+            ['മലയാളം', ['ml-IN']],
+            ['मराठी', ['mr-IN']],
+            ['Magyar', ['hu-HU']],
+            ['ລາວ', ['lo-LA']],
+            ['Nederlands', ['nl-NL']],
+            ['नेपाली भाषा', ['ne-NP']],
+            ['Norsk bokmål', ['nb-NO']],
+            ['Polski', ['pl-PL']],
+            ['Português', ['pt-BR', 'Brasil'],
+                ['pt-PT', 'Portugal']
+            ],
+            ['Română', ['ro-RO']],
+            ['සිංහල', ['si-LK']],
+            ['Slovenščina', ['sl-SI']],
+            ['Basa Sunda', ['su-ID']],
+            ['Slovenčina', ['sk-SK']],
+            ['Suomi', ['fi-FI']],
+            ['Svenska', ['sv-SE']],
+            ['Kiswahili', ['sw-TZ', 'Tanzania'],
+                ['sw-KE', 'Kenya']
+            ],
+            ['ქართული', ['ka-GE']],
+            ['Հայերեն', ['hy-AM']],
+            ['தமிழ்', ['ta-IN', 'இந்தியா'],
+                ['ta-SG', 'சிங்கப்பூர்'],
+                ['ta-LK', 'இலங்கை'],
+                ['ta-MY', 'மலேசியா']
+            ],
+            ['తెలుగు', ['te-IN']],
+            ['Tiếng Việt', ['vi-VN']],
+            ['Türkçe', ['tr-TR']],
+            ['اُردُو', ['ur-PK', 'پاکستان'],
+                ['ur-IN', 'بھارت']
+            ],
+            ['Ελληνικά', ['el-GR']],
+            ['български', ['bg-BG']],
+            ['Pусский', ['ru-RU']],
+            ['Српски', ['sr-RS']],
+            ['Українська', ['uk-UA']],
+            ['한국어', ['ko-KR']],
+
+            ['日本語', ['ja-JP']],
+            ['हिन्दी', ['hi-IN']],
+            ['ภาษาไทย', ['th-TH']]
+        ];
+
+        for (var i = 0; i < langs.length; i++) {
+            select_language.options[i] = new Option(langs[i][0], i);
+        }
+        // Set default language / dialect.
+        select_language.selectedIndex = 10;
+        updateCountry();
+        select_dialect.selectedIndex = 11;
+        showInfo('info_start');
+        var interim_transcript;
+
+        function updateCountry() {
+            for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+                select_dialect.remove(i);
+            }
+            var list = langs[select_language.selectedIndex];
+            for (var i = 1; i < list.length; i++) {
+                select_dialect.options.add(new Option(list[i][1], list[i][0]));
+            }
+            select_dialect.style.visibility = list[1].length == 1 ? 'hidden' : 'visible';
+        }
+
+        var final_transcript = '';
+        var recognizing = false;
+        var ignore_onend;
+        var start_timestamp;
+        if (!('webkitSpeechRecognition' in window)) {
+            upgrade();
+        } else {
+            start_button.style.display = 'inline-block';
+            var recognition = new webkitSpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onstart = function () {
+                recognizing = true;
+                showInfo('info_speak_now');
+                start_img.src =
+                    'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-animate.gif';
+            };
+
+            recognition.onerror = function (event) {
+                if (event.error == 'no-speech') {
+                    start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+                    showInfo('info_no_speech');
+                    ignore_onend = true;
+                }
+                if (event.error == 'audio-capture') {
+                    start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+                    showInfo('info_no_microphone');
+                    ignore_onend = true;
+                }
+                if (event.error == 'not-allowed') {
+                    if (event.timeStamp - start_timestamp < 100) {
+                        showInfo('info_blocked');
+                    } else {
+                        showInfo('info_denied');
+                    }
+                    ignore_onend = true;
+                }
+            };
+
+            recognition.onend = function () {
+                recognizing = false;
+                if (ignore_onend) {
+                    return;
+                }
+                start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic.gif';
+                if (!final_transcript) {
+                    showInfo('info_start');
+                    return;
+                }
+                showInfo('');
+                if (window.getSelection) {
+                    window.getSelection().removeAllRanges();
+                    var range = document.createRange();
+                    range.selectNode(document.getElementById('final_span'));
+                    window.getSelection().addRange(range);
+                }
+             
+            };
+
+            recognition.onresult = function (event) {
+                interim_transcript = '';
+                if (typeof (event.results) == 'undefined') {
+                    recognition.onend = null;
+                    recognition.stop();
+                    upgrade();
+                    return;
+                }
+                for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        final_transcript += event.results[i][0].transcript;
+                    } else {
+                        interim_transcript += event.results[i][0].transcript;
+                    }
+                }
+                final_transcript = capitalize(final_transcript);
+                final_span.innerHTML = linebreak(final_transcript);
+                interim_span.innerHTML = linebreak(interim_transcript);
+                if (final_transcript || interim_transcript) {
+                    showButtons('inline-block');
+                }
+            };
+        }
+
+        function upgrade() {
+            start_button.style.visibility = 'hidden';
+            showInfo('info_upgrade');
+        }
+
+        var two_line = /\n\n/g;
+        var one_line = /\n/g;
+
+        function linebreak(s) {
+            return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+        }
+
+        var first_char = /\S/;
+
+        function capitalize(s) {
+            return s.replace(first_char, function (m) {
+                return m.toUpperCase();
+            });
+        }
+
+        function sendButton() {
+            if (recognizing) {
+                recognizing = false;
+                recognition.stop();
+            }
+            send_button.style.display = 'none';
+
+            var send_content_val = parseInt(final_span.innerHTML);
+            
+            if (!isNaN(send_content_val)) {
+                send_content.innerHTML = "已送出： " + send_content_val;
+                sendContent(send_content_val);
+            } else {
+                send_content.innerHTML = "只能傳送數字！";
+            }
+            send_info.style.display = 'inline-block';
+            showInfo('');
+        }
+
+        function sendContent(con) {
+            //******Read AIO info.*******
+            // Adafruit user name
+            aio_n = document.getElementById("username").value;
+            // Adafruit IO Key
+            aio_k = document.getElementById("activekey").value;
+            // Adafruit feed name 
+            aio_f = document.getElementById("feed").value;
+            $.ajax({
+                    url: "https://io.adafruit.com/api/v2/" + aio_n + "/feeds/" + aio_f + "/data?X-AIO-Key=" + aio_k,
+                    type: "POST",
+                    data: {
+                        "value": con
+                    },
+                })
+                // .done(function (data) {
+                // new Noty({
+                //     text: '發出通知',
+                //     type: 'info'
+                // }).show();
+                // })
+                .fail(function () {
+                    new Noty({
+                        text: '無法發出通知',
+                        type: 'error'
+                    }).show();
+                });
+        }
+
+        function clearButton() {
+            recognition.stop();
+            final_span.innerHTML = '';
+            interim_span.innerHTML = '';
+            // interim_transcript = '';
+            send_button.style.display = 'none';
+            send_info.style.display = 'none';
+            clear_button.style.display = 'none';
+            // showInfo('');
+        }
+
+        function startButton(event) {
+            if (recognizing) {
+                recognition.stop();
+                return;
+            }
+            final_transcript = '';
+            recognition.lang = select_dialect.value;
+            recognition.start();
+            ignore_onend = false;
+            final_span.innerHTML = '';
+            interim_span.innerHTML = '';
+            start_img.src = 'https://www.google.com/intl/en/chrome/assets/common/images/content/mic-slash.gif';
+            showInfo('info_allow');
+            showButtons('none');
+            start_timestamp = event.timeStamp;
+        }
+
+        function showInfo(s) {
+            if (s) {
+                for (var child = info.firstChild; child; child = child.nextSibling) {
+                    if (child.style) {
+                        child.style.display = child.id == s ? 'inline' : 'none';
+                    }
+                }
+                info.style.visibility = 'visible';
+            } else {
+                info.style.visibility = 'hidden';
+            }
+        }
+
+        var current_style;
+
+        function showButtons(style) {
+            if (style == current_style) {
+                return;
+            }
+            current_style = style;
+            send_button.style.display = style;
+            send.style.display = style;
+            clear_button.style.display = style;
+            send_info.style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
