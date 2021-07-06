@@ -146,8 +146,9 @@
             <p style="color: black;">
                 Teachable Machine 模型網址:
                 <input type="text" id="modelurl" class="inputtext" name="inputtext" 
-                    value="https://teachablemachine.withgoogle.com/models/8Rq14Cquf/"><br>
-
+                    value=""><br>
+                <!-- <input type="text" id="modelurl" class="inputtext" name="inputtext" 
+                    value="https://teachablemachine.withgoogle.com/models/8Rq14Cquf/"><br> -->
                 <button id="startBtn" type="button" onclick="init()">Start</button>
             </p>
 
@@ -242,23 +243,26 @@
 
         //將題目寫出來
         labelContainer.firstChild.innerHTML = prediction[qNum].className;
+        
 
 
-        if (scoreValue > 50) {
+        // if (scoreValue > 50) {
             
             labelContainer.style.backgroundColor = "#80ff00"
             labelContainer.style.color = "#ffffff"
-        } else {
+        // } else {
             
-            labelContainer.style.backgroundColor = "rgb(136, 136, 136)"
-            labelContainer.style.color = "#80ff00"
-        }
-        // console.log(scoreValue)
+        //     labelContainer.style.backgroundColor = "rgb(136, 136, 136)"
+        //     labelContainer.style.color = "#80ff00"
+        // }
+        
 
         var elem = document.getElementById("scoreBar");
 
 
-        elem.style.width = scoreValue + '%';
-        elem.innerHTML = scoreValue;
-    }
+        // elem.style.width = scoreValue + '%';
+        // elem.innerHTML = scoreValue;
+        elem.style.width =  '99%';
+        elem.innerHTML = "恭喜您答對了！";
+}
 </script>

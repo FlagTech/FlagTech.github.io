@@ -63,13 +63,15 @@
 
         .sidenav .closebtn {
             position: relative;
+            color: #929090;
             /* top: 0; */
             /* right: 25px; */
             font-size: 16px;
             margin-top: 10px;
             
             /* height: 20px; */
-            
+            border: 1px solid #ccc;
+            border-radius: 4px;            
 
         }
         .msgbox {
@@ -218,7 +220,7 @@
                        <label class="left">Adafruit IO 金鑰:</label>
                         <input type="text" id="activekey" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
                         <label class="left">Adafruit IO 帳號:</label>
-                        <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value="Rainnie"><br>
+                        <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
                         <label class="left">Adafruit IO Feed:</label>
                         <input type="text" id="feed" class="inputtext" name="inputtext" autocomplete="on" value="music"><br>
                         <a href="javascript:void(0)" class="closebtn" id="closebtn" aria-disabled="true" onclick="closeNav()">設定完成</a>
@@ -315,15 +317,15 @@
     <script>
         $(document).ready(function () {
             $('#username').on('input', function () {
-                if ($(this).val() != '') {
+                if ($('#username').val() != '') {
             
-                    $('#closebtn').css({
+                    $(".closebtn").css({
                         'color': '#ffffff',
                         'background-color': 'rgb(75, 197, 253)'
                     })
                 } else {
                     
-                    $('#closebtn').css({
+                    $(".closebtn").css({
                         'color': 'rgb(147, 158, 158)',
                         'background-color': 'rgb(147, 158, 158)'
                     })

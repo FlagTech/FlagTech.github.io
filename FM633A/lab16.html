@@ -169,13 +169,13 @@
         <p style="color: black;">
     
             <label class="left">Teachable Machine 模型網址:</label>  
-            <input type="text" id="modelurl" class="inputtext" name="inputtext" value="https://teachablemachine.withgoogle.com/models/Rr8oHhwu3/"><br>
-        
+            <!-- <input type="text" id="modelurl" class="inputtext" name="inputtext" value="https://teachablemachine.withgoogle.com/models/Rr8oHhwu3/"><br> -->
+            <input type="text" id="modelurl" class="inputtext" name="inputtext" value=""><br>        
          
             <label class="left">Adafruit IO 金鑰:</label>
             <input type="text" id="activekey" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
             <label class="left">Adafruit IO 帳號:</label>
-            <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value="Rainnie"><br>
+            <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
             <label class="left">Adafruit IO Feed:</label>
             <input type="text" id="feed" class="inputtext" name="inputtext" autocomplete="on" value="yoga"><br>
             <button id="startBtn" type="button" onclick="init()" disabled>Start</button>
@@ -247,8 +247,8 @@
         const generator = new Math.seedrandom(Date.now());
         const randomNumber = generator();
         //隨機出題，排除第一類：閒置
-        // qNum = Math.floor(Math.random() * (maxPredictions - 1)) + 1;
-        qNum =3;
+        qNum = Math.floor(Math.random() * (maxPredictions - 1)) + 1;
+        // qNum =3;
         console.log(qNum);
         
 
@@ -286,8 +286,9 @@
         // if (unanswered){
             webcam.update(); // update the webcam frame
         // }
-
-        await predict();
+        if (unanswered){
+            await predict();
+        }
         window.requestAnimationFrame(loop);
     }
 
@@ -340,7 +341,7 @@
                             type: 'error'
                         }).show();
                         });  
-                resumeTimer = window.setTimeout(resumeNaddQ(), 2000)
+                resumeTimer = window.setTimeout(resumeNaddQ, 2000)
                 unanswered = false;  
                 labelContainer.style.backgroundColor = "#80ff00"
                 labelContainer.style.color = "#ffffff"
@@ -358,19 +359,7 @@
             // elem.style.width = scoreValue + '%'; 
             elem.innerHTML = scoreValue ;
         }
-        
-        // for (let i = 0; i < maxPredictions; i++) {
-        //     const classPrediction =
-        //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-        //     labelContainer.childNodes[i].innerHTML = classPrediction;
-        //     // console.log(prediction[i].probability.toFixed(2));
-        //     if (prediction[i].probability.toFixed(2) > 0.5){
-        //         document.getElementById("dot1").style.backgroundColor = "#80ff00";
-        //     }
-        //     else{
-        //         // document.getElementById("dot1").style.backgroundColor = "gray";
-        //     }
-        // }
+
     }
     function drawPose(pose) {
         if (webcam.canvas) {
@@ -386,7 +375,7 @@
     function resumeNaddQ(){
         unanswered=true;
         //隨機出題，排除第一類：閒置
-        // qNum = Math.floor(Math.random() * (maxPredictions - 1)) + 1;  
+        qNum = Math.floor(Math.random() * (maxPredictions - 1)) + 1;  
              
     }
 </script>
