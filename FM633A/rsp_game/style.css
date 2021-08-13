@@ -28,7 +28,7 @@ section {
 
 .intro {
   color: rgb(224, 224, 224);
-  height: 0vh;
+  height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
