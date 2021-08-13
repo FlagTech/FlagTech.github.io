@@ -95,7 +95,7 @@
         <img class="computer-hand" src="./assets/rock.png" alt="" />
       </div>
       <div class="options">
-        <button class="decide">出拳！</button>
+        <button class="decide" id="decide" disabled>出拳！</button>
 
         <!-- <button class="rock">rock</button> -->
         <!-- <button class="paper">paper</button> -->
@@ -388,6 +388,7 @@
         // playing = false;
         isInit = false;
         winner.textContent = "擺好姿勢後按下『出拳！』";
+        $('#decide').attr('disabled', false);
       }
       // console.log("predEnd:", playing);
     }
