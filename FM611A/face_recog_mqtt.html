@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 刷臉智慧門鎖</title>
+
+    <script>
+        var aio_n; // Adafruit user name
+        var aio_k; // Adafruit IO Key
+        var aio_f; // Adafruit feed name
+        var az_k; // Azure Key
+        var az_ep; // Azure Endpoint
+        var client;
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" rel="stylesheet">
+    <style>
+        *,
+        *:before,
+        *:after {
+            box-sizing: border-box;
+            hyphens: auto;
+            overflow-wrap: break-word;
+        }
+
+        html {
+            font-size: 20px;
+            min-height: 100%;
+        }
+
+        body {
+            max-width: 700px;
+            min-height: 100%;
+            margin: 2em auto;
+            padding: 0 0.5em;
+
+            background: linear-gradient(45deg, #2A69AC, #72B7EA);
+            background-repeat: no-repeat;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font-size: inherit;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: transparent;
+        }
+
+        .button {
+            padding: 0.5em;
+            margin: 1em 0;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            background: #3b5998;
+            color: #fff;
+        }
+
+        .hidden,
+        [hidden] {
+            display: none;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        #video {
+            width: 100%;
+        }
+
+        /* === Responsive === */
+        .container {
+            padding: 10px 60px 10px 60px;
+        }
+
+        .button {
+            padding: 0.5em;
+        }
+
+        #personSelectList,
+        #personName {
+            width: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px 30px 10px 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 5px 15px 5px 15px;
+            }
+
+            .button {
+                padding: 0.2em;
+            }
+
+            #personSelectList {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+
+<body>
+    <div class="page-ui">
+        <div class="container">
+            <h1>AI 刷臉智慧門鎖</h1>
+            <p hidden class="page-error"></p>
+            <div class="page-ok">
+                <video id="video" autoplay="true"></video>
+                <canvas id="photo" style="display: none;"></canvas>
+                <div>
+                    <button type="button" id="button-play" class="button" onclick="identPerson();">辨識身份</button>
+                </div>
+                <div>
+                    <button type="button" id="button-stop" class="button">停止</button>
+                </div>
+                <hr>
+                <div>
+                    <input type="text" name="personName" id="personName">
+                    <button type="button" onclick="addPerson();" class="button" style="width:7rem;">新增人名</button>
+                </div>
+                <div>
+                    <select name="personSelectList" id="personSelectList"></select> 選擇人名進行以下操作:
+                </div>
+                <div>
+                    <button type="button" class="button" style="width:50%;" onclick="addFace();">拍臉提昇準確度</button>
+                    <button type="button" class="button" style="width:23%;" onclick="trainGroup();">訓練</button>
+                    <button type="button" class="button" style="width:23%;" onclick="delPerson();">刪除</button>
+                </div>
+                <div>
+                    <input type="text" name="aio_n" id="aio_n" placeholder="AIO 使用者名稱">
+                    <input type="text" name="aio_k" id="aio_k" placeholder="AIO 使用者金鑰">
+                    <input type="text" name="az_ep" id="az_ep" placeholder="Azure 端點">
+                    <input type="text" name="az_k" id="az_k" placeholder="Azure 金鑰">
+                    <button type="button" class="button" style="width:50%;" onclick="init();">載入人臉資料</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+    <script>
+        if (!window.jQuery) {
+            pageError("請先連上網路才能使用 AI 功能");
+            throw '';
+        };
+
+        var groupID = "flag";
+        var personList = {};
+        var video = document.querySelector("#video");
+        var photo = document.querySelector("#photo");
+
+        function hasGetUserMedia() {
+            return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+        }
+
+        if (hasGetUserMedia()) {
+            navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function (err) {
+                    console.log("An error occured! " + err);
+                    pageError("您的瀏覽器不支援影像功能");
+                });
+        } else {
+            pageError("您的瀏覽器不支援影像功能");
+        }
+
+        var buttonPlay = document.getElementById('button-play');
+        var buttonStop = document.getElementById('button-stop');
+
+        buttonStop.setAttribute('hidden', '');
+
+        function speakMsg(words, type) {
+            if (typeof type === 'undefined') {
+                type = "info";
+            }
+            new Noty({
+                text: words,
+                type: type
+            }).show();
+            speak(words);
+        }
+
+        var synth = window.speechSynthesis;
+        var speakTimeout = null;
+
+        function speak(words) {
+            if (synth.speaking) {
+                synth.cancel()
+                console.error('speechSynthesis.speaking');
+                if (speakTimeout !== null)
+                    clearTimeout(speakTimeout);
+                speakTimeout = setTimeout(function () {
+                    speak(words);
+                }, 250);
+                return;
+            }
+
+            if (words) {
+                var utterThis = new SpeechSynthesisUtterance(words);
+                utterThis.onend = function (event) {
+                    console.log('SpeechSynthesisUtterance.onend');
+                }
+                utterThis.onerror = function (event) {
+                    console.error('SpeechSynthesisUtterance.onerror');
+                }
+
+                utterThis.lang = "zh-TW";
+                utterThis.volume = 0.5;
+                utterThis.pitch = 1;
+                utterThis.rate = 1;
+                synth.speak(utterThis);
+            }
+        }
+
+        function logEvent(string) {
+            console.log(string);
+        }
+
+        function pageError(msg) {
+            document.querySelector('.page-error').textContent = msg;
+            document.querySelector('.page-error').removeAttribute('hidden');
+            document.querySelector('.page-ok').setAttribute('hidden', '');
+            [].forEach.call(document.querySelectorAll('form button'), function (button) {
+                button.setAttribute('disabled', '');
+            });
+        }
+
+        makeblob = function (dataURL) {
+            var BASE64_MARKER = ';base64,';
+            if (dataURL.indexOf(BASE64_MARKER) == -1) {
+                var parts = dataURL.split(',');
+                var contentType = parts[0].split(':')[1];
+                var raw = decodeURIComponent(parts[1]);
+                return new Blob([raw], {
+                    type: contentType
+                });
+            }
+            var parts = dataURL.split(BASE64_MARKER);
+            var contentType = parts[0].split(':')[1];
+            var raw = window.atob(parts[1]);
+            var rawLength = raw.length;
+
+            var uInt8Array = new Uint8Array(rawLength);
+
+            for (var i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+
+            return new Blob([uInt8Array], {
+                type: contentType
+            });
+        }
+
+        function snapPhoto() {
+            $('#photo').attr('width', video.videoWidth).attr('height', video.videoHeight);
+            // console.log(photo.width);
+            // console.log(photo.height);
+            var photoContext = photo.getContext('2d');
+            photoContext.drawImage(video, 0, 0, photo.width, photo.height);
+            var dataURL = photo.toDataURL("image/jpeg", 0.95);
+            return makeblob(dataURL);
+        }
+
+        function addFace() {
+            new Noty({
+                text: '正在儲存您的臉孔',
+                type: 'info'
+            }).show();
+            var personId = $('#personSelectList').val();
+            $.ajax({
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/persons/" + personId + "/persistedFaces",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+                        //xhrObj.setRequestHeader("Content-Type","application/json");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    contentType: 'application/octet-stream',
+                    type: "POST",
+                    processData: false,
+                    data: snapPhoto(),
+                })
+                .done(function (data) {
+                    new Noty({
+                        text: '已經儲存您的臉孔, 請記得執行訓練',
+                        type: 'success'
+                    }).show();
+                    updatePersonList();
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法連線 AI 服務',
+                        type: 'error'
+                    }).show();
+                });
+        }
+
+        function identPerson() {
+            var params = {
+                "returnFaceId": "true",
+                "returnFaceLandmarks": "false",
+            };
+
+            speakMsg('正在使用此畫面辨識您的身份...');
+            video.pause();
+
+            $.ajax({
+                    url: az_ep + "face/v1.0/detect?" + $.param(params),
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    type: "POST",
+                    processData: false,
+                    data: snapPhoto(),
+                })
+                .done(function (data) {
+                    if (data.length == 0) {
+                        speakMsg('找不到臉孔', 'error');
+                    } else {
+                        var faceIds = [];
+                        for (i = 0; i < data.length; i++) {
+                            faceIds.push(data[i].faceId);
+                        }
+                        var request = {
+                            "personGroupId": "flag",
+                            "faceIds": faceIds,
+                            "maxNumOfCandidatesReturned": 1,
+                            "confidenceThreshold": 0.5
+                        };
+                        $.ajax({
+                                url: az_ep + "face/v1.0/identify",
+                                beforeSend: function (xhrObj) {
+                                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                                },
+                                type: "POST",
+                                data: JSON.stringify(request),
+                            })
+                            .done(function (data) {
+                                if (data[0].candidates.length == 0) {
+                                    speakMsg("您的身份不明", 'error');
+                                } else {
+                                    var name = personList[data[0].candidates[0].personId];
+                                    if (name) {
+                                        speakMsg(name + "您好, 歡迎回來", "success");
+                                        //setTimeout(function(){ $.get("/close"); }, 5000);
+
+                                        client.publish(
+                                            aio_n + "/feeds/face",
+                                            "100",
+                                            (err) => {
+                                                if (err) {
+                                                    new Noty({
+                                                        text: '傳送失敗',
+                                                        type: 'error'
+                                                    }).show();
+                                                } else {
+                                                    new Noty({
+                                                        text: '傳送成功',
+                                                        type: 'info'
+                                                    }).show();
+                                                }
+                                            });
+
+                                    } else {
+                                        speakMsg("您的身份不明", 'error');
+                                    }
+                                }
+                            })
+                            .fail(function () {
+                                new Noty({
+                                    text: '無法連線 AI 服務',
+                                    type: 'error'
+                                }).show();
+                            })
+                    }
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法連線 AI 服務',
+                        type: 'error'
+                    }).show();
+                })
+                .always(function () {
+                    video.play();
+                });
+        }
+
+        function trainGroup() {
+            $.ajax({
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/train?",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    type: "POST",
+                    data: "",
+                })
+                .done(function (data) {
+                    new Noty({
+                        text: '開始訓練',
+                        type: 'info'
+                    }).show();
+                    checkTraining();
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法連線 AI 服務',
+                        type: 'error'
+                    }).show();
+                });
+        }
+
+        function checkTraining() {
+            $.ajax({
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/training",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    type: "GET",
+                })
+                .done(function (data) {
+                    if (data.status == "succeeded") new Noty({
+                        text: '訓練完成',
+                        type: 'success'
+                    }).show();
+                    else setTimeout(function () {
+                        checkTraining();
+                    }, 2000);
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法連線 AI 服務',
+                        type: 'error'
+                    }).show();
+                });
+        }
+
+        function delPerson() {
+            var result = confirm("確定要刪除?");
+            if (!result) return;
+
+            var id = $('#personSelectList').val();
+            if (id) {
+                $.ajax({
+                        url: az_ep + "face/v1.0/persongroups/" + groupID +
+                            "/persons/" + id,
+                        beforeSend: function (xhrObj) {
+                            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                        },
+                        type: "DELETE",
+                    })
+                    .done(function (data) {
+                        new Noty({
+                            text: '已經刪除',
+                            type: 'success'
+                        }).show();
+                        updatePersonList(name);
+                    })
+                    .fail(function () {
+                        new Noty({
+                            text: '無法連線 AI 服務',
+                            type: 'error'
+                        }).show();
+                    });
+            }
+        }
+
+        function addPerson() {
+            var name = $('#personName').val();
+            if (name) {
+                $.ajax({
+                        url: az_ep + "face/v1.0/persongroups/" + groupID +
+                            "/persons",
+                        beforeSend: function (xhrObj) {
+                            xhrObj.setRequestHeader("Content-Type", "application/json");
+                            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                        },
+                        type: "POST",
+                        data: '{ "name": "' + name + '"}',
+                    })
+                    .done(function (data) {
+                        new Noty({
+                            text: '已經新增',
+                            type: 'success'
+                        }).show();
+                        updatePersonList(name);
+                    })
+                    .fail(function () {
+                        new Noty({
+                            text: '無法連線 AI 服務',
+                            type: 'error'
+                        }).show();
+                    });
+            }
+        }
+
+        function updatePersonList(defaultName) {
+            $.ajax({
+                    type: "GET",
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/persons",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    var list = '';
+                    personList = {};
+                    for (i = 0; i < data.length; i++) {
+                        list += "<option value='" + data[i].personId + "'";
+
+                        if (defaultName === data[i].name) list += "selected";
+
+                        list += ">" + data[i].name + " (已儲存 " + data[i].persistedFaceIds.length + " 張照片) " +
+                            "</option>";
+
+                        personList[data[i].personId] = data[i].name;
+                    }
+                    $('#personSelectList').html(list);
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法取得使用者列表',
+                        type: 'error'
+                    }).show();
+                })
+        }
+
+        function addGroup(id) {
+            $.ajax({
+                    type: "PUT",
+                    url: az_ep + "face/v1.0/persongroups/" + id,
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Content-Type", "application/json");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    dataType: "json",
+                    data: '{"name": "group1", "userData": "Flag Maker FM611A"}',
+                })
+                .always(function (jqXHR) {
+                    if (jqXHR.status != 200) {
+                        new Noty({
+                            text: '無法建立群組',
+                            type: 'error'
+                        }).show();
+                    }
+                });
+        }
+
+        function checkGroup(id) {
+            $.ajax({
+                    type: "GET",
+                    url: az_ep + "face/v1.0/persongroups",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    for (i = 0; i < data.length; i++) {
+                        if (data[i].personGroupId == id) {
+                            updatePersonList();
+                            new Noty({
+                                text: '成功下載群組列表',
+                                type: 'info'
+                            }).show();
+                            return;
+                        }
+                    }
+                    addGroup(id);
+                    new Noty({
+                        text: '成功新增群組列表',
+                        type: 'info'
+                    }).show();
+                })
+                .fail(function () {
+                    new Noty({
+                        text: '無法取得群組列表',
+                        type: 'error'
+                    }).show();
+                })
+        }
+
+        $(document).ready(function () {
+            // let urlParams = new URLSearchParams(window.location.search);
+            Noty.overrideDefaults({
+                layout: 'topRight',
+                timeout: 3000,
+                progressBar: true,
+                killer: true,
+                visibilityControl: true,
+            })
+
+            new Noty({
+                text: '正在初始化, 請稍後...',
+                type: 'info',
+                timeout: 3000
+            }).show();
+            $.ajaxSetup({
+                timeout: 10000,
+            });
+
+            // checkGroup(groupID);
+        });
+
+        function init() {
+            aio_k = $("#aio_k").val();
+            console.log("AIO Key:" + aio_k);
+            aio_n = $("#aio_n").val();
+            console.log("AIO user name:" + aio_n);
+            aio_f = "face";
+            console.log("AIO feed name:" + aio_f);
+            az_k = $("#az_k").val();
+            console.log("Azure Key:" + az_k);
+            az_ep = $("#az_ep").val();
+            console.log("Azure Endpoint:" + az_ep);
+            checkGroup(groupID);
+
+            let options = {
+                username: aio_n, // AIO 使用者名稱
+                password: aio_k // AIO 金鑰
+            }
+            client = mqtt.connect(
+                // AIO mqtt websocket 走 443 埠
+                "wss://io.adafruit.com:443",
+                options // 連接時指定選項登入 AIO
+            );
+            console.log('connnecting....');
+            client.on('connect', () => {
+                new Noty({
+                    text: '連上 MQTT 伺服器',
+                    type: 'success'
+                }).show();
+            });
+        }
+    </script>
+</body>
+
+</html>
