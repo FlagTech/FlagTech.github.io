@@ -170,8 +170,17 @@
     // More API functions here:
     // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
     let model, webcam, labelContainer, maxPredictions;
+    let ansed = false;
     var qNum, scoreValue;
     // Load the image model and setup the webcam
+    function genQ(){
+         //亂數機
+         const generator = new Math.seedrandom(Date.now());
+        const randomNumber = generator();
+        //隨機出題，排除最後一類：背景
+        qNum = Math.floor(Math.random() * (maxPredictions - 1));  
+        ansed = false;     
+    }
     async function init() {
         // the link to your model provided by Teachable Machine export panel
         const URL = document.getElementById("modelurl").value;
@@ -190,11 +199,11 @@
         maxPredictions = model.getTotalClasses();
 
         //亂數機
-        const generator = new Math.seedrandom(Date.now());
-        const randomNumber = generator();
-        //隨機出題，排除最後一類：背景
-        qNum = Math.floor(Math.random() * (maxPredictions - 1));
-
+        // const generator = new Math.seedrandom(Date.now());
+        // const randomNumber = generator();
+        // //隨機出題，排除最後一類：背景
+        // qNum = Math.floor(Math.random() * (maxPredictions - 1));
+        genQ();
         // console.log(qNum);
 
 
@@ -245,24 +254,30 @@
         labelContainer.firstChild.innerHTML = prediction[qNum].className;
         
 
-
-        // if (scoreValue > 50) {
+        var elem = document.getElementById("scoreBar");
+        if (scoreValue > 70) {
             
             labelContainer.style.backgroundColor = "#80ff00"
             labelContainer.style.color = "#ffffff"
-        // } else {
+            elem.style.width = scoreValue + '%';
+            elem.innerHTML = "恭喜您答對了！ 2 秒後重新出題...";
+            ansed = true;
+            setTimeout(genQ,2000);
+        
+        } else if (!ansed){
             
-        //     labelContainer.style.backgroundColor = "rgb(136, 136, 136)"
-        //     labelContainer.style.color = "#80ff00"
-        // }
+            labelContainer.style.backgroundColor = "rgb(136, 136, 136)"
+            labelContainer.style.color = "#80ff00"
+            elem.style.width = scoreValue + '%';
+            elem.innerHTML = scoreValue;
+        }
         
 
-        var elem = document.getElementById("scoreBar");
+        
 
 
-        // elem.style.width = scoreValue + '%';
-        // elem.innerHTML = scoreValue;
-        elem.style.width =  '99%';
-        elem.innerHTML = "恭喜您答對了！";
+
+        // elem.style.width =  '99%';
+        // elem.innerHTML = "恭喜您答對了！";
 }
 </script>
