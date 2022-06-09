@@ -1,0 +1,400 @@
+<title>
+    LAB07 口罩偵測警報系統
+</title>
+<style>
+    html,
+    body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        background: rgb(17,56,133);
+        background: linear-gradient(135deg, rgb(73, 144, 192) 0%, rgb(114, 127, 199) 47%, rgb(119, 119, 199) 53%,rgb(51, 94, 182) 100%);
+    }
+
+    h1{
+        text-align: center;
+        
+    }
+    #startBtn{
+        background-color: rgb(128, 128, 128); 
+        width: 40%; 
+        height: 10vh; 
+        border-radius: 10px; 
+        color: rgb(65, 65, 65);
+        font-size: xx-large;
+        margin-top: 10px;
+        /* padding-top: 50px; */
+    }
+    .inputtext{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: large;
+    }
+    .msgbox{
+        text-align: center;
+        font-size:x-large;
+        border-radius: 15px;
+        background-color: rgb(80, 176, 255);
+        opacity: 78%;
+        border: 5px solid rgb(0, 225, 255);
+        width: 80%;
+        padding: 20px;
+        margin: auto;
+        box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2),
+            1px 1px 0 0 #25576f,
+            2px 2px 0 0 #25576f,
+            3px 3px 0 0 #25576f,
+            4px 4px 0 0 #25576f,
+            5px 5px 0 0 #25576f;
+    }
+ 
+    .left {
+        text-align: left;
+        float: left;
+        /* padding-left: 3%; */
+        font-size: large;
+    }
+    
+    .right {
+        height: 100vh;
+        width: 20%;
+        background-color: rgb(248, 85, 85);
+        float: right;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+
+        position: absolute;
+        
+        top: 5%;
+        left: 5%;
+        /* transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%); */
+        color: black;
+        font-size: 16px;
+        /* padding: 16px 30px; */
+        border: none;
+        /* cursor: pointer; */
+        text-align: center;
+        z-index: 100;
+    }
+    .label{
+        /* vertical-align:bottom; */
+        font-size: xx-large;
+        color: #cf6f00;
+        margin: auto;
+        margin-top: 10px;
+        text-align: center;
+        /* transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%); */
+        z-index: 99;
+        position:relative;
+        background: transparent;
+        background-color: rgb(0, 255, 157);
+        /* background: linear-gradient(135deg, rgb(196, 124, 31) 0%, rgb(179, 87, 1) 66%,rgb(151, 165, 21) 100%);  */
+        /* opacity: 30%; */
+        border-radius: 10px;
+        padding: 10px;
+        width: 50%;
+        display: none;
+        /* visibility: hidden; */
+    }
+    #webcamVideo
+    {
+        z-index: 0;
+        /* width: 100%; */
+        /* opacity:.65; */
+        /* min-height:100vh; */
+        margin: auto;
+        /* position:absolute; */
+        min-width: 100%;
+        border-radius: 10px;
+        position:relative;
+        /* position:fixed; */
+        /* background: transparent; */
+        /* border-radius: 5px; */
+        /* -webkit-transform: scaleX(-1);
+        -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        transform: scaleX(-1); */
+
+        filter: FlipH;
+        -ms-filter: "FlipH";
+    }
+
+    .cam {
+        /* position: absolute; 
+        right: 0; 
+        bottom: 0;
+        min-width: 100%; 
+        min-height: 100%;
+        width: auto; 
+        height: auto;  */
+        border-radius: 10px;
+        z-index: 1;
+        /* background-size: cover;
+        overflow: hidden; */
+    }
+    /* .w3-light-grey{
+        width: 80%;
+
+    } */
+
+</style>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+<!-- <div class="left"> -->
+<h1 style="color: rgb(0, 255, 64);">LAB07 口罩偵測警報系統</h1>
+
+<div class="div-relative" style="margin: auto;width: 80%;">
+    <div class="msgbox" id="msgbox">
+        <p style="color: black;">
+        
+        <label class="left">Teachable Machine 模型網址:</label>  
+        <input type="text" id="modelurl" class="inputtext" name="inputtext" value=""><br>
+        <!-- <input type="text" id="modelurl" class="inputtext" name="inputtext" value="https://teachablemachine.withgoogle.com/models/Jpt5XnbqF/"><br>     -->
+     
+        <label class="left">Adafruit IO 金鑰:</label>
+        <input type="text" id="activekey" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
+        <label class="left">Adafruit IO 帳號:</label>
+        <input type="text" id="username" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
+        <label class="left">Adafruit IO Feed:</label>
+        <input type="text" id="feed" class="inputtext" name="inputtext" autocomplete="on" value="mask"><br>
+        <button id="startBtn" type="button" onclick="init()" disabled>Start</button>
+        </p>
+    
+    
+    </div>
+<!-- <span id="dot1" class="dot"></span> -->
+<div class="w3-light-grey">
+    <div id="scoreBar" class="w3-container w3-light-green" style="width:0%;border-radius: 5px;display: none;">0</div>
+  </div>
+<div id="label-container" class="label"></div>
+<br>
+<div id="webcam-container" class="cam"></div>
+</div>
+<!-- </div> -->
+<!-- <div class="right"></div> -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.bootcss.com/noty/3.1.4/noty.min.js"></script>
+<script type="text/javascript">
+
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+
+
+
+    let model, webcam, labelContainer, maxPredictions;
+    var alarm_stus = false;
+    var qNum, scoreValue;
+   
+    // Load the image model and setup the webcam
+    $(document).ready(function () {
+            $('#activekey').on('input', function () {
+                if ($(this).val() != '') {
+                    $('#startBtn').attr('disabled', false);
+                    $('#startBtn').css({'color':'rgb(255,255,255)','background-color':'rgb(255,0,0)'})
+                }
+                else {
+                    $('#startBtn').attr('disabled', true);
+                    $('#startBtn').css({'color':'rgb(65,65,65)','background-color':'rgb(128,128,128)'})
+                }
+            });
+        });
+    async function init() {
+        // labelContainer = document.getElementById("label-container");
+        // labelContainer.appendChild(document.createElement("div"));
+        labelContainer = document.getElementById("label-container");
+        labelContainer.appendChild(document.createElement("h1"));
+        labelContainer.firstChild.innerHTML = "模型讀取中..." ;  
+        labelContainer.style.display = "block";
+        // the link to your model provided by Teachable Machine export panel
+        const URL = document.getElementById("modelurl").value;
+        document.getElementById("msgbox").style.display = "none";
+        
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        //亂數機
+        // const generator = new Math.seedrandom(Date.now());
+        // const randomNumber = generator();
+
+
+        
+
+        // convenience function to setup a webcam
+        const flip = false; // whether to flip the webcam
+        webcam = new tmImage.Webcam(540, 960, flip); // width, height
+        await webcam.setup({ facingMode: "user" }); // use "user" to use front-cam on mobile phones
+
+        // append elements to the DOM --> **before starting the webcam**
+        // document.getElementById('webcam-container').appendChild(webcam.canvas); // just in case you want to use specifically the canvas
+        document.getElementById('webcam-container').appendChild(webcam.webcam); // webcam object needs to be added in any case to make this work on iOS
+
+        // grab video-object in any way you want and set the attributes --> **"muted" and "playsinline"**
+        let wc = document.getElementsByTagName('video')[0];
+        wc.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise :-)
+
+        wc.muted = "true"
+        wc.id = "webcamVideo";
+
+        // only now start the webcam --> **after video-object added to DOM and attributes are set**
+        webcam.play();
+        window.requestAnimationFrame(loop); // update canvas by loop-function
+        
+
+        document.getElementById("scoreBar").style.display = "block";
+        labelContainer.firstChild.innerHTML = "系統偵測中" ;
+
+        // wc.appendChild(labelContainer);
+        // for (let i = 0; i < maxPredictions; i++) { // and class labels
+        //     labelContainer.appendChild(document.createElement("div"));
+        // }
+        // document.getElementsByClassName("label").style.visibility = "visible"
+    }
+
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    // run the webcam image through the image model
+    async function predict() {
+        //******Read AIO info.*******
+        // Adafruit user name
+        const aio_n = document.getElementById("username").value; 
+        // Adafruit IO Key
+        const aio_k = document.getElementById("activekey").value;
+        // Adafruit feed name 
+        const aio_f = document.getElementById("feed").value; 
+
+        // predict can take in an image, video or canvas html element
+        const prediction = await model.predict(webcam.canvas);
+        var elem = document.getElementById("scoreBar");  
+
+        //no_mask(class 1) 信心值
+        scoreValue = Math.floor(prediction[1].probability.toFixed(2)*100);
+
+        // 比較後取出最大值
+        var pred_result = [];
+            for (let i = 0; i < maxPredictions; i++) {
+                const Predct_Name = prediction[i].className;
+                const Predct_Probability = prediction[i].probability.toFixed(2);
+                
+                if (typeof pred_result !== 'undefined' && pred_result.length == 0){
+                    pred_result = [parseFloat(Predct_Probability), Predct_Name];
+                }                
+                else if (parseFloat(Predct_Probability) > pred_result[0]){                   
+                    pred_result = [parseFloat(Predct_Probability), Predct_Name];
+                }
+                
+                // console.log([parseFloat(Predct_Probability), parseFloat(pred_result[0])]);
+                
+                // labelContainer.childNodes[i].innerHTML = Predct_Name + " : " + Predct_Probability;
+            }
+
+        
+
+        // $("#predictResult").text(pred_result[1]);
+        if (pred_result[0] > 0.7 && pred_result[1] == "no_mask" && !alarm_stus ){
+            console.log("alarm!");
+            // sendAlarm(pred_result[1]);
+            alarm_stus = true;
+            $.ajax({
+                    url: "https://io.adafruit.com/api/v2/" + aio_n + "/feeds/" + aio_f + "/data?X-AIO-Key=" + aio_k,
+                    type: "POST",
+                    data: {
+                        "value":100
+                    },
+                    })
+                //   .done(function (data) {
+                //     new Noty({
+                //       text: '發出通知',
+                //       type: 'info'
+                //     }).show();
+                //   })
+                    .fail(function () {
+                    new Noty({
+                        text: '無法發出通知',
+                        type: 'error'
+                    }).show();
+                    });                
+            labelContainer.style.backgroundColor = "rgb(248, 85, 85)"
+            labelContainer.style.color = "#ffffff" 
+            labelContainer.firstChild.innerHTML = "注意！！！請佩戴口罩！";
+            elem.className = "w3-container w3-red";
+            // elem.style.removeProperty('class');           
+            // elem.style.backgroundColor = 'red'; 
+
+            }
+
+        else if (pred_result[1] !== "no_mask" && alarm_stus){
+                console.log("clear!");
+                // sendAlarm(pred_result[1]);
+                alarm_stus = false;
+                $.ajax({
+                        url: "https://io.adafruit.com/api/v2/" + aio_n + "/feeds/" + aio_f + "/data?X-AIO-Key=" + aio_k,
+                        type: "POST",
+                        data: {
+                          "value":0
+                        },
+                      })
+                    //   .done(function (data) {
+                    //     new Noty({
+                    //       text: '發出通知',
+                    //       type: 'info'
+                    //     }).show();
+                    //   })
+                      .fail(function () {
+                        new Noty({
+                          text: '無法發出通知',
+                          type: 'error'
+                        }).show();
+                      });        
+                labelContainer.style.backgroundColor = "rgb(0, 255, 157)";  
+                labelContainer.style.color = "#cf6f00";  
+                labelContainer.firstChild.innerHTML = "系統偵測中" ;
+                elem.className = "w3-container w3-light-green";
+            }
+        $('#scoreBar').css('width',scoreValue + '%')
+            // elem.style.width = scoreValue + '%'; 
+            
+            
+            // elem.style.backgroundColor = 'rgb(0,255,157)'
+        
+        elem.innerHTML = scoreValue ;
+        // for (let i = 0; i < maxPredictions; i++) {
+        //     const classPrediction =
+        //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        //     labelContainer.childNodes[i].innerHTML = classPrediction;
+        //     // console.log(prediction[i].probability.toFixed(2));
+        //     if (prediction[i].probability.toFixed(2) > 0.5){
+        //         document.getElementById("dot1").style.backgroundColor = "#80ff00";
+        //     }
+        //     else{
+        //         // document.getElementById("dot1").style.backgroundColor = "gray";
+        //     }
+        // }
+    }
+</script>
