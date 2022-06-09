@@ -34,26 +34,6 @@
             text-align: center;
         }
 
-        button,
-        input,
-        select,
-        textarea {
-            font-size: inherit;
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            background: transparent;
-        }
-
-        .button {
-            padding: 0.5em;
-            margin: 1em 0;
-            width: 100%;
-            border-radius: 10px;
-            border: none;
-            background: #3b5998;
-            color: #fff;
-        }
-
         .hidden,
         [hidden] {
             display: none;
@@ -75,15 +55,6 @@
             padding: 10px 60px 10px 60px;
         }
 
-        .button {
-            padding: 0.5em;
-        }
-
-        #personSelectList,
-        #personName {
-            width: 50%;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 10px 30px 10px 30px;
@@ -94,14 +65,6 @@
             .container {
                 padding: 5px 15px 5px 15px;
             }
-
-            .button {
-                padding: 0.2em;
-            }
-
-            #personSelectList {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -110,14 +73,13 @@
     <div class="page-ui">
         <div class="container">
             <h1>AI 刷臉智慧門鎖</h1>
-            <p hidden class="page-error"></p>
+            <p hidden class="page-error">message</p>
             <div class="page-ok">
                 <video id="video" autoplay="true"></video>
             </div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     <script>
         if (!window.jQuery) {
             pageError("請先連上網路才能使用 AI 功能");
@@ -127,7 +89,7 @@
         var video = document.querySelector("#video");
 
         function hasGetUserMedia() {
-            return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+            return (navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
         }
 
         if (hasGetUserMedia()) {
@@ -147,11 +109,10 @@
             pageError("您的瀏覽器不支援影像功能");
         }
 
-
         function pageError(msg) {
             document.querySelector('.page-error').textContent = msg;
-            document.querySelector('.page-error').removeAttribute('hidden');
-            document.querySelector('.page-ok').setAttribute('hidden', '');
+            // document.querySelector('.page-error').removeAttribute('hidden');
+            // document.querySelector('.page-ok').setAttribute('hidden', '');
         }
     </script>
 </body>
