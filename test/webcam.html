@@ -74,8 +74,8 @@
         <div class="container">
             <h1>AI 刷臉智慧門鎖</h1>
             <p hidden class="page-error">message</p>
-            <div class="page-ok">
-                <video id="video" autoplay="true"></video>
+            <div class="page-ok" id="video_area">
+                <!-- <video id="video" autoplay="true"></video> -->
             </div>
         </div>
     </div>
@@ -86,8 +86,8 @@
             throw '';
         };
 
-        var video = document.querySelector("#video");
-
+        // var video = document.querySelector("#video");
+        
         function hasGetUserMedia() {
             return (navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
         }
@@ -98,8 +98,12 @@
                     audio: false
                 })
                 .then(function (stream) {
+                    var video_area = document.querySelector("#video_area");
+                    const video = document.createElement('video');
+                    video.setAttribute('id', 'video');
                     video.srcObject = stream;
-                    // video.play();
+                    video_area.appendChild(video);
+                    video.play();
                 })
                 .catch(function (err) {
                     console.log("An error occured! " + err);
