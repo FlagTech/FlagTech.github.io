@@ -98,7 +98,7 @@
                     audio: false
                 })
                 .then(function (stream) {
-                    var video_area = document.querySelector("#video_area");
+                    var video_area = document.getElementById("video_area");
                     const video = document.createElement('video');
                     // video.setAttribute('id', 'video');
                     video.srcObject = stream;
