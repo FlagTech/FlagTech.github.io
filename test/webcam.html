@@ -100,7 +100,7 @@
                 .then(function (stream) {
                     var video_area = document.querySelector("#video_area");
                     const video = document.createElement('video');
-                    video.setAttribute('id', 'video');
+                    // video.setAttribute('id', 'video');
                     video.srcObject = stream;
                     video_area.appendChild(video);
                     video.play();
