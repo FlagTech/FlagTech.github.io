@@ -149,6 +149,7 @@
                     <input type="text" name="az_ep" id="az_ep" placeholder="Aure 端點">
                     <input type="text" name="az_k" id="az_k" placeholder="Azure 金鑰">
                     <input type="text" name="bly_token" id="bly_token" placeholder="Blynk 權杖">
+                    <input type="text" name="bly_pin" id="bly_pin" placeholder="Blynk 虛擬腳位" value="v0">
                     <button type="button" class="button" style="width:50%;" onclick="init();">載入人臉資料</button>
                 </div>
             </div>
@@ -371,12 +372,14 @@
                                         $.get(
                                             'https://blynk.cloud/external/api/update?token=' +
                                             bly_token +
-                                            '&v0=0',
+                                            '&' +
+                                            bly_pin + '=0',
                                             function (data) {
                                                 setTimeout(function () {
                                                     $.get('https://blynk.cloud/external/api/update?token=' +
                                                         bly_token +
-                                                        '&v0=1')
+                                                        '&' +
+                                                        bly_pin + '=1')
                                                 }, 5000);
                                             });
 
@@ -623,6 +626,8 @@
 
             bly_token = getCookie('bly_token');
             if(bly_token != "") $("#bly_token").val(bly_token);
+            bly_pin = getCookie('bly_pin');
+            if(bly_pin != "") $("#bly_pin").val(bly_pin);
             az_k = getCookie('az_k');
             if(az_k != "") $("#az_k").val(az_k);
             az_ep = getCookie('az_ep');
@@ -656,6 +661,8 @@
         function init() {
             bly_token = $("#bly_token").val();
             console.log("Blynk token:" + bly_token);
+            bly_pin = $("#bly_pin").val();
+            console.log("Blynk pin:" + bly_pin);
             az_k = $("#az_k").val();
             console.log("Azure Key:" + az_k);
             az_ep = $("#az_ep").val();
@@ -663,6 +670,7 @@
 
             // store keys to cookie
             setCookie('bly_token', bly_token, 30);
+            setCookie('bly_pin', bly_pin, 30);
             setCookie('az_k', az_k, 30);
             setCookie('az_ep', az_ep);
 
