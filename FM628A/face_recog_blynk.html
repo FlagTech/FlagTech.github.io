@@ -173,9 +173,9 @@
 
         if (hasGetUserMedia()) {
             navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: false
-                })
+                video: true,
+                audio: false
+            })
                 .then(function (stream) {
                     video.srcObject = stream;
                     video.play();
@@ -292,18 +292,18 @@
             }).show();
             var personId = $('#personSelectList').val();
             $.ajax({
-                    url: az_ep + "face/v1.0/persongroups/" + groupID +
-                        "/persons/" + personId + "/persistedFaces",
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
-                        //xhrObj.setRequestHeader("Content-Type","application/json");
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    contentType: 'application/octet-stream',
-                    type: "POST",
-                    processData: false,
-                    data: snapPhoto(),
-                })
+                url: az_ep + "face/v1.0/persongroups/" + groupID +
+                    "/persons/" + personId + "/persistedFaces",
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+                    //xhrObj.setRequestHeader("Content-Type","application/json");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                contentType: 'application/octet-stream',
+                type: "POST",
+                processData: false,
+                data: snapPhoto(),
+            })
                 .done(function (data) {
                     new Noty({
                         text: '已經儲存您的臉孔, 請記得執行訓練',
@@ -329,15 +329,15 @@
             video.pause();
 
             $.ajax({
-                    url: az_ep + "face/v1.0/detect?" + $.param(params),
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    type: "POST",
-                    processData: false,
-                    data: snapPhoto(),
-                })
+                url: az_ep + "face/v1.0/detect?" + $.param(params),
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                type: "POST",
+                processData: false,
+                data: snapPhoto(),
+            })
                 .done(function (data) {
                     if (data.length == 0) {
                         speakMsg('找不到臉孔', 'error');
@@ -353,14 +353,14 @@
                             "confidenceThreshold": 0.5
                         };
                         $.ajax({
-                                url: az_ep + "face/v1.0/identify",
-                                beforeSend: function (xhrObj) {
-                                    xhrObj.setRequestHeader("Content-Type", "application/json");
-                                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                                },
-                                type: "POST",
-                                data: JSON.stringify(request),
-                            })
+                            url: az_ep + "face/v1.0/identify",
+                            beforeSend: function (xhrObj) {
+                                xhrObj.setRequestHeader("Content-Type", "application/json");
+                                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                            },
+                            type: "POST",
+                            data: JSON.stringify(request),
+                        })
                             .done(function (data) {
                                 if (data[0].candidates.length == 0) {
                                     speakMsg("您的身份不明", 'error');
@@ -369,16 +369,16 @@
                                     if (name) {
                                         speakMsg(name + "您好, 歡迎回來", "success");
                                         $.get(
-                                            'https://blynk.cloud/external/api/update?token=' + 
-                                            bly_token + 
+                                            'https://blynk.cloud/external/api/update?token=' +
+                                            bly_token +
                                             '&v0=0',
-                                            function(data) {
-                                                setTimeout(function(){
-                                                    $.get('https://blynk.cloud/external/api/update?token=' + 
-                                                            bly_token + 
-                                                            '&v0=1')
-                                                    }, 5000);
-                                        });
+                                            function (data) {
+                                                setTimeout(function () {
+                                                    $.get('https://blynk.cloud/external/api/update?token=' +
+                                                        bly_token +
+                                                        '&v0=1')
+                                                }, 5000);
+                                            });
 
                                     } else {
                                         speakMsg("您的身份不明", 'error');
@@ -406,14 +406,14 @@
 
         function trainGroup() {
             $.ajax({
-                    url: az_ep + "face/v1.0/persongroups/" + groupID +
-                        "/train?",
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    type: "POST",
-                    data: "",
-                })
+                url: az_ep + "face/v1.0/persongroups/" + groupID +
+                    "/train?",
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                type: "POST",
+                data: "",
+            })
                 .done(function (data) {
                     new Noty({
                         text: '開始訓練',
@@ -431,13 +431,13 @@
 
         function checkTraining() {
             $.ajax({
-                    url: az_ep + "face/v1.0/persongroups/" + groupID +
-                        "/training",
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    type: "GET",
-                })
+                url: az_ep + "face/v1.0/persongroups/" + groupID +
+                    "/training",
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                type: "GET",
+            })
                 .done(function (data) {
                     if (data.status == "succeeded") new Noty({
                         text: '訓練完成',
@@ -462,13 +462,13 @@
             var id = $('#personSelectList').val();
             if (id) {
                 $.ajax({
-                        url: az_ep + "face/v1.0/persongroups/" + groupID +
-                            "/persons/" + id,
-                        beforeSend: function (xhrObj) {
-                            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                        },
-                        type: "DELETE",
-                    })
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/persons/" + id,
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    type: "DELETE",
+                })
                     .done(function (data) {
                         new Noty({
                             text: '已經刪除',
@@ -489,15 +489,15 @@
             var name = $('#personName').val();
             if (name) {
                 $.ajax({
-                        url: az_ep + "face/v1.0/persongroups/" + groupID +
-                            "/persons",
-                        beforeSend: function (xhrObj) {
-                            xhrObj.setRequestHeader("Content-Type", "application/json");
-                            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                        },
-                        type: "POST",
-                        data: '{ "name": "' + name + '"}',
-                    })
+                    url: az_ep + "face/v1.0/persongroups/" + groupID +
+                        "/persons",
+                    beforeSend: function (xhrObj) {
+                        xhrObj.setRequestHeader("Content-Type", "application/json");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                    },
+                    type: "POST",
+                    data: '{ "name": "' + name + '"}',
+                })
                     .done(function (data) {
                         new Noty({
                             text: '已經新增',
@@ -516,14 +516,14 @@
 
         function updatePersonList(defaultName) {
             $.ajax({
-                    type: "GET",
-                    url: az_ep + "face/v1.0/persongroups/" + groupID +
-                        "/persons",
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    dataType: "json",
-                })
+                type: "GET",
+                url: az_ep + "face/v1.0/persongroups/" + groupID +
+                    "/persons",
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                dataType: "json",
+            })
                 .done(function (data) {
                     var list = '';
                     personList = {};
@@ -549,15 +549,15 @@
 
         function addGroup(id) {
             $.ajax({
-                    type: "PUT",
-                    url: az_ep + "face/v1.0/persongroups/" + id,
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Content-Type", "application/json");
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    dataType: "json",
-                    data: '{"name": "group1", "userData": "Flag Maker FM611A"}',
-                })
+                type: "PUT",
+                url: az_ep + "face/v1.0/persongroups/" + id,
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                dataType: "json",
+                data: '{"name": "group1", "userData": "Flag Maker FM611A"}',
+            })
                 .always(function (jqXHR) {
                     if (jqXHR.status != 200) {
                         new Noty({
@@ -570,13 +570,13 @@
 
         function checkGroup(id) {
             $.ajax({
-                    type: "GET",
-                    url: az_ep + "face/v1.0/persongroups",
-                    beforeSend: function (xhrObj) {
-                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
-                    },
-                    dataType: "json",
-                })
+                type: "GET",
+                url: az_ep + "face/v1.0/persongroups",
+                beforeSend: function (xhrObj) {
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", az_k);
+                },
+                dataType: "json",
+            })
                 .done(function (data) {
                     for (i = 0; i < data.length; i++) {
                         if (data[i].personGroupId == id) {
@@ -621,8 +621,37 @@
                 timeout: 10000,
             });
 
+            bly_token = getCookie('bly_token');
+            if(bly_token != "") $("#bly_token").val(bly_token);
+            az_k = getCookie('az_k');
+            if(az_k != "") $("#az_k").val(az_k);
+            az_ep = getCookie('az_ep');
+            if(az_ep != "") $("#az_ep").val(az_ep);
             // checkGroup(groupID);
         });
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
 
         function init() {
             bly_token = $("#bly_token").val();
@@ -631,6 +660,12 @@
             console.log("Azure Key:" + az_k);
             az_ep = $("#az_ep").val();
             console.log("Azure Endpoint:" + az_ep);
+
+            // store keys to cookie
+            setCookie('bly_token', bly_token, 30);
+            setCookie('az_k', az_k, 30);
+            setCookie('az_ep', az_ep);
+
             checkGroup(groupID);
         }
     </script>
