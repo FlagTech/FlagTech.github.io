@@ -103,6 +103,9 @@
                     // video.setAttribute('id', 'video');
                     video.srcObject = stream;
                     video_area.appendChild(video);
+                    video.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise :-)
+                    video.muted = "true"
+
                     video.play();
                 })
                 .catch(function (err) {
