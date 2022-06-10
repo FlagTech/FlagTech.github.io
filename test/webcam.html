@@ -75,7 +75,7 @@
             <h1>AI 刷臉智慧門鎖</h1>
             <p hidden class="page-error">message</p>
             <div class="page-ok" id="video_area">
-                <!-- <video id="video" autoplay="true"></video> -->
+                <video id="video" autoplay="true"></video>
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
             throw '';
         };
 
-        // var video = document.querySelector("#video");
+        var video = document.querySelector("#video");
         
         function hasGetUserMedia() {
             return (navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -98,11 +98,11 @@
                     audio: false
                 })
                 .then(function (stream) {
-                    var video_area = document.getElementById("video_area");
-                    const video = document.createElement('video');
-                    video.setAttribute('id', 'video');
+                    // var video_area = document.getElementById("video_area");
+                    // const video = document.createElement('video');
+                    // video.setAttribute('id', 'video');
                     video.srcObject = stream;
-                    video_area.appendChild(video);
+                    // video_area.appendChild(video);
                     video.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise :-)
                     // video.muted = "true"
 
