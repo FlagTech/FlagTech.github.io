@@ -100,11 +100,11 @@
                 .then(function (stream) {
                     var video_area = document.getElementById("video_area");
                     const video = document.createElement('video');
-                    // video.setAttribute('id', 'video');
+                    video.setAttribute('id', 'video');
                     video.srcObject = stream;
                     video_area.appendChild(video);
                     video.setAttribute("playsinline", true); // written with "setAttribute" bc. iOS buggs otherwise :-)
-                    video.muted = "true"
+                    // video.muted = "true"
 
                     video.play();
                 })
