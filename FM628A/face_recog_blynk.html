@@ -309,7 +309,7 @@
                         text: '已經儲存您的臉孔, 請記得執行訓練',
                         type: 'success'
                     }).show();
-                    updatePersonList();
+                    updatePersonList(personList[personId]);
                 })
                 .fail(function () {
                     new Noty({
@@ -530,7 +530,7 @@
                     for (i = 0; i < data.length; i++) {
                         list += "<option value='" + data[i].personId + "'";
 
-                        if (defaultName === data[i].name) list += "selected";
+                        if (defaultName === data[i].name) list += " selected";
 
                         list += ">" + data[i].name + " (已儲存 " + data[i].persistedFaceIds.length + " 張照片) " +
                             "</option>";
