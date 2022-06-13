@@ -5,16 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI 刷臉智慧門鎖</title>
-
     <script>
-        var aio_n; // Adafruit user name
-        var aio_k; // Adafruit IO Key
-        var aio_f; // Adafruit feed name
-        var az_k; // Azure Key
-        var az_ep; // Azure Endpoint
-        var client;
+        let bly_token;
+        let bly_pin;
+        let az_k;  // Azure Key
+        let az_ep; // Azure Endpoint
+        let client;
     </script>
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" rel="stylesheet">
     <style>
         *,
@@ -163,10 +160,10 @@
             throw '';
         };
 
-        var groupID = "flag";
-        var personList = {};
-        var video = document.querySelector("#video");
-        var photo = document.querySelector("#photo");
+        let groupID = "flag";
+        let personList = {};
+        let video = document.querySelector("#video");
+        let photo = document.querySelector("#photo");
 
         function hasGetUserMedia() {
             return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
@@ -189,8 +186,8 @@
             pageError("您的瀏覽器不支援影像功能");
         }
 
-        var buttonPlay = document.getElementById('button-play');
-        var buttonStop = document.getElementById('button-stop');
+        let buttonPlay = document.getElementById('button-play');
+        let buttonStop = document.getElementById('button-stop');
 
         buttonStop.setAttribute('hidden', '');
 
@@ -205,8 +202,8 @@
             speak(words);
         }
 
-        var synth = window.speechSynthesis;
-        var speakTimeout = null;
+        let synth = window.speechSynthesis;
+        let speakTimeout = null;
 
         function speak(words) {
             if (synth.speaking) {
@@ -221,7 +218,7 @@
             }
 
             if (words) {
-                var utterThis = new SpeechSynthesisUtterance(words);
+                let utterThis = new SpeechSynthesisUtterance(words);
                 utterThis.onend = function (event) {
                     console.log('SpeechSynthesisUtterance.onend');
                 }
@@ -251,23 +248,23 @@
         }
 
         makeblob = function (dataURL) {
-            var BASE64_MARKER = ';base64,';
+            let BASE64_MARKER = ';base64,';
             if (dataURL.indexOf(BASE64_MARKER) == -1) {
-                var parts = dataURL.split(',');
-                var contentType = parts[0].split(':')[1];
-                var raw = decodeURIComponent(parts[1]);
+                let parts = dataURL.split(',');
+                let contentType = parts[0].split(':')[1];
+                let raw = decodeURIComponent(parts[1]);
                 return new Blob([raw], {
                     type: contentType
                 });
             }
-            var parts = dataURL.split(BASE64_MARKER);
-            var contentType = parts[0].split(':')[1];
-            var raw = window.atob(parts[1]);
-            var rawLength = raw.length;
+            let parts = dataURL.split(BASE64_MARKER);
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
 
-            var uInt8Array = new Uint8Array(rawLength);
+            let uInt8Array = new Uint8Array(rawLength);
 
-            for (var i = 0; i < rawLength; ++i) {
+            for (let i = 0; i < rawLength; ++i) {
                 uInt8Array[i] = raw.charCodeAt(i);
             }
 
@@ -280,9 +277,9 @@
             $('#photo').attr('width', video.videoWidth).attr('height', video.videoHeight);
             // console.log(photo.width);
             // console.log(photo.height);
-            var photoContext = photo.getContext('2d');
+            let photoContext = photo.getContext('2d');
             photoContext.drawImage(video, 0, 0, photo.width, photo.height);
-            var dataURL = photo.toDataURL("image/jpeg", 0.95);
+            let dataURL = photo.toDataURL("image/jpeg", 0.95);
             return makeblob(dataURL);
         }
 
@@ -291,7 +288,7 @@
                 text: '正在儲存您的臉孔',
                 type: 'info'
             }).show();
-            var personId = $('#personSelectList').val();
+            let personId = $('#personSelectList').val();
             $.ajax({
                 url: az_ep + "face/v1.0/persongroups/" + groupID +
                     "/persons/" + personId + "/persistedFaces",
@@ -321,7 +318,7 @@
         }
 
         function identPerson() {
-            var params = {
+            let params = {
                 "returnFaceId": "true",
                 "returnFaceLandmarks": "false",
             };
@@ -343,11 +340,11 @@
                     if (data.length == 0) {
                         speakMsg('找不到臉孔', 'error');
                     } else {
-                        var faceIds = [];
+                        let faceIds = [];
                         for (i = 0; i < data.length; i++) {
                             faceIds.push(data[i].faceId);
                         }
-                        var request = {
+                        let request = {
                             "personGroupId": "flag",
                             "faceIds": faceIds,
                             "maxNumOfCandidatesReturned": 1,
@@ -366,7 +363,7 @@
                                 if (data[0].candidates.length == 0) {
                                     speakMsg("您的身份不明", 'error');
                                 } else {
-                                    var name = personList[data[0].candidates[0].personId];
+                                    let name = personList[data[0].candidates[0].personId];
                                     if (name) {
                                         speakMsg(name + "您好, 歡迎回來", "success");
                                         $.get(
@@ -459,10 +456,10 @@
         }
 
         function delPerson() {
-            var result = confirm("確定要刪除?");
+            let result = confirm("確定要刪除?");
             if (!result) return;
 
-            var id = $('#personSelectList').val();
+            let id = $('#personSelectList').val();
             if (id) {
                 $.ajax({
                     url: az_ep + "face/v1.0/persongroups/" + groupID +
@@ -489,7 +486,7 @@
         }
 
         function addPerson() {
-            var name = $('#personName').val();
+            let name = $('#personName').val();
             if (name) {
                 $.ajax({
                     url: az_ep + "face/v1.0/persongroups/" + groupID +
@@ -528,7 +525,7 @@
                 dataType: "json",
             })
                 .done(function (data) {
-                    var list = '';
+                    let list = '';
                     personList = {};
                     for (i = 0; i < data.length; i++) {
                         list += "<option value='" + data[i].personId + "'";
