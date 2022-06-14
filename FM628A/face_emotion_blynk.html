@@ -171,7 +171,7 @@
     $(document).ready(function () {
       bly_token = getCookie('bly_token');
       if (bly_token != "") $("#bly_token").val(bly_token);
-      bly_pin = getCookie('bly_pin');
+      bly_pin = getCookie('bly_emotion_pin');
       if (bly_pin != "") $("#bly_pin").val(bly_pin);
       az_k = getCookie('az_k');
       if (az_k != "") $("#az_k").val(az_k);
@@ -230,7 +230,7 @@
 
       // store keys to cookie
       setCookie('bly_token', bly_token, 30);
-      setCookie('bly_pin', bly_pin, 30);
+      setCookie('bly_emotion_pin', bly_pin, 30);
       setCookie('az_k', az_k, 30);
       setCookie('az_ep', az_ep);
 
