@@ -28,10 +28,6 @@ if (labelStr == "") labelStr = "Teddy,Chuan";
 labelStr = prompt("請輸入名稱並以逗號隔開人名:", labelStr);
 let labels = labelStr.toString().split(",")
 
-// 設定焦點移出輸入欄位時儲存資料
-bly_token.addEventListener("blur", saveCookie);
-bly_pin.addEventListener("blur", saveCookie);
-
 // 讓輸入框圓角一點  需要 jquery-ui.min.js 和 jquery-ui.min.css
 $('input:text').addClass("ui-widget ui-widget-content ui-corner-all ui-textfield");
 
