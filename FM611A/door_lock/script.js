@@ -64,8 +64,6 @@ let results;
 let init = false;
 
 function changeCanvasSize() {
-  bly_token.style.width = (video1.offsetWidth).toString() + "px"
-  bly_pin.style.width = (video1.offsetWidth).toString() + "px"
   canvas.style.width = video1.offsetWidth.toString() + "px"
   canvas.style.height = video1.offsetHeight.toString() + "px"
   canvas.style.left = getPosition(video1)["x"] + "px";
