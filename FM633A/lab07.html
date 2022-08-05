@@ -303,10 +303,10 @@
                 const Predct_Probability = prediction[i].probability.toFixed(2);
                 
                 if (typeof pred_result !== 'undefined' && pred_result.length == 0){
-                    pred_result = [parseFloat(Predct_Probability), Predct_Name];
+                    pred_result = [parseFloat(Predct_Probability), Predct_Name, i];
                 }                
                 else if (parseFloat(Predct_Probability) > pred_result[0]){                   
-                    pred_result = [parseFloat(Predct_Probability), Predct_Name];
+                    pred_result = [parseFloat(Predct_Probability), Predct_Name, i];
                 }
                 
                 // console.log([parseFloat(Predct_Probability), parseFloat(pred_result[0])]);
@@ -317,7 +317,7 @@
         
 
         // $("#predictResult").text(pred_result[1]);
-        if (pred_result[0] > 0.7 && pred_result[1] == "no_mask" && !alarm_stus ){
+        if (pred_result[0] > 0.7 && pred_result[2] == 1 && !alarm_stus ){
             console.log("alarm!");
             // sendAlarm(pred_result[1]);
             alarm_stus = true;
@@ -349,7 +349,7 @@
 
             }
 
-        else if (pred_result[1] !== "no_mask" && alarm_stus){
+        else if (pred_result[2] !== 1 && alarm_stus){
                 console.log("clear!");
                 // sendAlarm(pred_result[1]);
                 alarm_stus = false;
