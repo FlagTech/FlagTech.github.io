@@ -119,7 +119,7 @@ async function recognizeFaces() {
     setTimeout(async () => {
       canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     }, 1000)
-    $.get(board_url + "?mood=" + exprIdx[exprMax]);
+    $.get(board_url + "playmusic?mood=" + exprIdx[exprMax]);
   }
 }
 
