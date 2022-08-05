@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>表情偵測</title>
+  <style>
+    /* justify-content：x軸   align-items：y軸    flex-direction：排列方式 */
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: "微軟正黑體", "黑體-繁", sans-serif;
+      font-size: 40px;
+      background: darkgrey;
+    }
+
+    canvas {
+      position: absolute;
+    }
+
+    /* 顯示文字
+    #connDiv{
+      display:none;
+      font-family: "微軟正黑體";
+      font-weight:bold;
+      font-size: 5vmin;
+      color: rgb(0, 0, 0);
+      text-shadow: -1px -1px 0  rgb(255, 255, 255);
+      margin: 0;
+      padding: 20px;
+    } */
+
+    #inputVideo {
+      max-height: 70%;
+      max-width: 70%;
+    }
+
+    /* #connBtnImg{
+      position:relative;
+      width: 10vw;       
+      height: 10vh;  
+    } */
+
+    #mask {
+      width: 100vw;
+      height: 100vh;
+      background-color: #000;
+      background: rgba(0, 0, 0, 0.9);
+      position: absolute;
+      display: none;
+    }
+
+    #loadImg {
+      max-height: 50%;
+      max-width: 50%;
+      position: absolute;
+      display: none;
+    }
+
+    #identify {
+      font-family: "微軟正黑體";
+      font-size: 4vh;
+      margin-top: 1vh;
+      margin-bottom: 0vh;
+      height: 7vh;
+    }
+
+    #bly_token,
+    #bly_exp_pin {
+      font-size: 4vh;
+      height: 5vh;
+      max-width: 90vw;
+      margin-top: 1vh;
+    }
+
+    #te {
+      font-family: "微軟正黑體";
+      font-weight: bold;
+      font-size: 6vh;
+      color: rgb(255, 255, 255);
+      text-shadow: -1px -1px 0 rgb(0, 0, 0);
+      /*margin: 0;
+      margin-top: 2vh;
+      padding: 20px;*/
+      margin: 2vh;
+    }
+
+    .ui-textfield {
+      text-align: center;
+    }
+  </style>
+  <script defer src="face-api.min.js"></script>
+  <script defer src="script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+  <link rel="stylesheet" href="jquery-ui.min.css" />
+  <script src="jquery-ui.min.js"></script>
+</head>
+
+<body>
+  <!--   -->
+  <div id="mask"></div>
+  <img id="loadImg" src="loadModel.gif">
+  <p id="te">表情偵測</p>
+  <video id="inputVideo" autoplay muted playsinline></video>
+  <button id="identify">偵測按鈕</button>
+  <input id="bly_token" type="text" name="bly_token" placeholder="請輸入 Blynk 權杖">
+  <input id="bly_exp_pin" type="text" name="bly_exp_pin" placeholder="請輸入 Blynk 腳位" value="v7">
+</body>
+
+</html>
