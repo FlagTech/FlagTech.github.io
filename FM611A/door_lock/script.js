@@ -20,8 +20,7 @@ function getCookie(cname) {
 // 取得個別元素
 const video1 = document.getElementById('inputVideo')
 const idn = document.getElementById('identify')
-const bly_token = document.getElementById('bly_token')
-const bly_pin = document.getElementById('bly_pin')
+const board_url = document.referrer;
 
 // 取得人名, 要與 images 下的資料夾名稱相同 
 let labelStr = getCookie("labelStr");
@@ -29,21 +28,9 @@ if (labelStr == "") labelStr = "Teddy,Chuan";
 labelStr = prompt("請輸入名稱並以逗號隔開人名:", labelStr);
 let labels = labelStr.toString().split(",")
 
-// 將 Blynk 權杖與虛擬腳位儲存到 cookie
-function saveCookie() {
-  setCookie("bly_key", bly_token.value, 30);
-  setCookie("bly_pin", bly_pin.value, 30);
-}
-
 // 設定焦點移出輸入欄位時儲存資料
 bly_token.addEventListener("blur", saveCookie);
 bly_pin.addEventListener("blur", saveCookie);
-
-// 從 cookie 取得之前輸入的權杖與虛擬腳位
-let key = getCookie("bly_key");
-let pin = getCookie("bly_pin");
-if (key != "") bly_token.value = key;
-if (pin != "") bly_pin.value = pin;
 
 // 讓輸入框圓角一點  需要 jquery-ui.min.js 和 jquery-ui.min.css
 $('input:text').addClass("ui-widget ui-widget-content ui-corner-all ui-textfield");
@@ -121,20 +108,7 @@ async function recognizeFaces() {
     console.log(lab + dis)
 
     if (lab != "unknown" && dis < 0.4) {
-      $.get(
-        'https://blynk.cloud/external/api/update?token=' +
-        bly_token.value +
-        '&' +
-        bly_pin.value + '=0',
-        function (data) {
-          setTimeout(function () {
-            $.get('https://blynk.cloud/external/api/update?token=' +
-              bly_token.value +
-              '&' +
-              bly_pin.value + '=1')
-          }, 5000);
-        }
-      );
+      $.get(board_url + 'open');
     }
 
     const box = resizedDetections[i].detection.box
