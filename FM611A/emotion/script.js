@@ -20,30 +20,7 @@ function getCookie(cname) {
 // 取得個別元素
 const video1 = document.getElementById('inputVideo')
 const idn = document.getElementById('identify')
-const bly_token = document.getElementById('bly_token')
-const bly_exp_pin = document.getElementById('bly_exp_pin')
-
-// 取得人名, 要與 images 下的資料夾名稱相同 
-// let labelStr = getCookie("labelStr");
-// if(labelStr == "") labelStr = "Teddy,Chuan";
-// labelStr = prompt("請輸入名稱並以逗號隔開人名:", labelStr);
-// let labels = labelStr.toString().split(",")
-
-// 將 Blynk 權杖與虛擬腳位儲存到 cookie
-function saveCookie() {
-  setCookie("bly_key", bly_token.value, 30);
-  setCookie("bly_exp_pin", bly_exp_pin.value, 30);
-}
-
-// 設定焦點移出輸入欄位時儲存資料
-bly_token.addEventListener("blur", saveCookie);
-bly_exp_pin.addEventListener("blur", saveCookie);
-
-// 從 cookie 取得之前輸入的權杖與虛擬腳位
-let key = getCookie("bly_key");
-let pin = getCookie("bly_exp_pin");
-if (key != "") bly_token.value = key;
-if (pin != "") bly_exp_pin.value = pin;
+const board_url = document.referrer;
 
 // 讓輸入框圓角一點  需要 jquery-ui.min.js 和 jquery-ui.min.css
 $('input:text').addClass("ui-widget ui-widget-content ui-corner-all ui-textfield");
@@ -82,8 +59,6 @@ let results;
 let init = false;
 
 function changeCanvasSize() {
-  bly_token.style.width = (video1.offsetWidth).toString() + "px"
-  bly_exp_pin.style.width = (video1.offsetWidth).toString() + "px"
   canvas.style.width = video1.offsetWidth.toString() + "px"
   canvas.style.height = video1.offsetHeight.toString() + "px"
   canvas.style.left = getPosition(video1)["x"] + "px";
@@ -109,13 +84,13 @@ async function initRecognizeFaces() {
 }
 
 const exprIdx = {
-  neutral: 20,
-  happy: 40, 
-  angry: 60,
-  disgusted: 60, 
-  fearful: 60,
-  sad: 60,
-  surprised: 80 
+  neutral: 'normal',
+  happy: 'good', 
+  angry: 'bad',
+  disgusted: 'bad', 
+  fearful: 'bad',
+  sad: 'bad',
+  surprised: 'bad' 
 };
 
 async function recognizeFaces() {
@@ -144,13 +119,7 @@ async function recognizeFaces() {
     setTimeout(async () => {
       canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
     }, 1000)
-    $.get(
-      'https://blynk.cloud/external/api/update?token=' +
-      bly_token.value +
-      '&' +
-      bly_exp_pin.value + '=' +
-      exprIdx[exprMax],
-    );
+    $.get(board_url + "?mood=" + exprIdx[exprMax]);
   }
 }
 
