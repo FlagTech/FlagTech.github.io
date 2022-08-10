@@ -102,7 +102,6 @@ async function recognizeFaces() {
     console.log(lab + dis)
 
     if (lab != "unknown" && dis < 0.4) {
-      console.log("open door");
       $.get(board_url + 'open');
     }
 
