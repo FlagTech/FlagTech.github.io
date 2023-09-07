@@ -1,0 +1,101 @@
+﻿排名,書名,作者,出版商,定價,折扣,售價,出版日期
+1,ChatGPT 開發手冊 - 用 OpenAI API ‧ LangChain ‧ Embeddings 設計 Plugin、LINE/Discord bot、股票分析與客服自動化助理,施威銘研究室,旗標科技,750,79,593,2023/8/29
+2,SRE 實踐與開發平台指南：從團隊協作、原則、架構和趨勢掌握全局，做出精準決策,黃冠元（Rick Hwang） 著,博碩文化,620,78,484,2023/8/1
+3,Docker 實戰 6堂課：56個實驗動手做，掌握 Linux 容器核心技術（iThome鐵人賽系列書）【軟精裝】,賴怡玲（小賴）,博碩文化,720,78,562,2023/9/11
+4,遊戲設計 X 演算法 X TypeScript：出版社對我說「把祕笈通通交出來!」(iThome鐵人賽系列書)【軟精裝】,小哈片刻(Haska Su),博碩文化,720,78,562,2023/8/25
+5,重構的時機與實作｜五行程式碼規則 (Five Lines of Code: How and When to Refactor),Christian Clausen 著 H&C 譯,碁峰資訊,680,79,537,2023/9/4
+6,"Pragmatic TDD：以 DDD 寫出鬆散耦合、文件化和高品質的程式碼 (Pragmatic Test-Driven Development in C# and .NET: Write loosely coupled, documented, and high-quality code with DDD using familiar tools and libraries)",Adam Tibi 著 莊志弘(軟體主廚) 譯,博碩文化,720,78,562,2023/9/4
+7,圖形演算法｜Apache Spark 與 Neo4j 實務範例 (Graph Algorithms),"Mark Needham, Amy E. Hodler 著 張靜雯 譯",歐萊禮,580,79,458,2019/11/12
+8,"精通 API 架構｜設計、營運和發展基於 API 的系統 (Mastering API Architecture: Design, Operate, and Evolve Api-Based Systems)","James Gough , Daniel Bryant , Matthew Auburn 著 黃銘偉 譯",歐萊禮,680,79,537,2023/8/31
+9,使用 Redmine 管理企業 MIS 的那些鳥事：提升資安、專案與 IT 管理的 30個錦囊妙計 (iThome鐵人賽系列書)【軟精裝】,羅宇倫(Allan Lo),博碩文化,700,78,546,2023/8/23
+10,"Python 大數據專案 X 工程 X 產品 資料工程師的升級攻略, 2/e",林子軒 著,深智數位,780,79,616,2023/8/20
+11,你就是不寫測試才會沒時間：Kuma 的單元測試實戰 -- Java篇（iThome鐵人賽系列書）,許煜松（Kuma）,博碩文化,650,78,507,2022/10/28
+12,SQL Server 管理實戰 (適用SQL Server 2022/2019),胡百敬、洪玉茹、周妙謙、姚巧玫、林英豪、陳輝瑞,碁峰資訊,800,79,632,2023/8/14
+13,軟體測試實務 : 業界成功案例與高效實踐 [ I ],"李信杰 主編；江仁豪, 宋濤, 李佩蓉, 林書緯, 郁家豪, 徐鉦棋, 張仁瀚, 莊碧琪, 彭師孝, 黃冠元, 劉人傑, 劉振三, 蔡孟哲, 盧建成, 蘇哲平, 蘇義傑, 蘭鑫 合著",博碩文化,650,78,507,2023/6/5
+14,ChatGPT 指令大全與創新應用：GPT-4 搶先看、串接 API、客服機器人、AI英文家教，一鍵打造 AI智慧產品,Explainthis（王鵬傑、李俊廷、林品均）,博碩文化,680,78,530,2023/5/25
+15,軟體測試實務 : 業界成功案例與高效實踐 [ II ],"李信杰 主編；江仁豪, 呂昇峰, 邱志傑, 郁家豪, 張正朋, 郭信志, 梁舒翔, 陳坤裕, 陳肇陽, 傅韋傑, 黃冠元, 黃炳杰, 黃貫展, 劉振三, 蔡一郎, 鄧宇翔, 闕帝雄 合著",博碩文化,600,78,468,2023/6/5
+16,機器學習最強入門 - 基礎數學／機率／統計邁向AI真實數據專題實作 - 王者歸來,洪錦魁 著,深智數位,980,79,774,2023/8/11
+17,數據網格｜大規模提供資料驅動價值 (Data Mesh: Delivering Data-Driven Value at Scale),Zhamak Dehghani 著 吳曜撰 譯,歐萊禮,680,79,537,2023/8/1
+18,"流暢的 C｜設計原則、實踐和模式 (Fluent C: Principles, Practices, and Patterns)",Christopher Preschern 著 陳仁和 譯,歐萊禮,680,79,537,2023/8/2
+19,GA4 全方位攻略：掌握行銷科技與數據營運的成功指南,陳展儀,博碩文化,600,78,468,2023/7/19
+20,Agile Retrospectives 中文版：這樣打造敏捷回顧會議，讓團隊從優秀邁向卓越 (Agile Retrospectives: Making Good Teams Great),Esther Derby、Diana Larsen 著 敏捷回顧會議志工群 譯,博碩文化,500,78,390,2022/8/30
+21,全棧測試｜交付高品質軟體的實務指南 (Full Stack Testing: A Practical Guide for Delivering High Quality Software),Gayathri Mohan 著 洪國梁 譯,歐萊禮,680,79,537,2023/7/17
+22,"DevOps Handbook ｜打造世界級技術組織的實踐指南, 2/e (中文版) (The Devops Handbook: How to Create World-Class Agility, Reliability, & Security in Technology Organizations, 2/e)",Gene Kim等 沈佩誼 譯,碁峰資訊,650,79,513,2023/7/20
+23,Clean Architecture 無瑕的程式碼－整潔的軟體設計與架構篇 + 實作篇－在整潔的架構上弄髒你的手 (雙書合購),,博碩文化,1080,74,800,2022/8/10
+24,資料科學 SQL 工作術 – 以 MySQL 為例與情境式 ChatGPT 輔助學習 (SQL for Data Scientists - A Beginner’s Guide for Building Datasets for Analysis),Renée M. P. Teate 著 莊昊耘 譯,旗標科技,630,79,498,2023/8/28
+25,ChatGPT 4 萬用手冊 2023 秋季號：超強外掛、Prompt、LineBot、OpenAI API、Midjourney、Stable Diffusion、Leonardo.ai,蔡宜坦、施威銘研究室,旗標科技,680,79,537,2023/7/6
+26,約耳趣談軟體 (Joel on Software),Joel Spolsky 著 藍子軒 譯,碁峰資訊,580,79,458,2023/7/4
+27,跟著 Docker 隊長，修練 22天就精通 - 搭配 20小時作者線上教學，無縫接軌 Microservices、Cloud-native、Serverless、DevOps 開發架構,Elton Stoneman 李龍威‧葉欣睿,旗標科技,880,85,748,2021/10/13
+28,深入淺出 Git (Head First Git: A Learner's Guide to Understanding Git from the Inside Out),Raju Gandhi,歐萊禮,780,79,616,2023/7/21
+29,Azure DevOps 顧問實戰,董大偉,碁峰資訊,500,79,395,2022/4/19
+30,"Kubernetes 建置與執行 : 邁向基礎設施的未來, 3/e (Kubernetes: Up and Running: Dive Into the Future of Infrastructure, 3/e)","Brendan Burns, Joe Beda, Kelsey Hightower, Lachlan... 謝智浩(Scott) 譯",歐萊禮,580,79,458,2023/3/22
+31,領域驅動設計：軟體核心複雜度的解決方法 (Domain-Driven Design: Tackling Complexity in the Heart of Software),Eric Evans 趙俐、盛海艷、劉霞 譯，任發科　審校，博碩文化　編譯,博碩文化,680,78,530,2019/5/13
+32,現代 Linux 學習手冊 (Learning Modern Linux: A Handbook for the Cloud Native Practitioner),Michael Hausenblas 著 林班侯 譯,歐萊禮,580,79,458,2023/7/5
+33,"深入淺出 PMP, 4/e (Head First PMP: A Learner's Companion to Passing the Project Management Professional Exam, 4/e)","Jennifer Greene, Andrew Stellman 楊尊一",歐萊禮,1200,79,948,2019/6/28
+34,ASP.NET Core 7 MVC 跨平台範例實戰演練,聖殿祭司 奚江華,碁峰資訊,860,79,679,2023/7/27
+35,"Scrum Mastery 中文版：從優秀到卓越的僕人式領導力, 2/e (Scrum Mastery, 2/e)",Geoff Watts 著 精通敏捷志工群 譯,博碩文化,600,78,468,2023/8/3
+36,駕馭 ChatGPT 4: 探索 Azure OpenAI 與 Cognitive Service for Language 開發實踐 (使用.NET 與 Node.js),柯克(Ko Ko)、陳葵懋 (Ian Chen)、Ryan Chung,博碩文化,650,78,507,2023/7/19
+37,"Python 最強入門邁向頂尖高手之路：王者歸來, 2/e (全彩版)",洪錦魁,深智數位,1080,79,853,2020/9/17
+38,Unity 遊戲設計：程式基礎、操作祕訣、製作流程、關卡設計全攻略,北村愛実 著 蔡斐如 譯,旗標科技,630,79,498,2023/8/18
+39,無瑕的程式碼－敏捷軟體開發技巧守則 (Clean Code: A Handbook of Agile Software Craftsmanship),Robert C. Martin 著、戴于晉、博碩文化 譯,博碩文化,580,78,452,2013/3/22
+40,"軟體架構原理｜工程方法 (Fundamentals of Software Architecture: A Comprehensive Guide to Patterns, Characteristics, and Best Practices)","Mark Richards, Neal Ford 著 陳建宏 譯",歐萊禮,680,79,537,2021/2/2
+41,高效能 Go 程式設計｜資料驅動的效能優化 (Efficient Go: Data-Driven Performance Optimization),Bartlomiej Plotka 著 楊新章 譯,歐萊禮,780,79,616,2023/8/2
+42,"SQL 學習手冊｜資料建立、維護與檢索, 3/e (Learning SQL: Generate, Manipulate, and Retrieve Data, 3/e)",Alan Beaulieu 著 林班侯 譯,歐萊禮,620,79,490,2022/12/15
+43,Deep Learning｜用 Python 進行深度學習的基礎理論實作,斎藤康毅 著、吳嘉芳 譯,歐萊禮,580,79,458,2017/8/16
+44,刷題實戰筆記：演算法工程師求職加分的祕笈,付東來 (@labuladong),博碩文化,720,78,562,2021/8/27
+45,金魚都能懂的 CSS 必學屬性：網頁設計必備寶典（iT邦幫忙鐵人賽系列書）,李建杭（Amos）著,博碩文化,720,78,562,2022/5/3
+46,金融風險管理的機器學習應用｜使用 Python (Machine Learning for Financial Risk Management with Python: Algorithms for Modeling Risk),Abdullah Karasan 著 楊新章 譯,歐萊禮,680,79,537,2023/7/4
+47,一本精通 - Python 範例應用大全：Python 詳細語法教學 & 100+ 個 Python 範例,OXXO（張宗彥）,深智數位,880,79,695,2023/8/20
+48,"大話 AWS 雲端架構：雲端應用架構圖解輕鬆學, 3/e",李秉鴻、周廷諺,博碩文化,650,78,507,2022/12/1
+49,STM32 韌體開發實戰 (標準庫),蘇昱霖,碁峰資訊,450,79,355,2023/8/9
+50,無瑕的程式碼－敏捷軟體開發技巧守則 + 番外篇－專業程式設計師的生存之道 (雙書合購),Robert C. Martin 著、博碩文化 譯、陳錦輝 審校,博碩文化,940,74,700,2013/9/17
+51,Working Effectively with Legacy Code : 管理、修改、重構遺留程式碼的藝術 (中文版),MICHAEL C. FEATHERS 著 劉未鵬 譯,博碩文化,720,78,562,2019/8/2
+52,ASP.NET Core 6 零基礎建立自己的部落格,劉駿嶢 – Jim(雞湯工程師),深智數位,790,79,624,2023/8/20
+53,Python ✕ ChatGPT ✕ Excel 高效率打造辦公室作業 + 數據分析自動化,陳會安,旗標科技,699,79,552,2023/3/31
+54,實戰 Tableau 資料分析與視覺化分析,松島七衣,碁峰資訊,480,79,379,2023/8/30
+55,精通無瑕程式碼：工程師也能斷捨離！消除複雜度、提升效率的 17個關鍵技法 (The Art of Clean Code: Best Practices to Eliminate Complexity and Simplify Your Life),Christian Mayer 著 江玠峰 譯,博碩文化,600,78,468,2023/6/27
+56,無瑕的程式碼－整潔的軟體設計與架構篇 (Clean Architecture: A Craftsman's Guide to Software Structure and Design),Robert C. Martin 著 林欣穎 譯、 陳錦輝 審校,博碩文化,580,78,452,2018/5/16
+57,超圖解 C語言 -- 用資料結構 × 演算法突破 APCS,趙英傑,旗標科技,780,79,616,2022/11/25
+58,影像辨識實務應用 -- 使用 C#【暢銷回饋版】,張逸中、李美億 著,博碩文化,500,78,390,2022/6/20
+59,"網頁應用程式設計｜使用 Node 和 Express, 2/e (Web Development with Node and Express, 2/e)",Ethan Brown 著 賴屹民 譯,歐萊禮,580,79,458,2020/6/22
+60,類神經網路實戰：使用 Python (Make Your Own Neural Network),Tariq Rashid 著 林賜 譯／博碩文化 審校,博碩文化,420,78,328,2018/10/12
+61,"精通嵌入式 Linux 程式設計, 3/e (上)",Frank Vasquez、Chris Simmonds 著 錢亞宏 譯．博碩文化 審校,博碩文化,750,78,585,2023/7/17
+62,軟體架構指標｜改善架構品質的案例研究 (Software Architecture Metrics: Case Studies to Improve the Quality of Your Architecture),Christian Ciceri 等 著 劉超群 譯,歐萊禮,580,79,458,2022/11/22
+63,"精通機器學習｜使用 Scikit-Learn , Keras 與 TensorFlow, 2/e (Hands-on Machine Learning with Scikit-Learn, Keras, and TensorFlow, 2/e)",Aurélien Géron 著 賴屹民 譯,歐萊禮,1200,79,948,2020/4/8
+64,"Rust 程式設計, 2/e (Programming Rust: Fast, Safe Systems Development, 2/e)","Jim Blandy, Jason Orendorff, Leonora F. S. Tindall 著 賴屹民 譯",歐萊禮,1200,79,948,2022/8/10
+65,ChatGPT 完整解析：API 實測與企業應用實戰,陳昭明 著,深智數位,620,79,489,2023/5/20
+66,Python - 最強入門 ChatGPT 助攻邁向數據科學之路 - 王者歸來 (全彩印刷第四版),洪錦魁 著,深智數位,1200,79,948,2023/5/20
+67,深入淺出 Kotlin (Head First Kotlin: A Brain-Friendly Guide),"Dawn Griffiths, David Griffiths 賴屹民",歐萊禮,780,79,616,2019/8/5
+68,機器學習模擬應用｜將合成資料運用於AI (Practical Simulations for Machine Learning),"Paris and Mars Buttfield-Addison, Tim Nugent & Jon... 楊新章 譯",歐萊禮,680,79,537,2023/3/3
+69,練核心從裡強到外：全面了解 Linux 基礎架構,笨叔,深智數位,1000,79,790,2021/5/20
+70,大師養成起手式：從核心真正了解 Linux 運作原理,笨叔、陳悅 著,深智數位,880,79,695,2021/8/19
+71,世界第一簡單的 Python「超」入門 - 零基礎 OK！ChatGPT 隨時當助教！,鎌田正浩 著 夏萱 譯；施威銘研究室 監修,旗標科技,499,79,394,2023/7/31
+72,OAuth 2.0 從入門到實戰：利用驗證和授權守護 API 的安全,周建毅（Miles）,博碩文化,600,78,468,2022/12/16
+73,和艦長一起 30 天玩轉 GitLab【第二版】（iT邦幫忙鐵人賽系列書）,陳正瑋,博碩文化,650,78,507,2022/12/8
+74,"精通 Python｜運用簡單的套件進行現代運算, 2/e (Introducing Python: Modern Computing in Simple Packages, 2/e)",Bill Lubanovic 著 賴屹民 譯,歐萊禮,880,79,695,2020/6/2
+75,為你自己學 Git,五倍紅寶石 高見龍,博碩文化,500,85,425,2017/11/29
+76,"CODE COMPLETE：軟體開發實務指南, 2/e (中文版) (Code Complete: A Practical Handbook of Software Construction, 2/e)",Steve McConnell 金戈、湯凌、陳碩、張菲 譯，裘宗燕 審校，博碩文化 編譯,博碩文化,1280,85,1088,2018/11/28
+77,ASP.NET Core 6 實戰守則：超易懂的跨平台開發入門教學 (iT邦幫忙鐵人賽系列書),林正祥 ATai Lin,博碩文化,600,78,468,2022/3/16
+78,從 AI 到 生成式 AI：40個零程式的實作體驗，培養新世代人工智慧素養,羅光志 博士,旗標科技,560,79,442,2023/8/18
+79,Python：加密貨幣 CTA 量化交易 111個實戰技巧,劉承彥,博碩文化,600,78,468,2023/9/1
+80,Windows Server 2022 系統與網站建置實務,戴有煒,碁峰資訊,720,79,569,2022/1/14
+81,重新認識 Vue.js：008天絕對看不完的 Vue.js 3 指南,許國政（Kuro） 著,博碩文化,600,78,468,2021/2/9
+82,Power BI X ChatGPT：實作大數據篩選分析與商業圖表設計,吳燦銘,博碩文化,600,78,468,2023/6/2
+83,AI 最前哨：PHP8 與 My SQL— 網站規劃&視覺化顯示最完整攻略,葉建榮,深智數位,780,79,616,2023/8/25
+84,Specification by Example 中文版：團隊如何交付正確的軟體 (Specification by Example: How Successful Teams Deliver the Right Software),Gojko Adzic 著、張昌貴、張博超、石永超 譯、傅育文 審校,博碩文化,420,78,328,2014/7/29
+85,TypeScript 邁向專家之路：零基礎 JavaScript 打通 Angular、React 與 Vue.js 前端框架實戰 (Essential TypeScript: From Beginner to Pro),Adam Freeman 著 許文達 譯,旗標科技,880,85,748,2021/11/8
+86,今晚來點 Web 前端效能優化大補帖：一次搞定指標 × 工具 × 技巧，打造超高速網站（iThome鐵人賽系列書）,莫力全 Kyle Mo,博碩文化,650,78,507,2022/9/16
+87,"玩真的！Git ✕ GitHub 實戰手冊 - coding 實境、協同開發、雲端同步, 用最具臨場感的開發實例紮實學會！ (Git for Programmers)",Jesse Liberty 著 林子政 譯；施威銘研究室 監修,旗標科技,580,79,458,2022/10/20
+88,資料科學基礎數學 (Essential Math for Data Science),Thomas Nield 著 楊新章 譯,歐萊禮,680,79,537,2023/4/11
+89,"實戰 SEO｜60天讓網站流量增加 20倍, 4/e",昝輝(Zac),碁峰資訊,650,79,513,2023/7/20
+90,AI 必須！從做中學貝氏統計 – 從事機器學習、深度學習、資料科學、大數據分析一定要懂的統計利器 (修訂第二版),"Therese M. Donovan, Ruth M. Mickey 著 黃駿 譯 施威銘研究室 監修",旗標科技,1200,79,948,2023/4/21
+91,"React Native 學習手冊, 2/e (Learning React Native: Building Native Mobile Apps with JavaScript, 2/e)",Bonnie Eisenman 張靜雯,歐萊禮,580,79,458,2018/6/19
+92,"深度學習實務應用｜雲端、行動與邊緣裝置 (Practical Deep Learning for Cloud, Mobile and Edge)","Anirudh Koul, Siddha Ganju, Meher Kasam 著 楊新章 譯",歐萊禮,880,79,695,2021/8/10
+93,邊玩邊學，使用 Scratch 學習 AI 程式設計專案大集合,"石原淳也, 小川智史, 倉本大資 著 吳嘉芳 譯",歐萊禮,480,79,379,2023/5/29
+94,Go 學習手冊 (Learning Go),Jon Bodner 著 賴屹民 譯,歐萊禮,580,79,458,2021/8/12
+95,機器學習｜特徵工程 (Feature Engineering for Machine Learning),"Alice Zheng, Amanda Casari 著 楊新章 譯",歐萊禮,520,79,411,2020/4/30
+96,"網站擷取｜使用 Python, 2/e (Web Scraping with Python: Collecting More Data from the Modern Web, 2/e)",Ryan Mitchell 楊尊一,歐萊禮,580,79,458,2018/10/9
+97,"深入淺出設計模式, 2/e (Head First Design Patterns: Building Extensible and Maintainable Object-Oriented Software, 2/e)","Eric Freeman , Elisabeth Robson 著 賴屹民 譯",歐萊禮,980,79,774,2021/9/2
+98,"操作介面設計模式, 3/e (Designing Interfaces, 3/e)","Jenifer Tidwell, Charles Brewer, Aynne Valencia 著 張靜雯 譯",歐萊禮,980,79,774,2021/1/4
+99,"Python 錦囊妙計, 3/e (Python Cookbook, 3/e)","David Beazley, Brian K. Jones 著、黃銘偉 譯",歐萊禮,880,79,695,2014/4/14
+100,圖解 TCP/IP 網路通訊協定 (涵蓋IPv6)(2021修訂版),"井上直也,村山公保,竹下隆史,荒井透,苅田幸雄 著 吳嘉芳 譯",碁峰資訊,620,79,490,2021/2/18
