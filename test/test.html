@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天氣預報</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .weather-card {
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .weather-card img {
+            width: 50px;
+            height: 50px;
+        }
+        .weather-info {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>天氣預報</h1>
+        <div>
+            <label for="city-input">請輸入城市名稱：</label>
+            <input type="text" id="city-input" placeholder="請輸入城市名稱">
+            <button onclick="getData()">取得天氣資訊</button>
+        </div>
+        <div class="weather-card" id="city1">
+            <div class="weather-icon">
+                <img src="" alt="Weather Icon">
+            </div>
+            <div class="weather-info">
+                <h2 id="city1-name">紐約</h2>
+                <p id="city1-temp">25°C</p>
+                <p id="city1-description">晴</p>
+            </div>
+        </div>
+        <div class="weather-card" id="city2">
+            <div class="weather-icon">
+                <img src="" alt="Weather Icon">
+            </div>
+            <div class="weather-info">
+                <h2 id="city2-name">倫敦</h2>
+                <p id="city2-temp">18°C</p>
+                <p id="city2-description">多雲</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getData() {
+            var city = document.getElementById('city-input').value;
+
+            var url = "https://actions.zapier.com/api/v1/exposed/01HGWBE89EEXXQQHECGQPH6085/execute/";
+            var headers = {
+                //"origin": "http://foo.example",
+                "Content-Type": "application/json",
+                "accept": "application/json",
+                "x-api-key": "sk-ak-CLhCOxQ7udMqXHPUls16S8VqLO"
+            };
+            var cityData = {
+                "instructions": city
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(cityData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                var icon = data['result']['icon'];
+                var temperature = data['result']['temperature'];
+                var description = data['result']['description'];
+                document.getElementById('city1-name').innerText = city;
+                document.getElementById('city1-temp').innerText = temperature + '°C';
+                document.getElementById('city1-description').innerText = description;
+                document.querySelector('#city1 .weather-icon img').src = icon;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
