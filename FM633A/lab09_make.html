@@ -210,7 +210,8 @@
             <label class="left">Teachable Machine 模型網址:</label>  
             <input type="text" id="modelurl" class="inputtext" name="inputtext" value=""><br>
             <!-- <input type="text" id="modelurl" class="inputtext" name="inputtext" value="https://teachablemachine.withgoogle.com/models/2YZvRiW3W/"><br>         -->
-         
+            <label class="left">MAKE Webhooks 網址:</label>
+            <input type="text" id="make" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
             <label class="left">Adafruit IO 金鑰:</label>
             <input type="text" id="activekey" class="inputtext" name="inputtext" autocomplete="on" value=""><br>
             <label class="left">Adafruit IO 帳號:</label>
@@ -268,7 +269,7 @@
         });
     });
 
-    let model, webcam, labelContainer, maxPredictions, aio_n, aio_k, aio_f;
+    let model, webcam, labelContainer, maxPredictions, make_url, aio_n, aio_k, aio_f;
     var sendClicked = false;
     var timesup = false;
     var pred_result_index = 0;
@@ -293,7 +294,8 @@
         console.log(odate);
 
         labelContainer.style.display = "block";
-
+        // Make Webhooks
+        make_url = document.getElementById("make").value;    
         //******Read AIO info.*******
         // Adafruit user name
         aio_n = document.getElementById("username").value;
@@ -385,7 +387,7 @@
                     labelContainer.firstChild.innerHTML = "嗨！" + pred_result[1] + "！" + "您的時光膠囊已解鎖, 打開 LINE 看看吧！";
                     //****POST Value****
                     $.ajax({
-                            url: "https://hook.eu2.make.com/z92305h3f51f542g30cd77ej77ptngy6?value1=100,
+                            url: f"{make_url}?value1=100",
                             type: "GET",
                         })
                         .fail(function () {
