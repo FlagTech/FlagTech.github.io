@@ -1,0 +1,104 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="arduino_setup" id=")NCI7eaSP!}RN(m*:h}@" x="69" y="-64">
+    <statement name="SETUP_FUNC">
+      <block type="io_builtin_led" id="/mL=EK^P8I,H2L^gF;Y@">
+        <field name="BUILT_IN_LED">D4</field>
+        <value name="STATE">
+          <block type="io_highlow" id="s%uO9a055l]S{la|0?u0">
+            <field name="STATE">HIGH</field>
+          </block>
+        </value>
+        <next>
+          <block type="esp8266_sta_setup" id="{-1+(?6CM_FIqaRa}A?|">
+            <value name="SSID">
+              <block type="text" id="6wl-rdz~}#PG6YMJ+I.B">
+                <field name="TEXT">你的無線網路名稱</field>
+              </block>
+            </value>
+            <value name="PINCODE">
+              <block type="text" id="Cp|C4!~x,.eCNrHfnnP}">
+                <field name="TEXT">你的無線網路密碼</field>
+              </block>
+            </value>
+            <next>
+              <block type="controls_whileUntil" id="2elH3tJp/qf!D;0iOHi^">
+                <field name="MODE">WHILE</field>
+                <value name="BOOL">
+                  <block type="logic_negate" id=")3j2{:)L(MMk}AIs({~Q">
+                    <value name="BOOL">
+                      <block type="esp8266_connected" id="SrS/ADsK!D.zrDtxx:ta"></block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="time_delay" id="c:8jGIYiRrjXxYQ?gB-B">
+                    <value name="DELAY_TIME_MILI">
+                      <block type="math_number" id="]w8:Uj1?*f3%vC%`UFR#">
+                        <field name="NUM">1000</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <next>
+                  <block type="io_builtin_led" id="P()J}p4~^|jK-(xEEAfh">
+                    <field name="BUILT_IN_LED">D4</field>
+                    <value name="STATE">
+                      <block type="io_highlow" id="(0RzIaQC9K].s,poiaDn">
+                        <field name="STATE">LOW</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="variables_set" id=".g`0^%%Bdog3gjvPFE#[">
+                        <field name="VAR">MAKE 請求網址</field>
+                        <value name="VALUE">
+                          <block type="text_join" id="UweKi=pM!^|W6itXj}0L">
+                            <mutation items="2"></mutation>
+                            <value name="ADD0">
+                              <block type="text" id="7EKd{ZBr_Mjj]t,D%S)P">
+                                <field name="TEXT">你的 make.com web hook 網址</field>
+                              </block>
+                            </value>
+                            <value name="ADD1">
+                              <block type="text" id="D-@y9v20v_[k!ZDbEY{b">
+                                <field name="TEXT">?level=high&amp;time=now</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="arduino_loop" id="EAg)g_/#Sgta~QPPg4@7" deletable="false" x="68" y="206">
+    <statement name="LOOP_FUNC">
+      <block type="variables_set" id="vjSycbD*+o/3v)qP[+Qd">
+        <field name="VAR">狀態碼</field>
+        <value name="VALUE">
+          <block type="esp8266_http_get" id="+#9N{tvqoDRq0A7Y=8df">
+            <value name="URL">
+              <block type="variables_get" id="XT^V_TtHWE{c-A_=29-T">
+                <field name="VAR">MAKE 請求網址</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="time_delay" id="5^w`/vceOp(K=-xp@zmf">
+            <value name="DELAY_TIME_MILI">
+              <block type="math_number" id="hrp()^j%g-=kP2i/(_)q">
+                <field name="NUM">5000</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>
