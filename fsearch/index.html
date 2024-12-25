@@ -20,8 +20,11 @@
             background-color: #FFFFFF;
             display: flex;
             flex-direction: column;
-            width: 100%;
+            width: calc(100% - 40px);  /* Subtract padding from width */
             height: 100%;
+            margin: 0 auto;  /* Center the container */
+            max-width: 1200px;  /* Optional: limit maximum width */
+            padding: 0 20px;  /* Add horizontal padding */
         }
         .input-group {
             display: flex;
