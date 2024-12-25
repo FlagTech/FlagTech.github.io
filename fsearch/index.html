@@ -4,45 +4,85 @@
     <meta charset="UTF-8">
     <title>旗標科技產品簡易搜尋工具</title>
     <style>
+        :root {
+            /* Light Theme Colors */
+            --bg-primary: #FFF0F5;
+            --bg-secondary: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --border-color: #FFB6C1;
+            --frame-border: #DDA0DD;
+            --input-bg: #FFFFFF;
+            --input-hover: #F0F0F0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Dark Theme Colors - High Contrast */
+                --bg-primary: #1A1A2E;
+                --bg-secondary: #16213E;
+                --text-primary: #E94560;
+                --text-secondary: #F5D3A1;
+                --border-color: #0F3460;
+                --frame-border: #E94560;
+                --input-bg: #0F3460;
+                --input-hover: #16213E;
+            }
+        }
+
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
         }
+
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #FFF0F5;  /* 粉色背景 */
             display: flex;
             flex-direction: column;
         }
+
         .container {
-            background-color: #FFFFFF;
+            background-color: var(--bg-secondary);
             display: flex;
             flex-direction: column;
-            width: calc(100% - 40px);  /* Subtract padding from width */
+            width: calc(100% - 40px);
             height: 100%;
-            margin: 0 auto;  /* Center the container */
-            max-width: 1200px;  /* Optional: limit maximum width */
-            padding: 0 20px;  /* Add horizontal padding */
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .input-group {
             display: flex;
             gap: 15px;
             padding: 15px;
-            background-color: #FFFFFF;
+            background-color: var(--bg-secondary);
         }
+
         input {
             flex-grow: 1;
             padding: 10px;
-            border: 1px solid #FFB6C1;  /* 淺粉紅邊框 */
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease;
         }
+
+        input:hover {
+            background-color: var(--input-hover);
+        }
+
         #searchFrame {
             flex-grow: 1;
             width: 100%;
-            border: 1px solid #DDA0DD;  /* 淡紫色邊框 */
+            border: 1px solid var(--frame-border);
             border-radius: 10px;
         }
     </style>
