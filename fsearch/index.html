@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>旗標科技產品簡易搜尋工具</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #FFF0F5;  /* 粉色背景 */
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .input-group {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background-color: #FFFFFF;
+        }
+        input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #FFB6C1;  /* 淺粉紅邊框 */
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        #searchFrame {
+            flex-grow: 1;
+            width: 100%;
+            border: 1px solid #DDA0DD;  /* 淡紫色邊框 */
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input 
+                type="text" 
+                id="keywordInput" 
+                placeholder="輸入搜尋關鍵字" 
+                onkeypress="handleKeyPress(event)"
+            >
+            <input 
+                type="text" 
+                id="domainInput" 
+                placeholder="目標網域" 
+                value="www.flag.com.tw"
+            >
+        </div>
+        <iframe 
+            id="searchFrame" 
+            src="" 
+            frameborder="0"
+        ></iframe>
+    </div>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                const keyword = document.getElementById('keywordInput').value;
+                const domain = document.getElementById('domainInput').value;
+                
+                if (keyword) {
+                    const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent(keyword)} site:${domain}`;
+                    document.getElementById('searchFrame').src = searchUrl;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
