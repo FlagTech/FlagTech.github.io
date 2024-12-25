@@ -74,7 +74,7 @@
                 const domain = document.getElementById('domainInput').value;
                 
                 if (keyword) {
-                    const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent(keyword)} site:${domain}`;
+                    const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書")} site:${domain}`;
                     document.getElementById('searchFrame').src = searchUrl;
                 }
             }
