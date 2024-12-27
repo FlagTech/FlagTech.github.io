@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>旗標科技產品簡易搜尋工具</title>
     <style>
         :root {
@@ -14,6 +15,12 @@
             --frame-border: #DDA0DD;
             --input-bg: #FFFFFF;
             --input-hover: #F0F0F0;
+            --accent-color: #FF69B4;
+            
+            /* Responsive Typography */
+            --font-size-base: 16px;
+            --font-size-small: 14px;
+            --font-size-large: 18px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -27,6 +34,7 @@
                 --frame-border: #E94560;
                 --input-bg: #0F3460;
                 --input-hover: #16213E;
+                --accent-color: #FF4500;
             }
         }
 
@@ -34,49 +42,85 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             color: var(--text-primary);
             background-color: var(--bg-primary);
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-size: var(--font-size-base);
+        }
+
+        * {
+            box-sizing: inherit;
+            transition: all 0.3s ease;
         }
 
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
             display: flex;
             flex-direction: column;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
         }
 
         .container {
             background-color: var(--bg-secondary);
             display: flex;
             flex-direction: column;
-            width: calc(100% - 40px);
-            height: 100%;
-            margin: 0 auto;
+            width: 100%;
             max-width: 1200px;
-            padding: 0 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100vh;
         }
 
         .input-group {
             display: flex;
             gap: 15px;
-            padding: 15px;
-            background-color: var(--bg-secondary);
+            margin-bottom: 15px;
+            align-items: center;
         }
 
-        input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid var(--border-color);
+        #keywordInput {
+            flex-grow: 4;
+            padding: 12px;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            font-size: 16px;
+            font-size: var(--font-size-base);
             background-color: var(--input-bg);
             color: var(--text-primary);
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
-        input:hover {
+        #keywordInput:hover {
             background-color: var(--input-hover);
+        }
+
+        #keywordInput:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.3);
+        }
+
+        #domainSelect {
+            flex-grow: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: var(--font-size-base);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%23333333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position-x: 95%;
+            background-position-y: 50%;
+            padding-right: 30px;
         }
 
         #searchFrame {
@@ -84,6 +128,45 @@
             width: 100%;
             border: 1px solid var(--frame-border);
             border-radius: 10px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+            .input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            #keywordInput, #domainSelect {
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                font-size: var(--font-size-small);
+            }
+
+            .container {
+                padding: 10px;
+                border-radius: 6px;
+            }
+
+            #keywordInput, #domainSelect {
+                font-size: var(--font-size-small);
+                padding: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
         }
     </style>
 </head>
@@ -94,34 +177,50 @@
                 type="text" 
                 id="keywordInput" 
                 placeholder="輸入搜尋關鍵字" 
-                onkeypress="handleKeyPress(event)"
+                aria-label="搜尋關鍵字"
             >
-            <input 
-                type="text" 
-                id="domainInput" 
-                placeholder="目標網域" 
-                value="www.flag.com.tw"
+            <select 
+                id="domainSelect" 
+                aria-label="目標網域"
             >
+                <option value="www.flag.com.tw">www.flag.com.tw</option>
+                <option value="www.books.com.tw">www.books.com.tw</option>
+                <option value="www.eslite.com">www.eslite.com</option>
+            </select>
         </div>
         <iframe 
             id="searchFrame" 
             src="" 
+            title="搜尋結果"
             frameborder="0"
+            aria-label="搜尋結果框架"
         ></iframe>
     </div>
 
     <script>
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                const keyword = document.getElementById('keywordInput').value;
-                const domain = document.getElementById('domainInput').value;
-                
-                if (keyword) {
-                    const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書")} site:${domain}`;
-                    document.getElementById('searchFrame').src = searchUrl;
-                }
+        function performSearch() {
+            const keyword = document.getElementById('keywordInput').value.trim();
+            const domain = document.getElementById('domainSelect').value.trim();
+            
+            if (keyword) {
+                const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書")} site:${domain}`;
+                document.getElementById('searchFrame').src = searchUrl;
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const keywordInput = document.getElementById('keywordInput');
+
+            // 監聽 Enter 鍵
+            keywordInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 改善移動設備輸入體驗
+            keywordInput.setAttribute('enterkeyhint', 'search');
+        });
     </script>
 </body>
 </html>
