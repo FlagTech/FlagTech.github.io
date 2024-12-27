@@ -252,7 +252,7 @@
             const domain = document.getElementById('domainSelect').value.trim();
             
             if (keyword) {
-                const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書，並請加上每一本推薦書的網址")} site:${domain}`;
+                const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書籍")} site:${domain}`;
                 document.getElementById('searchFrame').src = searchUrl;
             }
         }
