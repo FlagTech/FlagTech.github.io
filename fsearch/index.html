@@ -76,6 +76,38 @@
             height: 100vh;
         }
 
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: var(--bg-secondary);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .title {
+            font-size: var(--font-size-large);
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
         .input-group {
             display: flex;
             gap: 15px;
@@ -172,6 +204,23 @@
 </head>
 <body>
     <div class="container">
+        <div class="header">
+            <a 
+                href="https://www.flag.com.tw/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="前往旗標科技官網"
+                class="logo-link"
+            >
+                <img 
+                    src="https://www.flag.com.tw/assets/img/Flag%20logo%20weblogo%20white.png" 
+                    alt="旗標科技 Logo" 
+                    class="logo"
+                    onerror="this.style.display='none'"
+                >
+            </a>
+            <div class="title">產品簡易搜尋工具</div>
+        </div>
         <div class="input-group">
             <input 
                 type="text" 
@@ -203,7 +252,7 @@
             const domain = document.getElementById('domainSelect').value.trim();
             
             if (keyword) {
-                const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書")} site:${domain}`;
+                const searchUrl = `https://felo.ai/search/?q=${encodeURIComponent("請推薦與 \"" + keyword + "\" 相關的書，並請加上每一本推薦書的網址")} site:${domain}`;
                 document.getElementById('searchFrame').src = searchUrl;
             }
         }
