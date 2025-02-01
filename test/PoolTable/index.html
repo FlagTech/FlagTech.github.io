@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台球遊戲</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="container">
+            <div class="player-info">
+                <div class="player" id="player1">
+                    <h3>玩家 1</h3>
+                    <div class="score">得分：<span id="score1">0</span></div>
+                    <div class="ball-type">球種：<span id="ballType1">未定</span></div>
+                    <div class="pocketed-balls">進球：<span id="pocketedBalls1"></span></div>
+                </div>
+                <div id="message">新遊戲開始！</div>
+                <div class="player" id="player2">
+                    <h3>玩家 2</h3>
+                    <div class="score">得分：<span id="score2">0</span></div>
+                    <div class="ball-type">球種：<span id="ballType2">未定</span></div>
+                    <div class="pocketed-balls">進球：<span id="pocketedBalls2"></span></div>
+                </div>
+            </div>
+            
+            <div class="game-container">
+                <canvas id="gameCanvas"></canvas>
+                <div class="wrong-balls-container">
+                    <canvas id="wrongBallsCanvas"></canvas>
+                </div>
+                <div class="controls">
+                    <button id="newGameBtn">新遊戲</button>
+                    <button id="resetBallBtn">重置白球</button>
+                </div>
+            </div>
+            
+            <div id="message" class="message"></div>
+            
+            <div class="rules-toggle" onclick="toggleRules()">顯示/隱藏遊戲規則</div>
+            <div id="gameRules" class="game-rules hidden">
+                <h3>遊戲規則說明</h3>
+                <ul>
+                    <li><strong>基本規則：</strong>
+                        <ul>
+                            <li>使用滑鼠瞄準和擊球</li>
+                            <li>點擊並拖動滑鼠來瞄準，放開滑鼠來擊球</li>
+                            <li>擊球力度由拖動距離決定</li>
+                        </ul>
+                    </li>
+                    <li><strong>球種選擇：</strong>
+                        <ul>
+                            <li>第一個進球的玩家決定球種（實色球或花色球）</li>
+                            <li>實色球為1-7號，花色球為9-15號</li>
+                            <li>必須打進自己的球種才能得分</li>
+                        </ul>
+                    </li>
+                    <li><strong>回合規則：</strong>
+                        <ul>
+                            <li>打中自己的球種並進球可以繼續回合</li>
+                            <li>打錯球或白球進袋會換對手</li>
+                            <li>未進球也會換對手</li>
+                        </ul>
+                    </li>
+                    <li><strong>黑8規則：</strong>
+                        <ul>
+                            <li>必須先把自己所有的球打進才能打8號球</li>
+                            <li>提前打進8號球會輸掉遊戲</li>
+                            <li>打進所有自己的球後，正確打進8號球獲勝</li>
+                            <li>打8號球時白球進袋會輸掉遊戲</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleRules() {
+            const rules = document.getElementById('gameRules');
+            rules.classList.toggle('hidden');
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

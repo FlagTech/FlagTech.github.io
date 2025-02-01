@@ -1,0 +1,198 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #2c3e50;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+#gameContainer {
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#gameCanvas {
+    border: 5px solid #654321;
+    border-radius: 10px;
+    margin: 20px auto;
+    background: #076324;
+}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gameCanvas {
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.controls {
+    margin: 10px 0;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #2980b9;
+}
+
+.message {
+    color: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background: rgba(0,0,0,0.5);
+}
+
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    color: white;
+    width: 800px;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.player {
+    padding: 15px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player.active {
+    background: rgba(52, 152, 219, 0.3);
+    border: 1px solid rgba(52, 152, 219, 0.5);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+}
+
+.player h3 {
+    margin: 0 0 10px 0;
+    color: #3498db;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.score {
+    font-size: 24px;
+    margin: 5px 0;
+}
+
+.ball-type {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.pocketed-balls {
+    font-size: 14px;
+    margin: 8px 0;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.pocketed-balls canvas {
+    margin-left: 5px;
+}
+
+.game-rules {
+    text-align: left;
+    margin: 20px auto;
+    padding: 15px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    max-width: 800px;
+}
+
+.game-rules h3 {
+    color: #3498db;
+    margin-top: 0;
+}
+
+.game-rules ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.game-rules li {
+    margin: 5px 0;
+}
+
+.rules-toggle {
+    cursor: pointer;
+    color: #3498db;
+    text-decoration: underline;
+    margin: 10px 0;
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.wrong-balls-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 0;
+}
+
+#wrongBallsCanvas {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#message {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    min-width: 200px;
+    text-align: center;
+    margin: 0 20px;
+}
