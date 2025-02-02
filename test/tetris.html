@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tetris with Cat/Dog Faces and Snake Animation</title>
+  <style>
+    body {
+      background: #333;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      touch-action: none;
+    }
+    canvas {
+      background: #000;
+      display: block;
+      margin: 20px auto;
+      border: 2px solid #555;
+    }
+    .touch-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      height: 100px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .touch-area {
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 20px;
+      pointer-events: auto;
+    }
+    .touch-area span {
+      color: white;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="300" height="600"></canvas>
+  <div class="touch-controls">
+    <div class="touch-area" id="moveLeft">
+      <span>←</span>
+    </div>
+    <div class="touch-area" id="moveDown">
+      <span>↓</span>
+    </div>
+    <div class="touch-area" id="moveRight">
+      <span>→</span>
+    </div>
+  </div>
+  <script>
+    // ----- 遊戲常數 -----
+    const BOARD_WIDTH = 10;
+    const BOARD_HEIGHT = 20;
+    const BLOCK_SIZE = 30;
+    const SCREEN_WIDTH = BOARD_WIDTH * BLOCK_SIZE;
+    const SCREEN_HEIGHT = BOARD_HEIGHT * BLOCK_SIZE;
+    
+    // 顏色定義
+    const COLORS = {
+      BLACK: "#000000",
+      GRAY: "#323232",
+      WHITE: "#ffffff",
+      RED: "#c80000",
+      GREEN: "#00c800",
+      BLUE: "#0000c8",
+      YELLOW: "#c8c800",
+      CYAN: "#00c8c8",
+      MAGENTA: "#c800c8",
+      ORANGE: "#ffa500"
+    };
+    
+    // 俄羅斯方塊圖形定義
+    const TETROMINOES = {
+      I: [[0,1], [1,1], [2,1], [3,1]],
+      O: [[1,0], [2,0], [1,1], [2,1]],
+      T: [[1,0], [0,1], [1,1], [2,1]],
+      S: [[1,0], [2,0], [0,1], [1,1]],
+      Z: [[0,0], [1,0], [1,1], [2,1]],
+      J: [[0,0], [0,1], [1,1], [2,1]],
+      L: [[2,0], [0,1], [1,1], [2,1]]
+    };
+    
+    const PIECE_COLORS = {
+      I: COLORS.CYAN,
+      O: COLORS.YELLOW,
+      T: COLORS.MAGENTA,
+      S: COLORS.GREEN,
+      Z: COLORS.RED,
+      J: COLORS.BLUE,
+      L: COLORS.ORANGE
+    };
+    
+    // 蛇動畫參數
+    const SNAKE_ANIMATION_TIME = 1.0; // 秒
+    const SNAKE_LENGTH = 6;
+    const SNAKE_HEAD_COLOR = COLORS.GREEN;
+    const SNAKE_BODY_COLOR = "#00b400";  // 稍暗的綠
+    const SNAKE_STRIPE_COLOR = "#008000";  // 更深的綠
+    
+    // 初始下落間隔（毫秒）
+    let dropInterval = 500;
+    
+    // 全域變數，確保 Game Over 畫面只顯示一次
+    let gameOverDisplayed = false;
+    
+    // ----- 貓、狗臉繪製函式 -----
+    function drawCatFace(ctx, x, y, size) {
+      // 貓耳朵
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.moveTo(x + 3, y + 3);
+      ctx.lineTo(x + 9, y + 3);
+      ctx.lineTo(x + 6, y + 9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(x + size - 3, y + 3);
+      ctx.lineTo(x + size - 9, y + 3);
+      ctx.lineTo(x + size - 6, y + 9);
+      ctx.closePath();
+      ctx.fill();
+      // 眼睛
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(x + size/2 - 4, y + size/2 - 2, 2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + size/2 + 4, y + size/2 - 2, 2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.arc(x + size/2 - 4, y + size/2 - 2, 1, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + size/2 + 4, y + size/2 - 2, 1, 0, Math.PI*2);
+      ctx.fill();
+      // 鼻子
+      ctx.fillStyle = "pink";
+      ctx.beginPath();
+      ctx.arc(x + size/2, y + size/2 + 2, 2, 0, Math.PI*2);
+      ctx.fill();
+      // 鬍鬚
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x + size/2 - 2, y + size/2 + 2);
+      ctx.lineTo(x + size/2 - 10, y + size/2 + 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + size/2 - 2, y + size/2 + 4);
+      ctx.lineTo(x + size/2 - 10, y + size/2 + 6);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + size/2 + 2, y + size/2 + 2);
+      ctx.lineTo(x + size/2 + 10, y + size/2 + 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + size/2 + 2, y + size/2 + 4);
+      ctx.lineTo(x + size/2 + 10, y + size/2 + 6);
+      ctx.stroke();
+    }
+    
+    function drawDogFace(ctx, x, y, size) {
+      // 狗耳朵
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.arc(x + 5, y + 5, 3, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + size - 5, y + 5, 3, 0, Math.PI*2);
+      ctx.fill();
+      // 眼睛
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      ctx.arc(x + size/2 - 4, y + size/2 - 2, 2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + size/2 + 4, y + size/2 - 2, 2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.arc(x + size/2 - 4, y + size/2 - 2, 1, 0, Math.PI*2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + size/2 + 4, y + size/2 - 2, 1, 0, Math.PI*2);
+      ctx.fill();
+      // 鼻子
+      ctx.fillStyle = "black";
+      ctx.beginPath();
+      ctx.arc(x + size/2, y + size/2 + 2, 3, 0, Math.PI*2);
+      ctx.fill();
+      // 嘴巴
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(x + size/2, y + size/2 + 2, 5, Math.PI, 2*Math.PI);
+      ctx.stroke();
+    }
+    
+    // ----- Tetris 遊戲類別 -----
+    class TetrisGame {
+      constructor(ctx) {
+        this.ctx = ctx;
+        this.board = [];
+        for (let i = 0; i < BOARD_HEIGHT; i++) {
+          this.board[i] = new Array(BOARD_WIDTH).fill(null);
+        }
+        this.score = 0;
+        this.gameOver = false;
+        this.dropTime = 0;
+        this.lastTime = performance.now();
+        this.snakeAnimations = []; // { row, elapsed }
+        this.dropInterval = 500;
+        this.currentPiece = this.newPiece();
+        this.pieceX = Math.floor(BOARD_WIDTH / 2) - 2;
+        this.pieceY = 0;
+      }
+      
+      newPiece() {
+        const shapes = Object.keys(TETROMINOES);
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const blocks = TETROMINOES[shape].map(coord => [coord[0], coord[1]]);
+        const faces = blocks.map(() => (Math.random() < 0.5 ? "cat" : "dog"));
+        return { shape, blocks, color: PIECE_COLORS[shape], faces };
+      }
+      
+      rotatePiece() {
+        const newBlocks = this.currentPiece.blocks.map(([x, y]) => [-y, x]);
+        const minX = Math.min(...newBlocks.map(([x, y]) => x));
+        const minY = Math.min(...newBlocks.map(([x, y]) => y));
+        const adjusted = newBlocks.map(([x, y]) => [x - minX, y - minY]);
+        if (!this.checkCollision(this.pieceX, this.pieceY, adjusted)) {
+          this.currentPiece.blocks = adjusted;
+        }
+      }
+      
+      checkCollision(posX, posY, blocks = this.currentPiece.blocks) {
+        for (let [bx, by] of blocks) {
+          let x = posX + bx;
+          let y = posY + by;
+          if (x < 0 || x >= BOARD_WIDTH || y >= BOARD_HEIGHT) return true;
+          if (y >= 0 && this.board[y][x] !== null) return true;
+        }
+        return false;
+      }
+      
+      lockPiece() {
+        for (let i = 0; i < this.currentPiece.blocks.length; i++) {
+          let [bx, by] = this.currentPiece.blocks[i];
+          let x = this.pieceX + bx;
+          let y = this.pieceY + by;
+          if (y < 0) {
+            this.gameOver = true;
+          } else {
+            this.board[y][x] = { color: this.currentPiece.color, face: this.currentPiece.faces[i] };
+          }
+        }
+        this.clearLines();
+        this.currentPiece = this.newPiece();
+        this.pieceX = Math.floor(BOARD_WIDTH / 2) - 2;
+        this.pieceY = 0;
+      }
+      
+      clearLines() {
+        let fullRows = [];
+        for (let i = 0; i < BOARD_HEIGHT; i++) {
+          if (this.board[i].every(cell => cell !== null)) {
+            fullRows.push(i);
+          }
+        }
+        if (fullRows.length > 0) {
+          for (let row of fullRows) {
+            this.snakeAnimations.push({ row: row, elapsed: 0 });
+          }
+        }
+      }
+      
+      updateSnakeAnimations(dt) {
+        let finishedRows = [];
+        for (let anim of this.snakeAnimations) {
+          anim.elapsed += dt;
+          if (anim.elapsed >= SNAKE_ANIMATION_TIME) {
+            finishedRows.push(anim.row);
+          }
+        }
+        this.snakeAnimations = this.snakeAnimations.filter(anim => anim.elapsed < SNAKE_ANIMATION_TIME);
+        for (let row of finishedRows.sort((a, b) => a - b)) {
+          this.board.splice(row, 1);
+          this.board.unshift(new Array(BOARD_WIDTH).fill(null));
+          this.score += BOARD_WIDTH;
+        }
+      }
+      
+      movePiece(dx) {
+        if (!this.checkCollision(this.pieceX + dx, this.pieceY)) {
+          this.pieceX += dx;
+        }
+      }
+      
+      movePieceDown() {
+        if (!this.checkCollision(this.pieceX, this.pieceY + 1)) {
+          this.pieceY++;
+        } else {
+          this.lockPiece();
+        }
+      }
+      
+      dropPiece() {
+        if (!this.checkCollision(this.pieceX, this.pieceY + 1)) {
+          this.pieceY++;
+        } else {
+          this.lockPiece();
+        }
+      }
+      
+      hardDrop() {
+        while (!this.checkCollision(this.pieceX, this.pieceY + 1)) {
+          this.pieceY++;
+        }
+        this.lockPiece();
+      }
+      
+      update(deltaTime) {
+        if (this.snakeAnimations.length > 0) {
+          this.updateSnakeAnimations(deltaTime);
+          return;
+        }
+        this.dropTime += deltaTime * 1000;
+        if (this.dropTime > this.dropInterval) {
+          this.dropPiece();
+          this.dropTime = 0;
+        }
+        if (this.board[0].some(cell => cell !== null)) {
+          this.gameOver = true;
+        }
+        let linesCleared = Math.floor(this.score / BOARD_WIDTH);
+        this.dropInterval = Math.max(100, 500 - linesCleared * 20);
+      }
+      
+      // ----- 繪製函式 -----
+      drawBoard() {
+        for (let i = 0; i < BOARD_HEIGHT; i++) {
+          let anim = this.snakeAnimations.find(a => a.row === i);
+          if (anim) {
+            this.drawSnake(i, anim);
+          } else {
+            for (let j = 0; j < BOARD_WIDTH; j++) {
+              let x = j * BLOCK_SIZE;
+              let y = i * BLOCK_SIZE;
+              this.ctx.strokeStyle = "black";
+              this.ctx.strokeRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+              if (this.board[i][j]) {
+                let cell = this.board[i][j];
+                this.ctx.fillStyle = cell.color;
+                this.ctx.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                if (cell.face === "cat") {
+                  drawCatFace(this.ctx, x, y, BLOCK_SIZE);
+                } else {
+                  drawDogFace(this.ctx, x, y, BLOCK_SIZE);
+                }
+              } else {
+                this.ctx.fillStyle = COLORS.BLACK;
+                this.ctx.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+              }
+            }
+          }
+        }
+      }
+      
+      drawPiece() {
+        for (let i = 0; i < this.currentPiece.blocks.length; i++) {
+          let [bx, by] = this.currentPiece.blocks[i];
+          let x = (this.pieceX + bx) * BLOCK_SIZE;
+          let y = (this.pieceY + by) * BLOCK_SIZE;
+          this.ctx.fillStyle = this.currentPiece.color;
+          this.ctx.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+          this.ctx.strokeStyle = "black";
+          this.ctx.strokeRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+          if (this.currentPiece.faces[i] === "cat") {
+            drawCatFace(this.ctx, x, y, BLOCK_SIZE);
+          } else {
+            drawDogFace(this.ctx, x, y, BLOCK_SIZE);
+          }
+        }
+      }
+      
+      drawScore() {
+        this.ctx.textAlign = "left";
+        this.ctx.fillStyle = "white";
+        this.ctx.font = "20px Arial";
+        this.ctx.fillText("Score: " + this.score, 10, 25);
+      }
+      
+      draw() {
+        this.ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        this.drawBoard();
+        this.drawPiece();
+        this.drawScore();
+      }
+      
+      drawSnake(row, anim) {
+        let elapsed = anim.elapsed;
+        let totalDistance = SCREEN_WIDTH + SNAKE_LENGTH * BLOCK_SIZE;
+        let headX = (elapsed / SNAKE_ANIMATION_TIME) * totalDistance - SNAKE_LENGTH * BLOCK_SIZE + BLOCK_SIZE / 2;
+        let baseY = row * BLOCK_SIZE + BLOCK_SIZE / 2;
+        let segments = [];
+        segments.push([headX, baseY]);
+        let amplitude = BLOCK_SIZE * 0.6;
+        for (let i = 1; i <= SNAKE_LENGTH; i++) {
+          let segX = headX - i * BLOCK_SIZE;
+          let segY = baseY + amplitude * Math.sin(2 * Math.PI * ((i / SNAKE_LENGTH) + (elapsed / SNAKE_ANIMATION_TIME)));
+          segments.push([segX, segY]);
+        }
+        let angles = [];
+        for (let i = 0; i < segments.length; i++) {
+          let dx, dy;
+          if (i === 0) {
+            dx = segments[1][0] - segments[0][0];
+            dy = segments[1][1] - segments[0][1];
+          } else {
+            dx = segments[i][0] - segments[i-1][0];
+            dy = segments[i][1] - segments[i-1][1];
+          }
+          angles.push(Math.atan2(dy, dx));
+        }
+        function drawRotatedEllipse(ctx, color, center, width, height, angle) {
+          let off = document.createElement("canvas");
+          off.width = width;
+          off.height = height;
+          let offCtx = off.getContext("2d");
+          offCtx.fillStyle = color;
+          offCtx.beginPath();
+          offCtx.ellipse(width/2, height/2, width/2, height/2, 0, 0, Math.PI*2);
+          offCtx.fill();
+          ctx.save();
+          ctx.translate(center[0], center[1]);
+          ctx.rotate(angle);
+          ctx.drawImage(off, -width/2, -height/2);
+          ctx.restore();
+        }
+        for (let i = 1; i < segments.length; i++) {
+          let seg = segments[i];
+          let angle = angles[i];
+          let bodyWidth = BLOCK_SIZE * 0.5;
+          let bodyHeight = BLOCK_SIZE * 0.3;
+          drawRotatedEllipse(this.ctx, SNAKE_BODY_COLOR, seg, bodyWidth, bodyHeight, angle);
+          let stripeDx = Math.cos(angle) * (bodyWidth / 2);
+          let stripeDy = Math.sin(angle) * (bodyWidth / 2);
+          this.ctx.strokeStyle = SNAKE_STRIPE_COLOR;
+          this.ctx.lineWidth = 2;
+          this.ctx.beginPath();
+          this.ctx.moveTo(seg[0] - stripeDx, seg[1] - stripeDy);
+          this.ctx.lineTo(seg[0] + stripeDx, seg[1] + stripeDy);
+          this.ctx.stroke();
+        }
+        let headCenter = segments[0];
+        let headAngle = angles[0];
+        let headWidth = BLOCK_SIZE * 1.0;
+        let headHeight = BLOCK_SIZE * 0.8;
+        drawRotatedEllipse(this.ctx, SNAKE_HEAD_COLOR, headCenter, headWidth, headHeight, headAngle);
+        let eyeOffsetX = headWidth / 4;
+        let eyeOffsetY = -headHeight / 4;
+        let leftEyeX = headCenter[0] + eyeOffsetX * Math.cos(headAngle) - eyeOffsetY * Math.sin(headAngle);
+        let leftEyeY = headCenter[1] + eyeOffsetX * Math.sin(headAngle) + eyeOffsetY * Math.cos(headAngle);
+        let rightEyeX = headCenter[0] - eyeOffsetX * Math.cos(headAngle) - eyeOffsetY * Math.sin(headAngle);
+        let rightEyeY = headCenter[1] - eyeOffsetX * Math.sin(headAngle) + eyeOffsetY * Math.cos(headAngle);
+        this.ctx.fillStyle = "white";
+        this.ctx.beginPath();
+        this.ctx.arc(leftEyeX, leftEyeY, Math.max(2, headWidth/10), 0, Math.PI*2);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.arc(rightEyeX, rightEyeY, Math.max(2, headWidth/10), 0, Math.PI*2);
+        this.ctx.fill();
+        this.ctx.fillStyle = "black";
+        this.ctx.beginPath();
+        this.ctx.arc(leftEyeX, leftEyeY, Math.max(1, headWidth/20), 0, Math.PI*2);
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.arc(rightEyeX, rightEyeY, Math.max(1, headWidth/20), 0, Math.PI*2);
+        this.ctx.fill();
+        for (let j = 0; j < BOARD_WIDTH; j++) {
+          this.ctx.strokeStyle = "black";
+          this.ctx.strokeRect(j * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        }
+      }
+    }
+    
+    // ----- 遊戲控制與主迴圈 -----
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    let game = new TetrisGame(ctx);
+    
+    // 移動端觸控控制
+    const moveLeftArea = document.getElementById('moveLeft');
+    const moveRightArea = document.getElementById('moveRight');
+    const moveDownArea = document.getElementById('moveDown');
+    
+    // 持續觸碰的計時器
+    let leftMoveTimer = null;
+    let rightMoveTimer = null;
+    let downMoveTimer = null;
+    let rotateTimer = null;
+    
+    // 設定重複觸發的間隔（毫秒）
+    const REPEAT_DELAY = 100;  // 初次延遲
+    const REPEAT_INTERVAL = 50;  // 重複間隔
+    const DOWN_REPEAT_INTERVAL = 50;  // 下降重複間隔
+    const ROTATE_REPEAT_INTERVAL = 250;  // 旋轉重複間隔
+    
+    // 遊戲重新開始函數
+    function restartGame() {
+      // 清除所有計時器
+      if (leftMoveTimer) {
+        clearTimeout(leftMoveTimer);
+        clearInterval(leftMoveTimer);
+        leftMoveTimer = null;
+      }
+      if (rightMoveTimer) {
+        clearTimeout(rightMoveTimer);
+        clearInterval(rightMoveTimer);
+        rightMoveTimer = null;
+      }
+      if (downMoveTimer) {
+        clearInterval(downMoveTimer);
+        downMoveTimer = null;
+      }
+      if (rotateTimer) {
+        clearInterval(rotateTimer);
+        rotateTimer = null;
+      }
+      
+      // 重新開始前先清除畫布
+      ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      
+      // 建立新遊戲
+      game = new TetrisGame(ctx);
+      gameOverDisplayed = false;
+      
+      // 重新啟動遊戲循環
+      lastTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    }
+    
+    // 處理遊戲結束後的觸碰重新開始
+    function handleTouchForRestart(e) {
+      if (game.gameOver) {
+        e.preventDefault();
+        restartGame();
+      }
+    }
+    
+    // 為所有可觸碰區域添加重新開始功能
+    document.addEventListener('touchstart', handleTouchForRestart);
+    
+    // 左移按鈕
+    moveLeftArea.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      if (game.gameOver) {
+        restartGame();
+        return;
+      }
+      
+      // 立即執行一次
+      game.movePiece(-1);
+      
+      // 設定持續移動的計時器
+      leftMoveTimer = setTimeout(function() {
+        leftMoveTimer = setInterval(function() {
+          if (!game.gameOver && game.snakeAnimations.length === 0) {
+            game.movePiece(-1);
+          }
+        }, REPEAT_INTERVAL);
+      }, REPEAT_DELAY);
+    });
+    
+    moveLeftArea.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (leftMoveTimer) {
+        clearTimeout(leftMoveTimer);
+        clearInterval(leftMoveTimer);
+        leftMoveTimer = null;
+      }
+    });
+    
+    // 右移按鈕
+    moveRightArea.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      if (game.gameOver) {
+        restartGame();
+        return;
+      }
+      
+      // 立即執行一次
+      game.movePiece(1);
+      
+      // 設定持續移動的計時器
+      rightMoveTimer = setTimeout(function() {
+        rightMoveTimer = setInterval(function() {
+          if (!game.gameOver && game.snakeAnimations.length === 0) {
+            game.movePiece(1);
+          }
+        }, REPEAT_INTERVAL);
+      }, REPEAT_DELAY);
+    });
+    
+    moveRightArea.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (rightMoveTimer) {
+        clearTimeout(rightMoveTimer);
+        clearInterval(rightMoveTimer);
+        rightMoveTimer = null;
+      }
+    });
+    
+    // 加速下落按鈕
+    moveDownArea.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      if (game.gameOver) {
+        restartGame();
+        return;
+      }
+      
+      // 立即執行一次
+      game.movePieceDown();
+      
+      // 設定持續移動的計時器
+      downMoveTimer = setInterval(function() {
+        if (!game.gameOver && game.snakeAnimations.length === 0) {
+          game.movePieceDown();
+        }
+      }, DOWN_REPEAT_INTERVAL);
+    });
+    
+    moveDownArea.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (downMoveTimer) {
+        clearInterval(downMoveTimer);
+        downMoveTimer = null;
+      }
+    });
+    
+    // 在畫布上旋轉 - 修改為連續旋轉
+    canvas.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      if (game.gameOver) {
+        restartGame();
+        return;
+      }
+      
+      // 檢查觸碰位置是否在遊戲區域內
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const x = touch.clientX - rect.left;
+      const y = touch.clientY - rect.top;
+      
+      // 如果觸碰在遊戲區域內
+      if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+        // 立即執行一次旋轉
+        game.rotatePiece();
+        
+        // 設定持續旋轉的計時器
+        rotateTimer = setInterval(function() {
+          if (!game.gameOver && game.snakeAnimations.length === 0) {
+            game.rotatePiece();
+          }
+        }, ROTATE_REPEAT_INTERVAL);
+      }
+    });
+    
+    canvas.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (rotateTimer) {
+        clearInterval(rotateTimer);
+        rotateTimer = null;
+      }
+    });
+    
+    // 確保觸碰移出畫布時也停止旋轉
+    canvas.addEventListener('touchcancel', function(e) {
+      e.preventDefault();
+      if (rotateTimer) {
+        clearInterval(rotateTimer);
+        rotateTimer = null;
+      }
+    });
+    
+    // 防止手機上的縮放和滾動
+    document.addEventListener('touchmove', function(e) {
+      if (e.touches.length > 1) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+    
+    // 確保在頁面離開時清除所有計時器
+    window.addEventListener('beforeunload', function() {
+      if (leftMoveTimer) {
+        clearTimeout(leftMoveTimer);
+        clearInterval(leftMoveTimer);
+      }
+      if (rightMoveTimer) {
+        clearTimeout(rightMoveTimer);
+        clearInterval(rightMoveTimer);
+      }
+      if (downMoveTimer) {
+        clearInterval(downMoveTimer);
+      }
+      if (rotateTimer) {
+        clearInterval(rotateTimer);
+      }
+    });
+    
+    let lastTime = performance.now();
+    
+    function gameLoop(timestamp) {
+      let dt = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      if (!game.gameOver) {
+        game.update(dt);
+        game.draw();
+        requestAnimationFrame(gameLoop);
+      } else {
+        if (!gameOverDisplayed) {
+          drawGameOver();
+          gameOverDisplayed = true;
+        }
+      }
+    }
+    
+    function drawGameOver() {
+      ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      ctx.fillStyle = "rgba(0,0,0,0.7)";
+      ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.fillStyle = "red";
+      ctx.font = "30px Arial";
+      ctx.fillText("Game Over", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 40);
+      ctx.fillStyle = "white";
+      ctx.font = "20px Arial";
+      ctx.fillText("Final Score: " + game.score, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+      ctx.fillText("Press any key to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 40);
+      ctx.restore();
+      // 監聽按鍵，確保只處理一次
+      window.addEventListener("keydown", restartGame, { once: true });
+    }
+    
+    window.addEventListener("keydown", function(e) {
+      if (game.gameOver || game.snakeAnimations.length > 0) return;
+      switch(e.key) {
+        case "ArrowLeft":
+          game.movePiece(-1);
+          break;
+        case "ArrowRight":
+          game.movePiece(1);
+          break;
+        case "ArrowUp":
+          game.rotatePiece();
+          break;
+        case "ArrowDown":
+          game.dropPiece();
+          break;
+        case " ":
+          game.hardDrop();
+          break;
+      }
+    });
+    
+    requestAnimationFrame(gameLoop);
+  </script>
+</body>
+</html>
