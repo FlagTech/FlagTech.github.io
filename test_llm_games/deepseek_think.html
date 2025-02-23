@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tetris + Candy Crush</title>
+    <style>
+        body {
+            background: #202028;
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 2em;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #fff;
+        }
+        .game-info {
+            margin-top: 20px;
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score" class="game-info">Score: 0</div>
+    <div id="time" class="game-info">Time: 0</div>
+    <canvas id="tetris" width="240" height="400"></canvas>
+    <div id="game-over">Game Over! Press any key to restart</div>
+    <script>
+        const canvas = document.getElementById('tetris');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const timeElement = document.getElementById('time');
+        const gameOverElement = document.getElementById('game-over');
+
+        context.scale(20, 20);
+
+        const COLORS = [
+            null,
+            '#FF0D72', // 紅
+            '#0DC2FF', // 藍
+            '#0DFF72', // 綠
+            '#F538FF', // 紫
+        ];
+
+        const SHAPES = [
+            [[1, 1, 1, 1]],
+            [[1, 1], [1, 1]],
+            [[1, 1, 1], [0, 1, 0]],
+            [[1, 1, 1], [1, 0, 0]],
+            [[1, 1, 1], [0, 0, 1]],
+            [[0, 1, 1], [1, 1, 0]],
+            [[1, 1, 0], [0, 1, 1]],
+        ];
+
+        function createMatrix(w, h) {
+            return Array(h).fill().map(() => Array(w).fill(0));
+        }
+
+        let arena = createMatrix(12, 20);
+        let player = createPiece();
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+        let score = 0;
+        let gameTime = 0;
+        let gameOver = false;
+
+        function createPiece() {
+            const type = Math.floor(Math.random() * 7);
+            const shape = SHAPES[type];
+            return {
+                pos: {x: Math.floor((12 - shape[0].length)/2), y: 0},
+                matrix: shape,
+                color: Math.floor(Math.random() * 4) + 1
+            };
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; y++) {
+                for (let x = 0; x < m[y].length; x++) {
+                    if (m[y][x] !== 0 &&
+                        (arena[y + o.y] &&
+                        arena[y + o.y][x + o.x]) !== 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        arena[y + player.pos.y][x + player.pos.x] = player.color;
+                    }
+                });
+            });
+        }
+
+        function playerReset() {
+            player = createPiece();
+            player.pos.y = 0;
+            player.pos.x = Math.floor((12 - player.matrix[0].length)/2);
+            if (collide(arena, player)) {
+                gameOver = true;
+                gameOverElement.style.display = 'block';
+            }
+        }
+
+        function playerDrop() {
+            player.pos.y++;
+            if (collide(arena, player)) {
+                player.pos.y--;
+                merge(arena, player);
+                playerReset();
+                arenaSweep();
+                updateScore();
+            }
+            dropCounter = 0;
+        }
+
+        function draw() {
+            context.fillStyle = '#000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos, player.color);
+        }
+
+        function drawMatrix(matrix, offset, color) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        context.fillStyle = COLORS[color];
+                        context.fillRect(x + offset.x, 
+                                      y + offset.y, 
+                                      1, 1);
+                    }
+                });
+            });
+        }
+
+        function update(time = 0) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+
+            if (!gameOver) {
+                gameTime += deltaTime;
+                timeElement.textContent = `Time: ${Math.floor(gameTime/1000)}`;
+
+                if (gameTime > 30000) {
+                    dropInterval = Math.max(100, 1000 - Math.floor(gameTime/30000)*100);
+                }
+
+                dropCounter += deltaTime;
+                if (dropCounter > dropInterval) {
+                    playerDrop();
+                }
+
+                draw();
+                requestAnimationFrame(update);
+            }
+        }
+
+        function arenaSweep() {
+            let eliminated = checkMatches();
+            let total = 0;
+
+            while (eliminated.length) {
+                total += eliminated.length;
+                eliminated.forEach(pos => {
+                    arena[pos.y][pos.x] = 0;
+                });
+                shiftDown();
+                eliminated = checkMatches();
+            }
+
+            score += total;
+        }
+
+        function checkMatches() {
+            const matches = new Set();
+
+            // Check rows
+            for (let y = 0; y < arena.length; y++) {
+                for (let x = 0; x < arena[y].length - 2; x++) {
+                    const color = arena[y][x];
+                    if (color !== 0 &&
+                        color === arena[y][x+1] &&
+                        color === arena[y][x+2]) {
+                        for (let i = x; i < arena[y].length; i++) {
+                            if (arena[y][i] === color) {
+                                matches.add(`${i},${y}`);
+                            } else break;
+                        }
+                    }
+                }
+            }
+
+            // Check columns
+            for (let x = 0; x < arena[0].length; x++) {
+                for (let y = 0; y < arena.length - 2; y++) {
+                    const color = arena[y][x];
+                    if (color !== 0 &&
+                        color === arena[y+1][x] &&
+                        color === arena[y+2][x]) {
+                        for (let i = y; i < arena.length; i++) {
+                            if (arena[i][x] === color) {
+                                matches.add(`${x},${i}`);
+                            } else break;
+                        }
+                    }
+                }
+            }
+
+            // Check full lines
+            for (let y = 0; y < arena.length; y++) {
+                if (arena[y].every(cell => cell !== 0)) {
+                    arena[y].forEach((_, x) => matches.add(`${x},${y}`));
+                }
+            }
+
+            return Array.from(matches).map(pos => {
+                const [x, y] = pos.split(',').map(Number);
+                return {x, y};
+            });
+        }
+
+        function shiftDown() {
+            for (let x = 0; x < arena[0].length; x++) {
+                let writeY = arena.length - 1;
+                for (let y = arena.length-1; y >= 0; y--) {
+                    if (arena[y][x] !== 0) {
+                        if (y !== writeY) {
+                            arena[writeY][x] = arena[y][x];
+                            arena[y][x] = 0;
+                        }
+                        writeY--;
+                    }
+                }
+            }
+        }
+
+        function updateScore() {
+            scoreElement.textContent = `Score: ${score}`;
+        }
+
+        document.addEventListener('keydown', event => {
+            if (gameOver) {
+                resetGame();
+                return;
+            }
+
+            switch(event.keyCode) {
+                case 37:
+                    player.pos.x--;
+                    if (collide(arena, player)) player.pos.x++;
+                    break;
+                case 39:
+                    player.pos.x++;
+                    if (collide(arena, player)) player.pos.x--;
+                    break;
+                case 40:
+                    playerDrop();
+                    break;
+                case 38:
+                    rotate();
+                    break;
+            }
+        });
+
+        function rotate() {
+            const matrix = player.matrix;
+            const newMatrix = matrix[0].map((_, i) =>
+                matrix.map(row => row[i]).reverse()
+            );
+            
+            const oldMatrix = player.matrix;
+            player.matrix = newMatrix;
+            if (collide(arena, player)) {
+                player.matrix = oldMatrix;
+            }
+        }
+
+        function resetGame() {
+            arena = createMatrix(12, 20);
+            player = createPiece();
+            score = 0;
+            gameTime = 0;
+            dropInterval = 1000;
+            gameOver = false;
+            gameOverElement.style.display = 'none';
+            updateScore();
+            timeElement.textContent = 'Time: 0';
+            lastTime = 0;
+            dropCounter = 0;
+            update();
+        }
+
+        update();
+    </script>
+</body>
+</html>

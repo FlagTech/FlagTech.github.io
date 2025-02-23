@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Tetris Crush</title>
+    <style>
+        body {
+            background: #202028;
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 2em;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #fff;
+        }
+        .game-info {
+            margin-top: 20px;
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score" class="game-info">Score: 0</div>
+    <div id="time" class="game-info">Time: 0</div>
+    <canvas id="tetris" width="240" height="400"></canvas>
+    <div id="game-over">Game Over! Press any key to restart</div>
+    <script>
+        const canvas = document.getElementById('tetris');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const timeElement = document.getElementById('time');
+        const gameOverElement = document.getElementById('game-over');
+
+        context.scale(20, 20);
+
+        const COLORS = [
+            null,
+            '#FF0D72', // 紅
+            '#0DC2FF', // 藍
+            '#0DFF72', // 綠
+            '#F538FF', // 紫
+        ];
+
+        const SHAPES = [
+            [[[1,1,1,1]], [[4],[4],[4],[4]]], // I型
+            [[[2,2], [2,2]]],                 // O型
+            [[[0,3,0], [3,3,3]], [[3,0], [3,3], [3,0]], [[3,3,3], [0,3,0]], [[0,3], [3,3], [0,3]]], // T型
+            [[[4,0,0], [4,4,4]], [[4,4], [4,0], [4,0]], [[4,4,4], [0,0,4]], [[0,4], [0,4], [4,4]]], // L型
+            [[[0,0,1], [1,1,1]], [[1,0], [1,0], [1,1]], [[1,1,1], [1,0,0]], [[1,1], [0,1], [0,1]]], // J型
+            [[[0,2,2], [2,2,0]], [[2,0], [2,2], [0,2]]], // S型
+            [[[3,3,0], [0,3,3]], [[0,3], [3,3], [3,0]]]  // Z型
+        ].map(shape => shape.map(variant => 
+            variant.map(row => 
+                row.map(cell => cell ? Math.floor(Math.random()*4)+1 : 0)
+            )
+        );
+
+        function createMatrix(w, h) {
+            return Array(h).fill().map(() => Array(w).fill(0));
+        }
+
+        let arena = createMatrix(12, 20);
+        let player = createPiece();
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+        let score = 0;
+        let gameTime = 0;
+        let gameOver = false;
+
+        function createPiece() {
+            const type = Math.floor(Math.random() * 7);
+            const variants = SHAPES[type];
+            const matrix = variants[Math.floor(Math.random()*variants.length)];
+            return {
+                pos: {x: Math.floor((12 - matrix[0].length)/2), y: 0},
+                matrix: matrix,
+            };
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; y++) {
+                for (let x = 0; x < m[y].length; x++) {
+                    if (m[y][x] !== 0 && 
+                       (arena[y + o.y] &&
+                        arena[y + o.y][x + o.x]) !== 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        arena[y + player.pos.y][x + player.pos.x] = value;
+                    }
+                });
+            });
+        }
+
+        function playerReset() {
+            player = createPiece();
+            if (collide(arena, player)) {
+                gameOver = true;
+                gameOverElement.style.display = 'block';
+            }
+        }
+
+        function playerDrop() {
+            player.pos.y++;
+            if (collide(arena, player)) {
+                player.pos.y--;
+                merge(arena, player);
+                playerReset();
+                arenaSweep();
+                updateScore();
+            }
+            dropCounter = 0;
+        }
+
+        function draw() {
+            context.fillStyle = '#000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            drawMatrix(arena, {x: 0, y: 0});
+            drawMatrix(player.matrix, player.pos);
+        }
+
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((color, x) => {
+                    if (color !== 0) {
+                        context.fillStyle = COLORS[color];
+                        context.fillRect(x + offset.x, 
+                                      y + offset.y, 
+                                      1, 1);
+                    }
+                });
+            });
+        }
+
+        function update(time = 0) {
+            const deltaTime = time - lastTime;
+            lastTime = time;
+
+            if (!gameOver) {
+                gameTime += deltaTime;
+                timeElement.textContent = `Time: ${Math.floor(gameTime/1000)}`;
+
+                if (gameTime > 30000) {
+                    dropInterval = Math.max(100, 1000 - Math.floor(gameTime/30000)*100);
+                }
+
+                dropCounter += deltaTime;
+                if (dropCounter > dropInterval) {
+                    playerDrop();
+                }
+
+                draw();
+                requestAnimationFrame(update);
+            }
+        }
+
+        function arenaSweep() {
+            let eliminated = checkMatches();
+            let total = 0;
+
+            while (eliminated.length) {
+                total += eliminated.length;
+                eliminated.forEach(pos => {
+                    arena[pos.y][pos.x] = 0;
+                });
+                shiftDown();
+                eliminated = checkMatches();
+            }
+
+            score += total;
+        }
+
+        function checkMatches() {
+            const matches = new Set();
+            const directions = [
+                {dx: 1, dy: 0},
+                {dx: 0, dy: 1}
+            ];
+
+            for (let y = 0; y < arena.length; y++) {
+                for (let x = 0; x < arena[0].length; x++) {
+                    const color = arena[y][x];
+                    if (color === 0) continue;
+
+                    directions.forEach(({dx, dy}) => {
+                        let count = 1;
+                        const currentMatches = [`${x},${y}`];
+                        
+                        let cx = x + dx;
+                        let cy = y + dy;
+                        while (cx >= 0 && cx < arena[0].length &&
+                              cy >= 0 && cy < arena.length &&
+                              arena[cy][cx] === color) {
+                            currentMatches.push(`${cx},${cy}`);
+                            count++;
+                            cx += dx;
+                            cy += dy;
+                        }
+
+                        cx = x - dx;
+                        cy = y - dy;
+                        while (cx >= 0 && cx < arena[0].length &&
+                              cy >= 0 && cy < arena.length &&
+                              arena[cy][cx] === color) {
+                            currentMatches.push(`${cx},${cy}`);
+                            count++;
+                            cx -= dx;
+                            cy -= dy;
+                        }
+
+                        if (count >= 3) {
+                            currentMatches.forEach(pos => matches.add(pos));
+                        }
+                    });
+                }
+            }
+
+            for (let y = 0; y < arena.length; y++) {
+                if (arena[y].every(cell => cell !== 0)) {
+                    arena[y].forEach((_, x) => matches.add(`${x},${y}`));
+                }
+            }
+
+            return Array.from(matches).map(pos => {
+                const [x, y] = pos.split(',').map(Number);
+                return {x, y};
+            });
+        }
+
+        function shiftDown() {
+            for (let x = 0; x < arena[0].length; x++) {
+                let writeY = arena.length - 1;
+                for (let y = arena.length-1; y >= 0; y--) {
+                    if (arena[y][x] !== 0) {
+                        if (y !== writeY) {
+                            arena[writeY][x] = arena[y][x];
+                            arena[y][x] = 0;
+                        }
+                        writeY--;
+                    }
+                }
+            }
+        }
+
+        function updateScore() {
+            scoreElement.textContent = `Score: ${score}`;
+        }
+
+        function rotate() {
+            const pos = player.pos.x;
+            let offset = 1;
+            const matrix = player.matrix;
+            const newMatrix = matrix[0].map((_, i) =>
+                matrix.map(row => row[i]).reverse()
+            );
+            
+            player.matrix = newMatrix;
+            if (collide(arena, player)) {
+                player.matrix = matrix;
+            }
+        }
+
+        function resetGame() {
+            arena = createMatrix(12, 20);
+            player = createPiece();
+            score = 0;
+            gameTime = 0;
+            dropInterval = 1000;
+            gameOver = false;
+            gameOverElement.style.display = 'none';
+            updateScore();
+            timeElement.textContent = 'Time: 0';
+            lastTime = 0;
+            dropCounter = 0;
+            update();
+        }
+
+        document.addEventListener('keydown', event => {
+            if (gameOver) {
+                resetGame();
+                return;
+            }
+
+            switch(event.keyCode) {
+                case 37:
+                    player.pos.x--;
+                    if (collide(arena, player)) player.pos.x++;
+                    break;
+                case 39:
+                    player.pos.x++;
+                    if (collide(arena, player)) player.pos.x--;
+                    break;
+                case 40:
+                    playerDrop();
+                    break;
+                case 38:
+                    rotate();
+                    break;
+            }
+        });
+
+        update();
+    </script>
+</body>
+</html>

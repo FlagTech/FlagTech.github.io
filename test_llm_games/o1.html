@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>俄羅斯方塊 x Candy Crush</title>
+    <style>
+        body {
+            background: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+        #gameCanvas {
+            background: #fff;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #666;
+        }
+        #info {
+            margin-bottom: 20px;
+        }
+        #info span {
+            margin: 0 20px;
+            font-size: 18px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>俄羅斯方塊 x Candy Crush</h1>
+    <div id="info">
+        <span>分數：<span id="score">0</span></span>
+        <span>時間：<span id="time">0</span> 秒</span>
+    </div>
+    <canvas id="gameCanvas" width="200" height="400"></canvas>
+    <h2 id="gameOverText" class="hidden">遊戲結束！按任何鍵重新開始</h2>
+
+    <script>
+    //=============================
+    // 遊戲設定
+    //=============================
+    const COLS = 10;            // 棋盤寬度（10格）
+    const ROWS = 20;            // 棋盤高度（20格）
+    const BLOCK_SIZE = 20;      // 每格像素大小
+    const COLORS = ["red", "blue", "green", "yellow"]; // 四種顏色
+    const CANVAS_WIDTH = COLS * BLOCK_SIZE;
+    const CANVAS_HEIGHT = ROWS * BLOCK_SIZE;
+    
+    // 起始掉落速度（毫秒）
+    const START_DROP_INTERVAL = 1000; 
+    // 最快掉落速度（毫秒）
+    const MIN_DROP_INTERVAL = 200;    
+
+    let canvas = document.getElementById("gameCanvas");
+    let ctx = canvas.getContext("2d");
+    canvas.width = CANVAS_WIDTH;
+    canvas.height = CANVAS_HEIGHT;
+
+    //=============================
+    // 形狀定義（俄羅斯方塊常見 7 種）
+    // 以下每個形狀都用相對於左上角的座標來定義
+    //=============================
+    const SHAPES = [
+      // I
+      [ [0,0], [1,0], [2,0], [3,0] ],
+      // O
+      [ [0,0], [1,0], [0,1], [1,1] ],
+      // T
+      [ [0,0], [1,0], [2,0], [1,1] ],
+      // S
+      [ [0,1], [1,1], [1,0], [2,0] ],
+      // Z
+      [ [0,0], [1,0], [1,1], [2,1] ],
+      // J
+      [ [0,0], [0,1], [1,1], [2,1] ],
+      // L
+      [ [2,0], [0,1], [1,1], [2,1] ]
+    ];
+
+    //=============================
+    // 遊戲用變數
+    //=============================
+    let board = [];             // 棋盤狀態，儲存顏色或 null
+    let currentPiece = null;    // 目前掉落中的方塊
+    let currentX = 0;           // 目前方塊左上角 X 座標（格為單位）
+    let currentY = 0;           // 目前方塊左上角 Y 座標（格為單位）
+    let dropInterval = START_DROP_INTERVAL; // 目前掉落速度（毫秒）
+    let lastDropTime = 0;       // 上次方塊自動下落的時間戳
+    let score = 0;              // 總計消除方塊數
+    let startTime = 0;          // 遊戲開始時間（毫秒）
+    let elapsedTime = 0;        // 遊戲經過時間（秒）
+    let gameOver = false;       // 是否遊戲結束
+
+    //=============================
+    // 初始化
+    //=============================
+    function initBoard() {
+        board = [];
+        for (let r = 0; r < ROWS; r++) {
+            let row = [];
+            for (let c = 0; c < COLS; c++) {
+                row.push(null);
+            }
+            board.push(row);
+        }
+    }
+
+    // 隨機產生新方塊（含隨機顏色）
+    function generateNewPiece() {
+        let shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+        // 每個格子給一個隨機顏色
+        let blocks = shape.map(() => COLORS[Math.floor(Math.random() * COLORS.length)]);
+        
+        return {
+            shape: shape,   // 座標
+            colors: blocks  // 與 shape 對應的顏色
+        };
+    }
+
+    // 重置遊戲
+    function resetGame() {
+        initBoard();
+        score = 0;
+        elapsedTime = 0;
+        startTime = Date.now();
+        dropInterval = START_DROP_INTERVAL;
+        lastDropTime = 0;
+        gameOver = false;
+        document.getElementById("score").textContent = score;
+        document.getElementById("time").textContent = elapsedTime;
+        document.getElementById("gameOverText").classList.add("hidden");
+
+        spawnPiece();
+        render();
+    }
+
+    //=============================
+    // 生出一個新方塊到上方
+    //=============================
+    function spawnPiece() {
+        currentPiece = generateNewPiece();
+        currentX = 3;  // 讓形狀大概出現在中間
+        currentY = 0;
+
+        // 若一開始就放不下，表示遊戲結束
+        if (!canMove(currentPiece, currentX, currentY)) {
+            endGame();
+        }
+    }
+
+    //=============================
+    // 方塊可否移動到指定位置
+    //=============================
+    function canMove(piece, x, y) {
+        for (let i = 0; i < piece.shape.length; i++) {
+            let [dx, dy] = piece.shape[i];
+            let newX = x + dx;
+            let newY = y + dy;
+            // 判斷是否超出邊界或是有其他方塊
+            if (
+                newX < 0 || newX >= COLS ||
+                newY < 0 || newY >= ROWS ||
+                (board[newY] && board[newY][newX] !== null)
+            ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //=============================
+    // 固定方塊到棋盤
+    //=============================
+    function lockPiece() {
+        for (let i = 0; i < currentPiece.shape.length; i++) {
+            let [dx, dy] = currentPiece.shape[i];
+            let px = currentX + dx;
+            let py = currentY + dy;
+            board[py][px] = currentPiece.colors[i];
+        }
+        // 消除檢查
+        clearMatches();
+    }
+
+    //=============================
+    // 消除檢查：包括
+    // 1) 整行判斷
+    // 2) 連續 3 個以上同色
+    //=============================
+    function clearMatches() {
+        let somethingCleared = true;
+
+        // 使用 while 反覆檢查，直到沒有任何可消除
+        while (somethingCleared) {
+            somethingCleared = false;
+
+            // 先檢查整列是否滿
+            for (let r = 0; r < ROWS; r++) {
+                let isFull = true;
+                for (let c = 0; c < COLS; c++) {
+                    if (board[r][c] === null) {
+                        isFull = false;
+                        break;
+                    }
+                }
+                if (isFull) {
+                    // 整行消除
+                    for (let rr = r; rr > 0; rr--) {
+                        board[rr] = [...board[rr - 1]];
+                    }
+                    board[0] = new Array(COLS).fill(null);
+                    // 因為有消除，更新 somethingCleared
+                    somethingCleared = true;
+                    // 行數量不只一行，也要繼續檢查
+                }
+            }
+
+            // 再檢查三個以上同顏色
+            // 建立一個標記陣列，用來標記要消除的位置
+            let toClear = [];
+            for (let r = 0; r < ROWS; r++) {
+                toClear[r] = new Array(COLS).fill(false);
+            }
+
+            // 水平檢查
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (board[r][c] !== null) {
+                        let color = board[r][c];
+                        // 檢查向右連續相同顏色有幾個
+                        let count = 1;
+                        let cc = c + 1;
+                        while (cc < COLS && board[r][cc] === color) {
+                            count++;
+                            cc++;
+                        }
+                        // 若連續 >= 3 個，相應標記
+                        if (count >= 3) {
+                            for (let k = 0; k < count; k++) {
+                                toClear[r][c + k] = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 垂直檢查
+            for (let c = 0; c < COLS; c++) {
+                for (let r = 0; r < ROWS; r++) {
+                    if (board[r][c] !== null) {
+                        let color = board[r][c];
+                        // 檢查向下連續相同顏色有幾個
+                        let count = 1;
+                        let rr = r + 1;
+                        while (rr < ROWS && board[rr][c] === color) {
+                            count++;
+                            rr++;
+                        }
+                        // 若連續 >= 3 個，相應標記
+                        if (count >= 3) {
+                            for (let k = 0; k < count; k++) {
+                                toClear[r + k][c] = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 根據 toClear 進行消除
+            let clearedCount = 0;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (toClear[r][c]) {
+                        board[r][c] = null;
+                        clearedCount++;
+                    }
+                }
+            }
+
+            if (clearedCount > 0) {
+                // 增加分數（以消除的方塊數累計）
+                score += clearedCount;
+                document.getElementById("score").textContent = score;
+                // 若有消除，需要再進行下一輪檢查（while 會繼續）
+                somethingCleared = true;
+
+                // 讓方塊往下掉落（消除之後上方的方塊掉下來）
+                applyGravity();
+            }
+        }
+    }
+
+    //=============================
+    // 讓空格上方的方塊自然掉落
+    //=============================
+    function applyGravity() {
+        for (let c = 0; c < COLS; c++) {
+            for (let r = ROWS - 1; r >= 0; r--) {
+                if (board[r][c] === null) {
+                    // 往上找第一個有方塊的 row
+                    let rr = r - 1;
+                    while (rr >= 0 && board[rr][c] === null) {
+                        rr--;
+                    }
+                    if (rr >= 0) {
+                        // 將上方方塊掉落到此
+                        board[r][c] = board[rr][c];
+                        board[rr][c] = null;
+                    }
+                }
+            }
+        }
+    }
+
+    //=============================
+    // 結束遊戲
+    //=============================
+    function endGame() {
+        gameOver = true;
+        document.getElementById("gameOverText").classList.remove("hidden");
+    }
+
+    //=============================
+    // 繪製更新
+    //=============================
+    function render() {
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+        // 畫出固定的方塊
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (board[r][c]) {
+                    drawBlock(c, r, board[r][c]);
+                }
+            }
+        }
+
+        // 畫出正在掉落的方塊
+        if (currentPiece) {
+            for (let i = 0; i < currentPiece.shape.length; i++) {
+                let [dx, dy] = currentPiece.shape[i];
+                let color = currentPiece.colors[i];
+                drawBlock(currentX + dx, currentY + dy, color);
+            }
+        }
+    }
+
+    function drawBlock(x, y, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+        ctx.strokeStyle = "#333";
+        ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    }
+
+    //=============================
+    // 遊戲主迴圈
+    //=============================
+    function gameLoop(timestamp) {
+        if (gameOver) {
+            return;
+        }
+
+        // 更新時間
+        let now = Date.now();
+        elapsedTime = Math.floor((now - startTime) / 1000);
+        document.getElementById("time").textContent = elapsedTime;
+
+        // 依照遊戲時間逐漸加快速度（可自行調整公式）
+        let speedFactor = 1 + Math.floor(elapsedTime / 10); // 每 10 秒加快一次
+        dropInterval = Math.max(START_DROP_INTERVAL - speedFactor * 50, MIN_DROP_INTERVAL);
+
+        // 判斷是否該自動掉落
+        if (now - lastDropTime > dropInterval) {
+            // 往下移動
+            if (canMove(currentPiece, currentX, currentY + 1)) {
+                currentY++;
+            } else {
+                // 固定並產生新方塊
+                lockPiece();
+                spawnPiece();
+            }
+            lastDropTime = now;
+        }
+
+        render();
+        requestAnimationFrame(gameLoop);
+    }
+
+    //=============================
+    // 監聽鍵盤事件
+    //=============================
+    document.addEventListener("keydown", (e) => {
+        if (gameOver) {
+            // 遊戲結束時，按任何鍵重新開始
+            resetGame();
+            return;
+        }
+        if (!currentPiece) return;
+
+        switch(e.key) {
+            case "ArrowLeft":
+                if (canMove(currentPiece, currentX - 1, currentY)) {
+                    currentX--;
+                }
+                break;
+            case "ArrowRight":
+                if (canMove(currentPiece, currentX + 1, currentY)) {
+                    currentX++;
+                }
+                break;
+            case "ArrowDown":
+                if (canMove(currentPiece, currentX, currentY + 1)) {
+                    currentY++;
+                }
+                break;
+            case "ArrowUp":
+                // 旋轉（以 T 形狀為例: shape 的相對座標進行 90 度旋轉）
+                let rotatedShape = [];
+                for (let i = 0; i < currentPiece.shape.length; i++) {
+                    let [dx, dy] = currentPiece.shape[i];
+                    // 旋轉 90 度 (x, y) -> (y, -x)
+                    rotatedShape.push([dy, -dx]);
+                }
+                
+                // 需要對應顏色一起重排
+                // 為了簡化，只是跟著 shape 順序處理，但實際上旋轉後每個格的位置改變
+                // 這裡的顏色順序不一定對應原本形狀（簡易示範）
+                let tempPiece = {
+                    shape: rotatedShape,
+                    colors: currentPiece.colors
+                };
+                
+                // 試著旋轉後能否移動到原位置
+                if (canMove(tempPiece, currentX, currentY)) {
+                    currentPiece.shape = rotatedShape;
+                }
+                break;
+        }
+
+        render();
+    });
+
+    //=============================
+    // 啟動遊戲
+    //=============================
+    resetGame();
+    requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tetris Crush</title>
+    <style>
+        canvas { border: 2px solid black; }
+        .info { margin: 10px; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div class="info">Score: <span id="score">0</span></div>
+    <div class="info">Time: <span id="time">0</span></div>
+    <canvas id="game" width="300" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const BLOCK_SIZE = 30;
+const COLS = 10;
+const ROWS = 20;
+const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00'];
+
+let grid = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+let score = 0;
+let startTime = Date.now();
+let speed = 1000;
+let gameOver = false;
+let currentPiece = null;
+
+const SHAPES = [
+    [[1,1,1,1]], // I
+    [[1,1,1],[0,1,0]], // T
+    [[1,1,1],[1,0,0]], // L
+    [[1,1],[1,1]], // O
+    [[1,1,0],[0,1,1]] // Z
+];
+
+class Piece {
+    constructor() {
+        this.shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+        this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.x = Math.floor(COLS/2 - this.shape[0].length/2);
+        this.y = 0;
+    }
+
+    draw() {
+        ctx.fillStyle = this.color;
+        for (let i = 0; i < this.shape.length; i++) {
+            for (let j = 0; j < this.shape[i].length; j++) {
+                if (this.shape[i][j]) {
+                    ctx.fillRect((this.x + j) * BLOCK_SIZE, (this.y + i) * BLOCK_SIZE, BLOCK_SIZE-1, BLOCK_SIZE-1);
+                }
+            }
+        }
+    }
+
+    collision() {
+        for (let i = 0; i < this.shape.length; i++) {
+            for (let j = 0; j < this.shape[i].length; j++) {
+                if (this.shape[i][j]) {
+                    let newX = this.x + j;
+                    let newY = this.y + i;
+                    if (newX < 0 || newX >= COLS || newY >= ROWS) return true;
+                    if (newY >= 0 && grid[newY][newX]) return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+function updateScore() {
+    document.getElementById('score').textContent = score;
+}
+
+function updateTime() {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('time').textContent = elapsed;
+    
+    // 每30秒加速一次
+    speed = Math.max(100, 1000 - Math.floor(elapsed / 30) * 200);
+}
+
+function checkLines() {
+    for (let y = 0; y < ROWS; y++) {
+        if (grid[y].every(cell => cell !== 0)) {
+            grid.splice(y, 1);
+            grid.unshift(Array(COLS).fill(0));
+            score += COLS;
+        }
+    }
+}
+
+function checkClusters() {
+    const visited = Array(ROWS).fill().map(() => Array(COLS).fill(false));
+    let clusters = [];
+
+    function dfs(x, y, color, cluster) {
+        if (x < 0 || x >= COLS || y < 0 || y >= ROWS) return;
+        if (visited[y][x] || grid[y][x] !== color) return;
+        
+        visited[y][x] = true;
+        cluster.push({x, y});
+        
+        dfs(x+1, y, color, cluster);
+        dfs(x-1, y, color, cluster);
+        dfs(x, y+1, color, cluster);
+        dfs(x, y-1, color, cluster);
+    }
+
+    for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+            if (!visited[y][x] && grid[y][x]) {
+                const cluster = [];
+                dfs(x, y, grid[y][x], cluster);
+                if (cluster.length >= 3) {
+                    clusters.push(...cluster);
+                }
+            }
+        }
+    }
+
+    clusters.forEach(({x, y}) => {
+        grid[y][x] = 0;
+        score++;
+    });
+
+    return clusters.length > 0;
+}
+
+function gameLoop() {
+    if (gameOver) return;
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // 處理自動下落
+    if (!currentPiece) {
+        currentPiece = new Piece();
+        if (currentPiece.collision()) {
+            gameOver = true;
+            ctx.fillStyle = '#FFF';
+            ctx.fillText('Game Over! Press any key to restart', 50, 300);
+            return;
+        }
+    } else {
+        currentPiece.y++;
+        if (currentPiece.collision()) {
+            currentPiece.y--;
+            for (let i = 0; i < currentPiece.shape.length; i++) {
+                for (let j = 0; j < currentPiece.shape[i].length; j++) {
+                    if (currentPiece.shape[i][j]) {
+                        grid[currentPiece.y + i][currentPiece.x + j] = currentPiece.color;
+                    }
+                }
+            }
+            currentPiece = null;
+
+            let removed = false;
+            do {
+                checkLines();
+                removed = checkClusters();
+            } while (removed);
+        }
+    }
+
+    // 繪製網格
+    grid.forEach((row, y) => {
+        row.forEach((color, x) => {
+            if (color) {
+                ctx.fillStyle = color;
+                ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE-1, BLOCK_SIZE-1);
+            }
+        });
+    });
+
+    if (currentPiece) currentPiece.draw();
+    
+    updateTime();
+    updateScore();
+    setTimeout(gameLoop, speed);
+}
+
+document.addEventListener('keydown', (e) => {
+    if (gameOver) {
+        initGame();
+        return;
+    }
+
+    if (!currentPiece) return;
+
+    switch(e.key) {
+        case 'ArrowLeft':
+            currentPiece.x--;
+            if (currentPiece.collision()) currentPiece.x++;
+            break;
+        case 'ArrowRight':
+            currentPiece.x++;
+            if (currentPiece.collision()) currentPiece.x--;
+            break;
+        case 'ArrowDown':
+            currentPiece.y++;
+            if (currentPiece.collision()) currentPiece.y--;
+            break;
+        case 'ArrowUp': // 旋轉
+            const rotated = currentPiece.shape[0].map((_, i) =>
+                currentPiece.shape.map(row => row[i]).reverse()
+            );
+            const original = currentPiece.shape;
+            currentPiece.shape = rotated;
+            if (currentPiece.collision()) currentPiece.shape = original;
+            break;
+    }
+});
+
+function initGame() {
+    grid = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+    score = 0;
+    startTime = Date.now();
+    speed = 1000;
+    gameOver = false;
+    currentPiece = null;
+    updateScore();
+    gameLoop();
+}
+
+initGame();
+</script>
+</body>
+</html>
